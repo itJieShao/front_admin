@@ -1,5 +1,7 @@
-FROM nginx:1.13
+FROM node:14-alpine
 MAINTAINER chenxiaodan <952678948@qq.com>
-ADD dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+RUN mkdir /app
+ADD . /app
+WORKDIR /app
+EXPOSE 8081
+CMD ["npm", "run", "dev"]
