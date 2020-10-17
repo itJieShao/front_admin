@@ -1,42 +1,41 @@
 <template>
   <div class="app-container">
-    <h2>新增预设套餐</h2>
+    <h2>{{ $route.query.package_id ? "编辑预设套餐" : "新增预设套餐" }}</h2>
     <el-card shadow="always">
-      <el-form ref="formData" :model="formData" label-width="100px">
+      <el-form label-width="100px">
         <el-form-item label="套餐标题">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="套餐主图">
           <el-upload
-            v-show="!formData.main_image"
+            :file-list="detailMainImgFile"
+            :class="{ main_img_hide: formData.main_image }"
+            :limit="1"
             action="/vendor/vendor/upload_image"
             list-type="picture-card"
+            :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :data={token:$store.state.user.token}
+            :on-remove="handleMainImgRemove"
+            :data="{ token: $store.state.user.token }"
           >
-          
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
         </el-form-item>
         <el-form-item label="套餐轮播图">
           <el-upload
+            :file-list="detailImagesFile"
+            multiple
             action="/vendor/vendor/upload_image"
             list-type="picture-card"
+            :on-success="upLoadImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
         </el-form-item>
         <el-divider />
-        <el-row gutter="20">
+        <el-row :gutter="20">
           <el-col :span="5">
             <el-form-item label="套餐单品">
               <el-button type="success" @click="dialogTableVisible = true"
@@ -57,9 +56,9 @@
                   v-for="(item, index) in formData.product_data"
                   :key="index"
                 >
-                  <p>{{ item.name }}</p>
+                  <p>{{ item.product_name }}</p>
                   <el-input-number
-                    v-model="item.num"
+                    v-model="item.product_num"
                     :min="1"
                     :max="10"
                   ></el-input-number>
@@ -101,19 +100,24 @@
           </el-input>
         </el-form-item>
         <el-row type="flex" class="row-bg" justify="end">
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">提交</el-button>
-          </el-form-item>
+          <el-button type="primary" @click="onSubmit">提交</el-button>
         </el-row>
       </el-form>
     </el-card>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
     <el-dialog
       width="60%"
       center
       title="预设单品列表"
       :visible.sync="dialogTableVisible"
     >
-      <el-table :data="productList" @selection-change="handleSelectionChange">
+      <el-table
+        ref="multipleTable"
+        :data="productList"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column
           align="center"
@@ -157,7 +161,12 @@
   </div>
 </template>
 <script>
-import { updatePackage, productList, packageLabelList } from "@/api/basic";
+import {
+  updatePackage,
+  productList,
+  packageLabelList,
+  packageDetail,
+} from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -165,12 +174,13 @@ export default {
       formData: {
         name: "",
         main_image: "",
-        image: "",
+        image: [],
         product_data: [],
         package_label_id: "",
         sale_price: "",
         desc: "",
       }, //表单提交数据
+      checkedProductData: [],
       productListData: {
         export: "",
         name: "",
@@ -183,18 +193,46 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       dialogTableVisible: false,
-      itemArr: [{ name: 111, num: "请输入数量" }],
     };
   },
   components: { Pagination },
+  computed:{
+    detailMainImgFile(){
+      if (this.formData.main_image){
+        return [{name:'detailMainImgFile',url:this.formData.main_image}]
+      } 
+    },
+    detailImagesFile(){
+      let imgsArr = [];
+      this.formData.image.forEach((item,index) => {
+        imgsArr.push({name:`detailImagesFile${index}`,url:item})
+      })
+      console.log(this.formData.image,imgsArr)
+      return imgsArr
+    },
+  },
   created() {
+    if (this.$route.query.package_id) {
+      this.formData.package_id = this.$route.query.package_id;
+      this.getDetail();
+    }
     this.getProductList();
     this.getLabelList();
   },
   methods: {
+    //预设套餐详情
+    getDetail() {
+      packageDetail({ package_id: this.$route.query.package_id }).then(
+        (res) => {
+          this.formData = res;
+          console.log(res);
+        }
+      );
+    },
     //预设单品标签列表
     getLabelList() {
       packageLabelList().then((res) => {
+        console.log(res);
         this.labelList = res;
       });
     },
@@ -207,40 +245,84 @@ export default {
     },
     //添加到套餐
     addPackage() {
+      let product_data = this.formData.product_data.concat(
+          this.checkedProductData
+        ),
+        result = [],
+        temp = {};
+      product_data.map((item, index) => {
+        if (!temp[item.product_id]) {
+          result.push(item);
+          temp[item.product_id] = true;
+        }
+      });
+      this.formData.product_data = result;
+      this.$refs.multipleTable.clearSelection();
       this.dialogTableVisible = false;
     },
+    //提交
     onSubmit() {
-      console.log(this.formData);
-      // updatePackage(this.formData).then((res) => {
-      //   console.log(re s);
-      // });
+      updatePackage(this.formData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1500,
+            onClose:()=>{
+              this.$router.go(-1);
+            },
+          });
+        }
+      });
     },
+    //删除主图
+    handleMainImgRemove(file, fileList) {
+      this.formData.main_image = "";
+    },
+    //删除轮播图
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      const index = this.formData.image.findIndex((item) => item == file.url);
+      this.formData.image.splice(index, 1);
+      console.log(this.formData.image)
     },
+    //查看图片
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
-      console.log(file.url);
       this.dialogVisible = true;
     },
+    //预设单品列表选择
     handleSelectionChange(val) {
       let checkedProductData = [];
       val.forEach((item) => {
         checkedProductData.push({
-          id: item.id,
-          name: item.name,
-          num: 1,
+          product_id: item.id,
+          product_name: item.name,
+          product_num: 1,
         });
       });
-      this.formData.product_data = checkedProductData;
+      this.checkedProductData = checkedProductData;
     },
+    //删除预设单品
     deleteProduct(index) {
       this.formData.product_data.splice(index, 1);
+    },
+    //上传主图
+    upLoadMainImg(res, file) {
+      if (res.status) {
+        this.formData.main_image = res.data.image_url;
+      }
+    },
+    //上传轮播图
+    upLoadImg(res, file, fileList) {
+      if (res.status) {
+        this.formData.image.push(res.data.image_url);
+      }
     },
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 p {
   margin: 0;
 }
@@ -270,5 +352,8 @@ p {
 .el-icon-delete {
   margin-left: 20px;
   cursor: pointer;
+}
+.main_img_hide .el-upload--picture-card {
+  display: none;
 }
 </style>

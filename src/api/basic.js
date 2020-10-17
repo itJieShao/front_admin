@@ -27,6 +27,15 @@ export function storeList(data) {
   })
 }
 
+//可查看门店列表（用于搜索功能）
+export function searchStoreList(data) {
+  return request({
+    url: '/vendor/vendor/vendor-list',
+    method: 'post',
+    data
+  })
+}
+
 //预设套餐列表
 export function packageList(data) {
   return request({
@@ -45,10 +54,28 @@ export function updatePackage(data) {
   })
 }
 
+//添加/编辑门店套餐
+export function updateVendorPackage(data) {
+  return request({
+    url: '/product/vendor-package/update',
+    method: 'post',
+    data
+  })
+}
+
 //门店套餐列表
 export function vendorPackageList(data) {
   return request({
     url: '/product/vendor-package/list',
+    method: 'post',
+    data
+  })
+}
+
+//优惠列表
+export function couponList(data) {
+  return request({
+    url: '/order/coupon/get-discount-list',
     method: 'post',
     data
   })
@@ -67,6 +94,24 @@ export function productList(data) {
 export function packageLabelList(data) {
   return request({
     url: '/product/package/get-label-list',
+    method: 'post',
+    data
+  })
+}
+
+//预设套餐详情接口
+export function packageDetail(data) {
+  return request({
+    url: '/product/package/detail',
+    method: 'post',
+    data
+  })
+}
+
+//门店套餐详情接口
+export function vendorPackageDetail(data) {
+  return request({
+    url: '/product/vendor-package/detail',
     method: 'post',
     data
   })
@@ -94,6 +139,24 @@ export function memberCardList(data) {
 export function userList(data) {
   return request({
     url: '/customer/customer/get-user-list',
+    method: 'post',
+    data
+  })
+}
+
+//用户积分列表
+export function integralList(data) {
+  return request({
+    url: '/customer/customer/get-integral-list',
+    method: 'post',
+    data
+  })
+}
+
+//用户资料
+export function customerDetail(data) {
+  return request({
+    url: '/customer/customer/get-user-data',
     method: 'post',
     data
   })

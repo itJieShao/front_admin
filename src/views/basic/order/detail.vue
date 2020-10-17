@@ -39,7 +39,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <el-row v-for="(item,index) in detail.detail" :key="index" :gutter="12" style="margin-bottom:20px;">
+    <el-row v-for="(item,index) in detail.package_data" :key="index" :gutter="12" style="margin-bottom:20px;">
       <el-col :span="8" v-for="(it,idx) in item" :key="idx">
         <el-card shadow="hover">
           <div class="goods_item">
@@ -64,7 +64,7 @@
     </el-row>
     <el-divider />
     <el-row :gutter="12">
-      <el-col :span="12">
+      <el-col :span="detail.after_sale_data.length?12:24">
         <el-card shadow="always">
           <div>
             <p>订单操作时间</p>
@@ -76,21 +76,21 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-if="detail.after_sale_data.length > 0">
         <el-card shadow="always">
           <div>
             <p>售后操作时间</p>
             <div class="time_info">
-              <p>申请时间：2018-08-20 15:14:38</p>
-              <p>审核时间：2018-08-20 15:14:38</p>
-              <p>售后完成：2018-08-20 15:14:38</p>
+              <p>申请时间：</p>
+              <p>审核时间：</p>
+              <p>售后完成：</p>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
-    <el-divider />
-    <el-row>
+    <el-divider v-if="detail.after_sale_data.length > 0"/>
+    <el-row v-if="detail.after_sale_data.length > 0">
       <el-col span="24">
         <el-card shadow="always">
           <div>
@@ -134,7 +134,6 @@ export default {
   },
   created(){
     this.order_id = this.$route.query.order_id;
-    console.log(this.order_id)
     this.getOrderDetail()
   },
   methods:{
@@ -142,10 +141,10 @@ export default {
       orderDetail({order_id:this.order_id}).then(res => {
         console.log(res)
         const packageArr = [];
-        for(let i=0;i<res.detail.length;i+=3){
-            packageArr.push(res.detail.slice(i,i+3));
+        for(let i=0;i<res.package_data.length;i+=3){
+            packageArr.push(res.package_data.slice(i,i+3));
         }
-        res.detail = packageArr
+        res.package_data = packageArr
         this.detail = res
       });
     }

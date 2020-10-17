@@ -2,10 +2,15 @@
   <div class="app-container">
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
-        <el-input placeholder="请输入搜索内容"></el-input>
+        <el-input
+          placeholder="请输入搜索内容"
+          v-model="listData.name"
+        ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button @click="getList" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
       </el-col>
       <el-col :span="4" style="display: flex; justify-content: flex-end">
         <el-button type="success" icon="el-icon-plus" @click="addMeal"
@@ -13,21 +18,28 @@
         >
       </el-col>
     </el-row>
-    <el-table :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column
-        v-loading="loading"
-        align="center"
-        label="套餐ID"
-        element-loading-text="请给我点时间！"
-      >
+    <el-table
+      v-loading="loading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+    >
+      <el-table-column align="center" label="套餐ID">
         <template slot-scope="scope">
           <span>{{ scope.row.package_id }}</span>
         </template>
       </el-table-column>
 
+      <el-table-column width="150" align="center" label="套餐图片">
+        <template slot-scope="scope">
+          <img style="max-width:100px;max-height:100px;" :src="scope.row.main_image" alt="" />
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="套餐名称">
         <template slot-scope="scope">
-          <img :src="scope.row.main_image" alt="" />
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -65,7 +77,9 @@
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail">详情</el-button>
+          <el-button size="mini" @click="goEdit(scope.row.package_id)"
+            >编辑</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -83,7 +97,7 @@
 import { packageList } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
-  name:'preinstall_meal',
+  name: "preinstall_meal",
   components: { Pagination },
   data() {
     return {
@@ -91,7 +105,7 @@ export default {
       listData: {
         page: 1,
         page_size: 10,
-        vendor_id: "",
+        name: "",
         export: "",
       },
       loading: false,
@@ -105,14 +119,17 @@ export default {
     addMeal() {
       this.$router.push("/basic/goods/preinstall_meal_add");
     },
-    goDetail() {
-      this.$router.push("/basic/goods/preinstall_meal_detail");
+    goEdit(package_id) {
+      this.$router.push(
+        `/basic/goods/preinstall_meal_edit?package_id=${package_id}`
+      );
+      //this.$router.push("/basic/goods/preinstall_meal_detail");
     },
     getList() {
       this.loading = true;
       packageList(this.listData).then((res) => {
         this.list = res.list;
-        this.total = res.count
+        this.total = res.count;
         this.loading = false;
       });
     },

@@ -3,18 +3,13 @@
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
-          v-model="listData.name"
-          placeholder="请输入单品名称搜索"
+          v-model="listData.condition"
+          placeholder="请输入搜索内容"
         ></el-input>
       </el-col>
       <el-col :span="10">
         <el-button @click="getList" type="primary" icon="el-icon-search"
           >搜索</el-button
-        >
-      </el-col>
-      <el-col :span="4" style="display: flex; justify-content: flex-end">
-        <el-button type="success" icon="el-icon-plus" @click="addMeal"
-          >新增单品</el-button
         >
       </el-col>
     </el-row>
@@ -26,88 +21,95 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="单品ID">
+      <el-table-column align="center" label="用户ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="单品名称">
+      <el-table-column width="200" align="center" label="用户头像">
         <template slot-scope="scope">
-          <img :src="scope.row.main_image" alt="" />
-          <span>{{ scope.row.name }}</span>
+          <img
+            style="width: 150px; height: 150px"
+            :src="scope.row.headImg"
+            alt=""
+          />
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="分类">
+      <el-table-column width="200" align="center" label="昵称">
         <template slot-scope="scope">
-          <span>{{ scope.row.category_name }}</span>
+          <span>{{ scope.row.nickName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="包装规格">
+      <el-table-column width="200" align="center" label="微信号">
         <template slot-scope="scope">
-          <span>{{ scope.row.package_box_name }}</span>
+          <span>{{ scope.row.WeChatNum }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="味型">
+      <el-table-column width="180" align="center" label="手机号码">
         <template slot-scope="scope">
-          <span>{{ scope.row.taste_name }}</span>
+          <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="温度曲线">
+      <el-table-column width="200" align="center" label="openid">
         <template slot-scope="scope">
-          <span>{{ scope.row.temperature_curve }}</span>
+          <span>{{ scope.row.openID }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="材料">
+      <el-table-column width="200" align="center" label="unionid">
         <template slot-scope="scope">
-          <span>{{ scope.row.material_species }}</span>
+          <span>{{ scope.row.unionID }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="调料">
+      <el-table-column align="center" label="性别">
         <template slot-scope="scope">
-          <span>{{ scope.row.seasoning_species }}</span>
+          <span v-if="scope.row.gender == 1">男</span>
+          <span v-else-if="scope.row.gender == 2">女</span>
+          <span v-else>未知</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="成本预警价">
+      <el-table-column align="center" label="口味">
         <template slot-scope="scope">
-          <span>{{ scope.row.warn_cost_price }}</span>
+          <span>{{ scope.row.taste }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="基础成本价">
+      <el-table-column align="center" label="年龄">
         <template slot-scope="scope">
-          <span>{{ scope.row.cost_price }}</span>
+          <span>{{ scope.row.birthday }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="毛利率">
+      <el-table-column align="center" label="地区">
         <template slot-scope="scope">
-          <span>{{ scope.row.profit_rate }}</span>
+          <span>{{ scope.row.province + scope.row.city }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="供应商">
+      <el-table-column width="150" align="center" label="会员卡用户">
         <template slot-scope="scope">
-          <span>{{ scope.row.supplier_name }}</span>
+          <span>{{ scope.row.member ? "是" : "否" }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="厨师">
+      <el-table-column align="center" label="是否禁用">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_user_name }}</span>
+          <span>{{ scope.row.status ? "是" : "否" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail">详情</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -122,39 +124,35 @@
 </template>
 
 <script>
-import { productList } from "@/api/basic";
+import { userList } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
+  name: "preinstall_meal",
+  components: { Pagination },
   data() {
     return {
-      list: null,
+      list: [],
       listData: {
         page: 1,
         page_size: 10,
-        vendor_id: "",
-        export: "",
-        name: "",
+        condition: "",
       },
-      loading: false,
+      loading: true,
       total: 0,
     };
   },
-  components: { Pagination },
   created() {
     this.getList();
   },
   methods: {
-    addMeal() {
-      this.$router.push("/basic/goods/preinstall_item_add");
-    },
-    goEdit() {
-      this.$router.push("/basic/goods/preinstall_item_edit");
+    goDetail(id) {
+      this.$router.push(`/basic/user/detail?customer_id=${id}`);
     },
     getList() {
       this.loading = true;
-      productList(this.listData).then((res) => {
-        this.total = res.count;
+      userList(this.listData).then((res) => {
         this.list = res.list;
+        this.total = res.count;
         this.loading = false;
       });
     },
