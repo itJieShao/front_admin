@@ -63,10 +63,28 @@ export function updateVendorPackage(data) {
   })
 }
 
+//添加/编辑门店套餐
+export function updateProduct(data) {
+  return request({
+    url: '/product/product/update',
+    method: 'post',
+    data
+  })
+}
+
 //门店套餐列表
 export function vendorPackageList(data) {
   return request({
     url: '/product/vendor-package/list',
+    method: 'post',
+    data
+  })
+}
+
+//门店套餐上下架
+export function vendorPackageUpdateStatus(data) {
+  return request({
+    url: '/product/vendor-package/update-status',
     method: 'post',
     data
   })
@@ -81,10 +99,19 @@ export function couponList(data) {
   })
 }
 
-//预约单品列表
+//预设单品列表
 export function productList(data) {
   return request({
     url: '/product/product/list',
+    method: 'post',
+    data
+  })
+}
+
+//预设单品详情
+export function productDetail(data) {
+  return request({
+    url: '/product/product/detail',
     method: 'post',
     data
   })
@@ -117,10 +144,55 @@ export function vendorPackageDetail(data) {
   })
 }
 
-//预约单品列表
+//预设单品标签列表
 export function labelList(data) {
   return request({
     url: '/product/label/get-label-list',
+    method: 'post',
+    data
+  })
+}
+
+//获取包装
+export function packageBox(data) {
+  return request({
+    url: '/product/package-box/get-data',
+    method: 'post',
+    data
+  })
+}
+
+//获取供应商
+export function supplierList(data) {
+  return request({
+    url: '/product/supplier/get-list',
+    method: 'post',
+    data
+  })
+}
+
+//获取味型  
+export function tasteList(data) {
+  return request({
+    url: '/product/taste/get-data',
+    method: 'post',
+    data
+  })
+}
+
+//获取材料  
+export function materialData(data) {
+  return request({
+    url: '/product/material/get-data',
+    method: 'post',
+    data
+  })
+}
+
+//获取调料
+export function seasoningData(data) {
+  return request({
+    url: '/product/seasoning/get-data',
     method: 'post',
     data
   })
@@ -130,6 +202,15 @@ export function labelList(data) {
 export function memberCardList(data) {
   return request({
     url: '/customer/customer/get-member-card-list',
+    method: 'post',
+    data
+  })
+}
+
+//门店单品列表
+export function vendorProductList(data) {
+  return request({
+    url: '/product/vendor-product/list',
     method: 'post',
     data
   })

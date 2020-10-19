@@ -1,0 +1,169 @@
+<template>
+  <div class="app-container">
+    <h2>门店单品详情</h2>
+    <el-card shadow="always">
+      <el-form label-width="100px">
+        <el-form-item label="单品名称">
+          <p>{{detail.name}}</p>
+        </el-form-item>
+        <el-form-item label="单品图片">
+          <img style="width: 148px; height: 148px" :src="detail.image" alt="" />
+        </el-form-item>
+        <el-divider />
+        <el-form-item label="单品信息">
+          <el-col :span="20">
+            <el-row :gutter="12">
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>单品ID</p>
+                    <p>{{ detail.id }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>标签</p>
+                    <p>{{ detail.category_name }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>门店库存</p>
+                    <p>{{ detail.vendor_qty }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>包装规格</p>
+                    <p>{{ detail.package_box_name }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>味型</p>
+                    <p>{{ detail.taste_name }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>厨师</p>
+                    <p>{{ detail.created_user_name }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="20" style="margin-top: 15px">
+            <el-row :gutter="12">
+              <el-col :span="8">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>创建时间</p>
+                    <p>{{ detail.id }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>上次进货价</p>
+                    <p>{{ detail.last_purchase_price }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>成本预警价</p>
+                    <p>{{ detail.warn_cost_price }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>基础成本价</p>
+                    <p>{{ detail.cost_price }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="4">
+                <el-card shadow="always">
+                  <div class="item_flex">
+                    <p>毛利率</p>
+                    <p>{{ detail.profit_rate }}</p>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="加工指标">
+          <el-card shadow="always">
+            <div>{{detail.process_indicators}}</div>
+          </el-card>
+        </el-form-item>
+        <el-form-item label="质量标准">
+          <el-card shadow="always">
+            <div>{{detail.quality_standard}}</div>
+          </el-card>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
+</template>
+
+<script>
+import { productDetail } from "@/api/basic";
+export default {
+  data() {
+    return {
+      detail: {},
+    };
+  },
+  created() {
+    this.getDetail();
+  },
+  methods: {
+    getDetail() {
+      productDetail({
+        vendor_product_id: this.$route.query.vendor_product_id,
+      }).then((res) => {
+        this.detail = res;
+      });
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+p {
+  margin: 0;
+}
+.item_flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.item_flex p:last-child {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  color: #999;
+}
+</style>

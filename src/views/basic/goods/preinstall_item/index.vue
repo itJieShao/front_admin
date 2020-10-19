@@ -107,7 +107,7 @@
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail">详情</el-button>
+          <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -147,8 +147,8 @@ export default {
     addMeal() {
       this.$router.push("/basic/goods/preinstall_item_add");
     },
-    goEdit() {
-      this.$router.push("/basic/goods/preinstall_item_edit");
+    goEdit(id) {
+      this.$router.push(`/basic/goods/preinstall_item_edit?id=${id}`);
     },
     getList() {
       this.loading = true;

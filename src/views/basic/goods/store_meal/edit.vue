@@ -36,7 +36,13 @@
         </div>
         <el-divider />
         <el-form-item label="门店">
+          <el-input
+            v-if="$route.query.vendor_package_id"
+            disabled
+            v-model="formData.vendor_name"
+          ></el-input>
           <el-select
+            v-else
             style="width: 100%"
             v-model="formData.vendor_id"
             filterable
@@ -254,13 +260,11 @@ export default {
         vendor_package_id: this.$route.query.vendor_package_id,
       }).then((res) => {
         this.formData = res;
-        console.log(res);
       });
     },
     //标签列表
     getLabelList() {
       packageLabelList().then((res) => {
-        console.log(res);
         this.labelList = res;
       });
     },
@@ -303,7 +307,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .main_img_box,
 .img_box {
   width: 148px;

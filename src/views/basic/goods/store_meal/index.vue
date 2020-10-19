@@ -51,7 +51,11 @@
 
       <el-table-column width="150" align="center" label="套餐图片">
         <template slot-scope="scope">
-          <img style="max-width:100px;max-height:100px;" :src="scope.row.main_image" alt="" />
+          <img
+            style="max-width: 100px; max-height: 100px"
+            :src="scope.row.main_image"
+            alt=""
+          />
         </template>
       </el-table-column>
 
@@ -131,14 +135,18 @@
 
       <el-table-column class-name="status-col" align="center" label="套餐状态">
         <template slot-scope="scope">
-          <span>{{ scope.row.status_name }}</span>
+          <span>{{ scope.row.status ? '已上架' : '已下架' }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goEdit(scope.row.vendor_package_id)"
-            >上架</el-button
+          <el-button
+            size="mini"
+            @click="
+              updateStatus([scope.row.vendor_package_id], scope.row.status)
+            "
+            >{{ scope.row.status ? "下架" : "上架" }}</el-button
           >
           <el-button size="mini" @click="goEdit(scope.row.vendor_package_id)"
             >编辑</el-button
@@ -157,7 +165,11 @@
 </template>
 
 <script>
-import { vendorPackageList, searchStoreList } from "@/api/basic";
+import {
+  vendorPackageList,
+  searchStoreList,
+  vendorPackageUpdateStatus,
+} from "@/api/basic";
 import Pagination from "@/components/Pagination";
 
 export default {
@@ -188,11 +200,28 @@ export default {
     this.getStoreList();
   },
   methods: {
-    addMeal(){
-      this.$router.push('/basic/goods/store_meal_add')
+    addMeal() {
+      this.$router.push("/basic/goods/store_meal_add");
     },
     goEdit(vendor_package_id) {
-      this.$router.push(`/basic/goods/store_meal_edit?vendor_package_id=${vendor_package_id}`);
+      this.$router.push(
+        `/basic/goods/store_meal_edit?vendor_package_id=${vendor_package_id}`
+      );
+    },
+    updateStatus(vendor_package_ids, status) {
+      vendorPackageUpdateStatus({
+        vendor_package_ids,
+        status: status ? 0 : 1,
+      }).then((res) => {
+        let index = this.list.findIndex(item => item.vendor_package_id == vendor_package_ids[0]);
+        this.$set(this.list[index],'status',status?0:1)
+        this.$notify({
+          title: "成功",
+          message: "操作成功",
+          type: "success",
+          duration: 1500,
+        });
+      });
     },
     getList() {
       this.loading = true;

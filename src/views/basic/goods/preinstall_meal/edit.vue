@@ -57,11 +57,7 @@
                   :key="index"
                 >
                   <p>{{ item.product_name }}</p>
-                  <el-input-number
-                    v-model="item.product_num"
-                    :min="1"
-                    :max="10"
-                  ></el-input-number>
+                  <el-input-number :min="1" v-model="item.product_num"></el-input-number>
                   <i @click="deleteProduct(index)" class="el-icon-delete"></i>
                 </div>
               </div>
@@ -193,24 +189,11 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       dialogTableVisible: false,
+      detailMainImgFile: [],
+      detailImagesFile: [],
     };
   },
   components: { Pagination },
-  computed:{
-    detailMainImgFile(){
-      if (this.formData.main_image){
-        return [{name:'detailMainImgFile',url:this.formData.main_image}]
-      } 
-    },
-    detailImagesFile(){
-      let imgsArr = [];
-      this.formData.image.forEach((item,index) => {
-        imgsArr.push({name:`detailImagesFile${index}`,url:item})
-      })
-      console.log(this.formData.image,imgsArr)
-      return imgsArr
-    },
-  },
   created() {
     if (this.$route.query.package_id) {
       this.formData.package_id = this.$route.query.package_id;
@@ -225,7 +208,18 @@ export default {
       packageDetail({ package_id: this.$route.query.package_id }).then(
         (res) => {
           this.formData = res;
-          console.log(res);
+          if (res.main_image) {
+            this.detailMainImgFile = [
+              { name: "detailMainImgFile", url: res.main_image },
+            ];
+          }
+          if (res.image.length > 0) {
+            let imgsArr = [];
+            res.image.forEach((item, index) => {
+              imgsArr.push({ name: `detailImagesFile${index}`, url: item });
+            });
+            this.detailImagesFile = imgsArr
+          }
         }
       );
     },
@@ -269,7 +263,7 @@ export default {
             message: "提交成功",
             type: "success",
             duration: 1500,
-            onClose:()=>{
+            onClose: () => {
               this.$router.go(-1);
             },
           });
@@ -284,7 +278,7 @@ export default {
     handleRemove(file, fileList) {
       const index = this.formData.image.findIndex((item) => item == file.url);
       this.formData.image.splice(index, 1);
-      console.log(this.formData.image)
+      console.log(this.formData.image);
     },
     //查看图片
     handlePictureCardPreview(file) {

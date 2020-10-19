@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>{{ $route.query.package_id ? "编辑预设单品" : "新增预设单品" }}</h2>
+    <h2>{{ $route.query.id ? "编辑预设单品" : "新增预设单品" }}</h2>
     <el-card shadow="always">
       <el-form label-width="100px">
         <el-form-item label="单品标题">
@@ -8,22 +8,27 @@
         </el-form-item>
         <el-form-item label="单品主图">
           <el-upload
-            :file-list="detailImagesFile"
-            multiple
+            :file-list="detailMainImgFile"
+            :class="{ main_img_hide: formData.image }"
+            :limit="1"
             action="/vendor/vendor/upload_image"
             list-type="picture-card"
-            :on-success="upLoadImg"
+            :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
+            :on-remove="handleMainImgRemove"
+            :data="{ token: $store.state.user.token }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
         <el-divider />
+        <el-form-item label="重量">
+          <el-input v-model="formData.weight"></el-input>
+        </el-form-item>
         <el-form-item label="标签" style="margin-top: 35px">
           <el-select
             style="width: 100%"
-            v-model="formData.package_label_id"
+            v-model="formData.product_category_id"
             filterable
             placeholder="请选择标签"
           >
@@ -39,15 +44,15 @@
         <el-form-item label="包装规格" style="margin-top: 35px">
           <el-select
             style="width: 100%"
-            v-model="formData.package_label_id"
+            v-model="formData.product_package_box_id"
             filterable
             placeholder="请选择包装规格"
           >
             <el-option
-              v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              v-for="item in packageBox"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -55,41 +60,41 @@
         <el-form-item label="味型" style="margin-top: 35px">
           <el-select
             style="width: 100%"
-            v-model="formData.package_label_id"
+            v-model="formData.taste_id"
             filterable
             placeholder="请选择味型"
           >
             <el-option
-              v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              v-for="item in tasteList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="成本预警价">
-          <el-input v-model="formData.sale_price">
+          <el-input v-model="formData.warn_cost_price">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
         <el-form-item label="基础成本价">
-          <el-input v-model="formData.sale_price">
+          <el-input v-model="formData.cost_price">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
         <el-form-item label="供应商" style="margin-top: 35px">
           <el-select
             style="width: 100%"
-            v-model="formData.package_label_id"
+            v-model="formData.supplier_id"
             filterable
             placeholder="请选择供应商"
           >
             <el-option
-              v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              v-for="item in supplierList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -100,7 +105,7 @@
             type="textarea"
             :rows="10"
             placeholder="请输入加工指标内容"
-            v-model="formData.desc"
+            v-model="formData.process_indicators"
           >
           </el-input>
         </el-form-item>
@@ -110,109 +115,190 @@
             type="textarea"
             :rows="10"
             placeholder="请输入质量标准内容"
-            v-model="formData.desc"
+            v-model="formData.quality_standard"
           >
           </el-input>
         </el-form-item>
         <el-divider />
         <el-row :gutter="20">
           <el-col :span="5">
-            <el-form-item label="材料">
-              <el-button type="success" @click="dialogTableVisible = true"
-                >添加</el-button
-              >
-            </el-form-item>
+            <el-form-item label="材料"> </el-form-item>
           </el-col>
-          <el-col :span="12" v-show="formData.product_data.length > 0">
+          <el-col :span="12">
             <el-card shadow="always">
               <div>
                 <div class="item_title">
-                  <p>单品</p>
+                  <p>材料名称</p>
+                  <p>单位</p>
                   <p>数量</p>
                 </div>
                 <el-divider />
                 <div
                   class="item_content"
-                  v-for="(item, index) in formData.product_data"
+                  v-for="(item, index) in formData.material"
                   :key="index"
                 >
-                  <p>{{ item.product_name }}</p>
-                  <el-input-number
-                    v-model="item.product_num"
-                    :min="1"
-                    :max="10"
-                  ></el-input-number>
-                  <i @click="deleteProduct(index)" class="el-icon-delete"></i>
+                  <div>
+                    <p>{{ item.material_name }}</p>
+                  </div>
+                  <div>
+                    <p>{{ item.unit_name }}</p>
+                  </div>
+                  <div class="i_right">
+                    <p>{{ item.num }}</p>
+                    <i
+                      @click="deleteMaterial(item.material_id)"
+                      class="el-icon-delete"
+                    ></i>
+                  </div>
+                </div>
+                <div class="item_content">
+                  <div>
+                    <el-select
+                      v-model="materialId"
+                      filterable
+                      placeholder="请选择材料"
+                    >
+                      <el-option
+                        v-for="item in materialData"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <div>
+                    <p>
+                      {{ checkedMaterial ? checkedMaterial.unit_name : "无" }}
+                    </p>
+                  </div>
+                  <div>
+                    <el-input-number
+                      :min="1"
+                      v-model="materialNum"
+                    ></el-input-number>
+                  </div>
                 </div>
               </div>
+              <el-button type="success" @click="addMaterial">新增</el-button>
             </el-card>
           </el-col>
         </el-row>
         <el-divider />
         <el-row :gutter="20">
           <el-col :span="5">
-            <el-form-item label="调料">
-              <el-button type="success" @click="dialogTableVisible = true"
-                >添加</el-button
-              >
-            </el-form-item>
+            <el-form-item label="调料"> </el-form-item>
           </el-col>
-          <el-col :span="12" v-show="formData.product_data.length > 0">
+          <el-col :span="12">
             <el-card shadow="always">
               <div>
                 <div class="item_title">
-                  <p>单品</p>
+                  <p>调料名称</p>
+                  <p>单位</p>
                   <p>数量</p>
                 </div>
                 <el-divider />
                 <div
                   class="item_content"
-                  v-for="(item, index) in formData.product_data"
+                  v-for="(item, index) in formData.seasoning"
                   :key="index"
                 >
-                  <p>{{ item.product_name }}</p>
-                  <el-input-number
-                    v-model="item.product_num"
-                    :min="1"
-                    :max="10"
-                  ></el-input-number>
-                  <i @click="deleteProduct(index)" class="el-icon-delete"></i>
+                  <div>
+                    <p>{{ item.seasoning_name }}</p>
+                  </div>
+                  <div>
+                    <p>{{ item.unit_name }}</p>
+                  </div>
+                  <div class="i_right">
+                    <p>{{ item.num }}</p>
+                    <i
+                      @click="deleteSeasoning(item.seasoning_id)"
+                      class="el-icon-delete"
+                    ></i>
+                  </div>
+                </div>
+                <div class="item_content">
+                  <div>
+                    <el-select
+                      v-model="seasoningId"
+                      filterable
+                      placeholder="请选择调料"
+                    >
+                      <el-option
+                        v-for="item in seasoningData"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <div>
+                    <p>
+                      {{ checkedSeasoning ? checkedSeasoning.unit_name : "无" }}
+                    </p>
+                  </div>
+                  <div>
+                    <el-input-number
+                      :min="1"
+                      v-model="seasoningNum"
+                    ></el-input-number>
+                  </div>
                 </div>
               </div>
+              <el-button type="success" @click="addSeasoning">新增</el-button>
             </el-card>
           </el-col>
         </el-row>
         <el-divider />
         <el-row :gutter="20">
           <el-col :span="5">
-            <el-form-item label="温度曲线">
-              <el-button type="success" @click="dialogTableVisible = true"
-                >添加</el-button
-              >
-            </el-form-item>
+            <el-form-item label="温度曲线"> </el-form-item>
           </el-col>
-          <el-col :span="12" v-show="formData.product_data.length > 0">
+          <el-col :span="12">
             <el-card shadow="always">
               <div>
                 <div class="item_title">
-                  <p>单品</p>
-                  <p>数量</p>
+                  <p>时间/min</p>
+                  <p>温度/°C</p>
                 </div>
                 <el-divider />
                 <div
                   class="item_content"
-                  v-for="(item, index) in formData.product_data"
+                  v-for="(item, index) in formData.temperature_corve"
                   :key="index"
                 >
-                  <p>{{ item.product_name }}</p>
-                  <el-input-number
-                    v-model="item.product_num"
-                    :min="1"
-                    :max="10"
-                  ></el-input-number>
-                  <i @click="deleteProduct(index)" class="el-icon-delete"></i>
+                  <div class="i_right">
+                    <p class="i_position">第{{ index + 1 }}段</p>
+                    <p>{{ item.time }}</p>
+                  </div>
+                  <div class="i_right">
+                    <p>{{ item.temperature }}</p>
+                    <i
+                      @click="deleteTemperatureCorve(index)"
+                      class="el-icon-delete"
+                    ></i>
+                  </div>
+                </div>
+                <div class="item_content">
+                  <div>
+                    <el-input
+                      placeholder="请输入时间"
+                      v-model="time"
+                    ></el-input>
+                  </div>
+                  <div>
+                    <el-input
+                      placeholder="请输入温度"
+                      v-model="temperature"
+                    ></el-input>
+                  </div>
                 </div>
               </div>
+              <el-button type="success" @click="addTemperatureCorve"
+                >新增</el-button
+              >
             </el-card>
           </el-col>
         </el-row>
@@ -225,65 +311,19 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
-    <el-dialog
-      width="60%"
-      center
-      title="预设单品列表"
-      :visible.sync="dialogTableVisible"
-    >
-      <el-table
-        ref="multipleTable"
-        :data="productList"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column
-          align="center"
-          property="id"
-          label="单品ID"
-          width="150"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          property="name"
-          label="单品名称"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          property="category_name"
-          label="分类"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          property="package_box_name"
-          label="包装规格"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          property="taste_name"
-          label="味型"
-        ></el-table-column>
-      </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        :page.sync="productListData.page"
-        :limit.sync="productListData.page_size"
-        @pagination="getProductList"
-      />
-      <el-row style="margin-top: 20px" type="flex" class="row-bg" justify="end">
-        <el-button @click="addPackage" type="success">添加到套餐</el-button>
-      </el-row>
-    </el-dialog>
   </div>
 </template>
 <script>
 import {
-  updatePackage,
+  updateProduct,
   productList,
   packageLabelList,
-  packageDetail,
+  productDetail,
+  packageBox,
+  tasteList,
+  supplierList,
+  materialData,
+  seasoningData,
 } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
@@ -291,12 +331,19 @@ export default {
     return {
       formData: {
         name: "",
-        main_image: "",
-        image: [],
-        product_data: [],
-        package_label_id: "",
-        sale_price: "",
-        desc: "",
+        image: "",
+        product_category_id: "",
+        product_package_box_id: "",
+        taste_id: "",
+        warn_cost_price: "",
+        cost_price: "",
+        weight: "",
+        supplier_id: "",
+        process_indicators: "",
+        quality_standard: "",
+        material: [],
+        seasoning: [],
+        temperature_corve: [],
       }, //表单提交数据
       checkedProductData: [],
       productListData: {
@@ -305,81 +352,160 @@ export default {
         page: 1,
         page_size: 5,
       },
-      labelList: [],
       productList: [],
       total: 0,
       dialogImageUrl: "",
       dialogVisible: false,
       dialogTableVisible: false,
+      labelList: [],
+      packageBox: [],
+      tasteList: [],
+      supplierList: [],
+      materialData: [],
+      materialId: "",
+      materialNum: "1",
+      seasoningData: [],
+      seasoningId: "",
+      seasoningNum: "1",
+      time: "",
+      temperature: "",
+      detailMainImgFile: [],
     };
   },
   components: { Pagination },
   computed: {
-    detailMainImgFile() {
-      if (this.formData.main_image) {
-        return [{ name: "detailMainImgFile", url: this.formData.main_image }];
+    checkedMaterial() {
+      if (this.materialId) {
+        return this.materialData.find((item) => item.id == this.materialId);
       }
     },
-    detailImagesFile() {
-      let imgsArr = [];
-      this.formData.image.forEach((item, index) => {
-        imgsArr.push({ name: `detailImagesFile${index}`, url: item });
-      });
-      return imgsArr;
+    checkedSeasoning() {
+      if (this.seasoningId) {
+        return this.seasoningData.find((item) => item.id == this.seasoningId);
+      }
     },
   },
   created() {
-    if (this.$route.query.package_id) {
-      this.formData.package_id = this.$route.query.package_id;
+    if (this.$route.query.id) {
+      this.formData.id = this.$route.query.id;
       this.getDetail();
     }
-    this.getProductList();
     this.getLabelList();
+    this.getPackageBox();
+    this.getSupplierList();
+    this.getTasteList();
+    this.getMaterialData();
+    this.getSeasoningData();
   },
   methods: {
-    //预设套餐详情
-    getDetail() {
-      packageDetail({ package_id: this.$route.query.package_id }).then(
-        (res) => {
-          this.formData = res;
-          console.log(res);
-        }
+    //新增材料
+    addMaterial() {
+      if (!this.materialId) {
+        return this.$message.error("请选择要新增的材料");
+      }
+      this.formData.material.push({
+        material_name: this.checkedMaterial.name,
+        unit_name: this.checkedMaterial.unit_name,
+        material_id: this.materialId,
+        num: this.materialNum,
+      });
+      this.materialId = "";
+    },
+    //删除材料
+    deleteMaterial(id) {
+      let index = this.formData.material.findIndex(
+        (item) => item.material_id == id
       );
+      this.formData.material.splice(index, 1);
+    },
+    //新增调料
+    addSeasoning() {
+      if (!this.seasoningId) {
+        return this.$message.error("请选择要新增的调料");
+      }
+      this.formData.seasoning.push({
+        seasoning_name: this.checkedSeasoning.name,
+        unit_name: this.checkedSeasoning.unit_name,
+        seasoning_id: this.seasoningId,
+        num: this.seasoningNum,
+      });
+      this.seasoningId = "";
+    },
+    //删除调料
+    deleteSeasoning(id) {
+      let index = this.formData.seasoning.findIndex(
+        (item) => item.seasoning_id == id
+      );
+      this.formData.seasoning.splice(index, 1);
+    },
+    //新增温度曲线
+    addTemperatureCorve() {
+      if (!this.time || !this.temperature) {
+        return this.$message.error("请输入时间和温度");
+      }
+      this.formData.temperature_corve.push({
+        time: this.time,
+        temperature: this.temperature,
+      });
+      this.time = this.temperature = "";
+    },
+    //删除温度曲线
+    deleteTemperatureCorve(index) {
+      this.formData.temperature_corve.splice(index, 1);
+    },
+    //预设单品详情
+    getDetail() {
+      productDetail({ id: this.$route.query.id }).then((res) => {
+        this.formData = res;
+        if (res.image) {
+          this.detailMainImgFile = [
+            { name: "detailMainImgFile", url: res.image },
+          ];
+        }
+        this.$set(this.formData, "material", res.material_data);
+        this.$set(this.formData, "seasoning", res.seasoning_data);
+        this.$set(this.formData, "temperature_corve", res.temperature_curve)
+      });
     },
     //预设单品标签列表
     getLabelList() {
       packageLabelList().then((res) => {
-        console.log(res);
         this.labelList = res;
       });
     },
-    //预设单品列表
-    getProductList() {
-      productList(this.productListData).then((res) => {
-        this.productList = res.list;
-        this.total = res.count;
+    //包装列表
+    getPackageBox() {
+      packageBox().then((res) => {
+        this.packageBox = res;
       });
     },
-    //添加到套餐
-    addPackage() {
-      let product_data = this.formData.product_data.concat(
-          this.checkedProductData
-        ),
-        result = [],
-        temp = {};
-      product_data.map((item, index) => {
-        if (!temp[item.product_id]) {
-          result.push(item);
-          temp[item.product_id] = true;
-        }
+    //味型列表
+    getTasteList() {
+      tasteList().then((res) => {
+        this.tasteList = res;
       });
-      this.formData.product_data = result;
-      this.$refs.multipleTable.clearSelection();
-      this.dialogTableVisible = false;
+    },
+    //供应商列表
+    getSupplierList() {
+      supplierList().then((res) => {
+        this.supplierList = res;
+      });
+    },
+    //材料列表
+    getMaterialData() {
+      materialData().then((res) => {
+        this.materialData = res;
+      });
+    },
+    //调料列表
+    getSeasoningData() {
+      seasoningData().then((res) => {
+        this.seasoningData = res;
+      });
     },
     //提交
     onSubmit() {
-      updatePackage(this.formData).then((res) => {
+      updateProduct(this.formData).then((res) => {
         if (res) {
           this.$notify({
             title: "成功",
@@ -395,45 +521,17 @@ export default {
     },
     //删除主图
     handleMainImgRemove(file, fileList) {
-      this.formData.main_image = "";
-    },
-    //删除轮播图
-    handleRemove(file, fileList) {
-      const index = this.formData.image.findIndex((item) => item == file.url);
-      this.formData.image.splice(index, 1);
-      console.log(this.formData.image);
+      this.formData.image = "";
     },
     //查看图片
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    //预设单品列表选择
-    handleSelectionChange(val) {
-      let checkedProductData = [];
-      val.forEach((item) => {
-        checkedProductData.push({
-          product_id: item.id,
-          product_name: item.name,
-          product_num: 1,
-        });
-      });
-      this.checkedProductData = checkedProductData;
-    },
-    //删除预设单品
-    deleteProduct(index) {
-      this.formData.product_data.splice(index, 1);
-    },
     //上传主图
     upLoadMainImg(res, file) {
       if (res.status) {
-        this.formData.main_image = res.data.image_url;
-      }
-    },
-    //上传轮播图
-    upLoadImg(res, file, fileList) {
-      if (res.status) {
-        this.formData.image.push(res.data.image_url);
+        this.formData.image = res.data.image_url;
       }
     },
   },
@@ -453,15 +551,12 @@ p {
     flex: 1;
   }
 }
-.item_title p:first-child {
-  margin-left: -40px;
-}
-.item_title p:last-child {
-  margin-left: -60px;
-}
 .item_content {
   margin-bottom: 20px;
   align-items: center;
+  div {
+    flex: 1;
+  }
 }
 .el-input-number {
   flex: 1;
@@ -469,6 +564,15 @@ p {
 .el-icon-delete {
   margin-left: 20px;
   cursor: pointer;
+}
+.i_position {
+  position: absolute;
+  left: 0;
+}
+.i_right {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 .main_img_hide .el-upload--picture-card {
   display: none;
