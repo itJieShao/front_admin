@@ -27,6 +27,15 @@ export function distributionList(data) {
   })
 }
 
+//配货详情
+export function distributionDetail(data) {
+  return request({
+    url: '/product/distribution/detail',
+    method: 'post',
+    data
+  })
+}
+
 //盘货管理列表
 export function inventoryList(data) {
   return request({
@@ -54,3 +63,11 @@ export function supplierList(data) {
   })
 }
 
+//新增进货
+export function addPurchase(data) {
+  return request({
+    url: '/product/purchase/add',
+    method: 'post',
+    data
+  })
+}

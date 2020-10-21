@@ -3,7 +3,6 @@ import Layout from '@/layout'
 const warehouseRouter = {
     path: '/warehouse',
     component: Layout,
-    redirect: '/warehouse/table',
     name: 'Warehouse',
     meta: { title: '仓库管理', icon: 'el-icon-s-help' },
     children: [
@@ -24,7 +23,14 @@ const warehouseRouter = {
             path: 'distribution',
             name: 'Distribution',
             component: () => import('@/views/warehouse/distribution'),
-            meta: { title: '配货管理', icon: 'tree' }
+            meta: { title: '配货管理', icon: 'tree' },
+        },
+        {
+            path: 'distribution_detail',
+            name: 'DistributionDetail',
+            hidden: true,
+            component: () => import('@/views/warehouse/distribution/detail'),
+            meta: { title: '配货详情', activeMenu: '/warehouse/distribution' }
         },
         {
             path: 'inventory',

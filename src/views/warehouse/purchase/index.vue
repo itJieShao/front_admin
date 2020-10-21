@@ -1,24 +1,26 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20" style="margin-bottom: 20px">
-      <el-col :span="10">
-        <el-input placeholder="请输入搜索内容"></el-input>
+      <!-- <el-col :span="10">
+        <el-input v-model="formData." placeholder="请输入搜索内容"></el-input>
       </el-col>
       <el-col :span="10">
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
-      </el-col>
-      <el-col :span="4" style="display:flex;justify-content: flex-end;">
+      </el-col> -->
+      <el-col :span="24" style="display: flex; justify-content: flex-end">
         <el-button type="success" @click="addPurchase">新增进货</el-button>
         <el-button type="warning">生成进货汇总</el-button>
       </el-col>
     </el-row>
-    <el-table :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column
-        v-loading="loading"
-        align="center"
-        label="进货ID"
-        element-loading-text="请给我点时间！"
-      >
+    <el-table
+      v-loading="loading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+    >
+      <el-table-column align="center" label="进货ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -90,7 +92,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" class-name="status-col" align="center" label="记录状态">
+      <el-table-column
+        width="180"
+        class-name="status-col"
+        align="center"
+        label="记录状态"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.status_name }}</span>
         </template>
@@ -137,16 +144,16 @@ export default {
     goDetail() {
       this.$router.push("/order/detail");
     },
-    addPurchase(){
+    addPurchase() {
       this.$router.push("/warehouse/purchase_add");
     },
     getList() {
       this.loading = true;
-      purchaseList(this.listData).then(res => {
+      purchaseList(this.listData).then((res) => {
         this.total = res.count;
-        this.list = res.list
-        this.loading = false
-      })
+        this.list = res.list;
+        this.loading = false;
+      });
     },
   },
 };

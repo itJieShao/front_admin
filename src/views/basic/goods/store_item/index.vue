@@ -44,13 +44,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="单品图片">
+      <el-table-column width="200" align="center" label="单品图片">
         <template slot-scope="scope">
           <img style="max-width:100px;max-height:100px;" :src="scope.row.image" alt="" />
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="单品名称">
+      <el-table-column width="200" align="center" label="单品名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -86,19 +86,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="上次进货价">
+      <el-table-column width="200" align="center" label="上次进货价">
         <template slot-scope="scope">
           <span>{{ scope.row.last_purchase_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="成本预警价">
+      <el-table-column width="200" align="center" label="成本预警价">
         <template slot-scope="scope">
           <span>{{ scope.row.warn_cost_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="基础成本价">
+      <el-table-column width="200" align="center" label="基础成本价">
         <template slot-scope="scope">
           <span>{{ scope.row.cost_price }}</span>
         </template>
@@ -110,31 +110,31 @@
         </template>
       </el-table-column> -->
 
-      <el-table-column width="250" align="center" label="温度曲线">
+      <el-table-column width="200" align="center" label="温度曲线">
         <template slot-scope="scope">
           <span>{{ scope.row.temperature_curve }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="材料">
+      <el-table-column width="200" align="center" label="材料">
         <template slot-scope="scope">
           <span>{{ scope.row.material_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="调料">
+      <el-table-column width="200" align="center" label="调料">
         <template slot-scope="scope">
           <span>{{ scope.row.seasoning_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="供应商">
+      <el-table-column width="200" align="center" label="供应商">
         <template slot-scope="scope">
           <span>{{ scope.row.supplier_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="厨师">
+      <el-table-column width="200" align="center" label="厨师">
         <template slot-scope="scope">
           <span>{{ scope.row.created_user_name }}</span>
         </template>

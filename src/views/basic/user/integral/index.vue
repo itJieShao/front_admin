@@ -13,13 +13,15 @@
         >
       </el-col>
     </el-row>
-    <el-table :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column
-        v-loading="loading"
-        align="center"
-        label="用户ID"
-        element-loading-text="请给我点时间！"
-      >
+    <el-table
+      v-loading="loading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+    >
+      <el-table-column align="center" label="用户ID">
         <template slot-scope="scope">
           <span>{{ scope.row.customer_id }}</span>
         </template>
@@ -42,9 +44,7 @@
           <el-tag v-if="scope.row.status == 1" type="success" effect="dark">
             增加
           </el-tag>
-          <el-tag v-else type="danger" effect="dark">
-            减去
-          </el-tag>
+          <el-tag v-else type="danger" effect="dark"> 减去 </el-tag>
         </template>
       </el-table-column>
 

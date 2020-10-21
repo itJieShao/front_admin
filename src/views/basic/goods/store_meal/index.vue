@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="套餐图片">
+      <el-table-column width="200" align="center" label="套餐图片">
         <template slot-scope="scope">
           <img
             style="max-width: 100px; max-height: 100px"
@@ -59,7 +59,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="套餐名称">
+      <el-table-column width="180" align="center" label="套餐名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>

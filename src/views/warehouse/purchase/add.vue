@@ -4,89 +4,64 @@
     <el-card shadow="always">
       <el-form label-width="100px">
         <el-form-item label="门店">
-          <el-input></el-input>
+          <el-select
+            style="width: 100%"
+            v-model="vendor_id"
+            filterable
+            placeholder="请选择门店"
+          >
+            <el-option
+              v-for="item in storeList"
+              :key="item.vendor_id"
+              :label="item.vendor_name"
+              :value="item.vendor_id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="售卖日期">
           <el-date-picker
+            value-format="yyyy-MM-dd"
             align="right"
             type="date"
             placeholder="请选择售卖日期"
-            :picker-options="pickerOptions"
+            v-model="saled_at"
           >
           </el-date-picker>
         </el-form-item>
       </el-form>
-      <p>门店套餐列表</p>
-      <el-tabs v-model="activeName" style="margin-top: 15px" type="border-card">
-        <el-tab-pane
-          v-for="item in tabMapOptions"
-          :key="item.key"
-          :label="item.label"
-          :name="item.key"
-        >
-          <el-table
-            :data="list"
-            border
-            fit
-            highlight-current-row
-            style="width: 100%"
+      <div v-show="vendor_id && saled_at">
+        <p>门店套餐列表</p>
+        <el-tabs v-model="active" style="margin-top: 15px" type="border-card">
+          <el-tab-pane
+            v-for="item in tabMapOptions"
+            :key="item.key"
+            :label="item.label"
+            :name="item.key"
           >
-            <el-table-column
-              v-loading="loading"
-              align="center"
-              label="套餐ID"
-              element-loading-text="请给我点时间！"
-            >
-              <template slot-scope="scope">
-                <span>{{ scope.row.vendor_package_id }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="套餐名称">
-              <template slot-scope="scope">
-                <span>{{ scope.row.vendor_package_name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="标签">
-              <template slot-scope="scope">
-                <span>{{ scope.row.label_name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="上次进货价">
-              <template slot-scope="scope">
-                <span>{{ scope.row.last_purchase_price }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="销量">
-              <template slot-scope="scope">
-                <p>{{ scope.row.today_sales }}</p>
-                <p>{{ scope.row.this_week_sales }}</p>
-                <p>{{ scope.row.this_month_sales }}</p>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="预订数量">
-              <template slot-scope="scope">
-                <span>{{ scope.row.book_qty }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="采购数量">
-              <template slot-scope="scope">
-                <el-input></el-input>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-      <el-row style="margin-top:20px;" type="flex" class="row-bg" justify="end">
-        
-          <el-button type="primary" @click="onSubmit">生成进货单</el-button>
-        
+            <keep-alive>
+              <tab-pane
+                @addPurchaseData="addPurchaseData"
+                v-if="active == item.key"
+                :vendor_id="vendor_id"
+                :saled_at="saled_at"
+              />
+            </keep-alive>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <el-row style="margin-top: 20px" type="flex" class="row-bg" justify="end">
+        <el-button type="primary" @click="onSubmit">生成进货单</el-button>
       </el-row>
     </el-card>
   </div>
 </template>
 <script>
-import { vendorPackageList } from "@/api/warehouse";
+import { searchStoreList } from "@/api/basic";
+import { addPurchase } from "@/api/warehouse";
+import TabPane from "./components/TabPane";
 export default {
+  components: { TabPane },
   data() {
     return {
       tabMapOptions: [
@@ -94,24 +69,58 @@ export default {
         { label: "午餐", key: "2" },
         { label: "下午茶", key: "3" },
       ],
-      activeName: "1",
+      active: "1",
       loading: false,
-      list: [],
+      purchase_data: {
+        1: [],
+        2: [],
+        3: [],
+      },
+      vendor_id: "",
+      saled_at: "",
+      storeList: [],
     };
   },
   created() {
-    this.getVendorPackageList();
+    this.getStoreList();
   },
   methods: {
-    getVendorPackageList() {
-      vendorPackageList().then((res) => {
-        console.log(res);
+    addPurchaseData(data) {
+      let index = this.purchase_data[this.active].findIndex(
+        (item) => item.vendor_package_id == data.vendor_package_id
+      );
+      if (index === -1) {
+        this.purchase_data[this.active].push(data);
+      } else {
+        this.purchase_data[this.active][index] = data;
+      }
+    },
+    getStoreList() {
+      searchStoreList().then((res) => {
+        this.storeList = res;
       });
     },
     onSubmit() {
-        
+      let { vendor_id, saled_at, purchase_data } = this;
+      let aData = {
+        vendor_id,
+        saled_at,
+        purchase_data,
+      };
+      addPurchase(aData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1500,
+            onClose: () => {
+              this.$router.go(-1);
+            },
+          });
+        }
+      });
     },
-    pickerOptions() {},
   },
 };
 </script>
