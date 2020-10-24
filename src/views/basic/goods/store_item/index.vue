@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20" style="margin-bottom: 20px">
-      <el-col :span="8">
+      <el-col :span="10">
         <el-select
           style="width: 100%"
-          v-model="listData.vendor_ids"
+          v-model="vendor_ids"
           filterable
           multiple
           placeholder="请选择门店"
@@ -18,196 +18,71 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="8">
-        <el-input
-          v-model="listData.name"
-          placeholder="请输入单品名称搜索"
-        ></el-input>
-      </el-col>
       <el-col :span="4">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="addTab" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
     </el-row>
-    <el-table
-      v-loading="loading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column align="center" label="单品ID">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="单品图片">
-        <template slot-scope="scope">
-          <img style="max-width:100px;max-height:100px;" :src="scope.row.image" alt="" />
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="单品名称">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="所属套餐">
-        <template slot-scope="scope">
-          <span>{{ scope.row.vendor_package_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="250" align="center" label="门店">
-        <template slot-scope="scope">
-          <span>{{ scope.row.vendor_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="250" align="center" label="标签">
-        <template slot-scope="scope">
-          <span>{{ scope.row.category_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="250" align="center" label="味型">
-        <template slot-scope="scope">
-          <span>{{ scope.row.taste_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="250" align="center" label="门店库存">
-        <template slot-scope="scope">
-          <span>{{ scope.row.qty }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="上次进货价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.last_purchase_price }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="成本预警价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.warn_cost_price }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="基础成本价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.cost_price }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- <el-table-column width="250" align="center" label="毛利率">
-        <template slot-scope="scope">
-          <span>{{ scope.row.take_code }}</span>
-        </template>
-      </el-table-column> -->
-
-      <el-table-column width="200" align="center" label="温度曲线">
-        <template slot-scope="scope">
-          <span>{{ scope.row.temperature_curve }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="材料">
-        <template slot-scope="scope">
-          <span>{{ scope.row.material_species }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="调料">
-        <template slot-scope="scope">
-          <span>{{ scope.row.seasoning_species }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="供应商">
-        <template slot-scope="scope">
-          <span>{{ scope.row.supplier_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="厨师">
-        <template slot-scope="scope">
-          <span>{{ scope.row.created_user_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="180" fixed="right" align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail(scope.row.id)"
-            >详情</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="listData.page"
-      :limit.sync="listData.page_size"
-      @pagination="getList"
-    />
+    <el-tabs v-model="tabActive" style="margin-top: 15px" type="border-card">
+      <el-tab-pane
+        v-for="item in storeList"
+        :key="item.vendor_id"
+        :label="item.vendor_name"
+        :name="item.vendor_id"
+      >
+        <keep-alive>
+          <tab-pane
+            v-if="tabActive == item.vendor_id"
+            :vendor_ids="
+              Array.isArray(item.vendor_id) ? item.vendor_id : [item.vendor_id]
+            "
+          />
+        </keep-alive>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import { vendorProductList, searchStoreList } from "@/api/basic";
-import Pagination from "@/components/Pagination";
-
+import { searchStoreList } from "@/api/basic";
+import TabPane from "./components/TabPane";
 export default {
-  components: { Pagination },
+  components: { TabPane },
   data() {
     return {
-      list: [],
-      listData: {
-        page: 1,
-        page_size: 10,
-        name: "",
-        export: "",
-        vendor_ids: [],
-      },
       storeList: [],
-      storeVal: [],
-      storeListData: {
-        condition: "",
-        page: 1,
-        page_size: 10,
-      },
-      loading: false,
-      total: 0,
+      tabActive: "",
+      vendor_ids: "",
     };
   },
   created() {
-    this.getList();
     this.getStoreList();
   },
   methods: {
-    goDetail(vendor_product_id) {
-      this.$router.push(`/basic/goods/store_item_detail?vendor_product_id=${vendor_product_id}`);
-    },
-    getList() {
-      this.loading = true;
-      vendorProductList(this.listData).then((res) => {
-        this.total = res.count;
-        this.list = res.list;
-        this.loading = false;
-      });
-    },
     getStoreList() {
       searchStoreList().then((res) => {
+        this.tabActive = res[0].vendor_id;
         this.storeList = res;
       });
     },
-    search() {
-      console.log(this.storeVal);
+    addTab() {
+      let {vendor_ids,storeList} = this;
+      let index =storeList.findIndex(item => item.vendor_id == vendor_ids);
+      if (vendor_ids.length > 0 && index == -1) {
+        let vendor_name = "";
+        storeList.forEach((item) => {
+          vendor_ids.forEach((it) => {
+            if (item.vendor_id == it) {
+              vendor_name += item.vendor_name + ",";
+            }
+          });
+        });
+        this.storeList.push({
+          vendor_id: vendor_ids,
+          vendor_name: vendor_name.substring(0, vendor_name.length - 1),
+        });
+      }
     },
   },
 };

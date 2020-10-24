@@ -9,7 +9,7 @@
         <el-card shadow="always"> 门店ID：{{detail.vendor_id}} </el-card>
       </el-col>
       <el-col :span="4">
-        <el-card shadow="always"> 门店名称：{{detail.vendor_name}} </el-card>
+        <el-card shadow="always"> 门店：{{detail.vendor_name}} </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always"> 用户ID：{{detail.customer_id}} </el-card>

@@ -10,14 +10,22 @@ const warehouseRouter = {
             path: 'purchase',
             name: 'Purchase',
             component: () => import('@/views/warehouse/purchase'),
-            meta: { title: '进货管理', icon: 'table' }
-        },
-        {
-            path: 'purchase_add',
-            name: 'Purchase_add',
-            hidden: true,
-            component: () => import('@/views/warehouse/purchase/add'),
-            meta: { title: '新增进货', activeMenu: '/warehouse/purchase' }
+            meta: { title: '进货管理', icon: 'table' },
+            children:[
+                {
+                    path: 'purchase_list',
+                    name: 'PurchaseList',
+                    component: () => import('@/views/warehouse/purchase/list'),
+                    meta: { title: '进货列表', icon: 'table' }
+                },
+                {
+                    path: 'purchase_add',
+                    name: 'Purchase_add',
+                    hidden: true,
+                    component: () => import('@/views/warehouse/purchase/list/add'),
+                    meta: { title: '新增进货', activeMenu: '/warehouse/purchase/list' }
+                },
+            ]
         },
         {
             path: 'distribution',
@@ -39,29 +47,57 @@ const warehouseRouter = {
             meta: { title: '盘货管理', icon: 'tree' }
         },
         {
+            path: 'inventory',
+            name: 'Inventory',
+            hidden: true,
+            component: () => import('@/views/warehouse/inventory/detail'),
+            meta: { title: '盘货详情', icon: 'tree',activeMenu: '/warehouse/inventory' }
+        },
+        {
             path: 'frmLoss',
             name: 'FrmLoss',
             component: () => import('@/views/warehouse/frmLoss'),
             meta: { title: '报损管理', icon: 'tree' }
         },
-        {
-            path: 'allocation',
-            name: 'Allocation',
-            component: () => import('@/views/warehouse/allocation'),
-            meta: { title: '调拨管理', icon: 'tree' }
-        },
+        // {
+        //     path: 'allocation',
+        //     name: 'Allocation',
+        //     component: () => import('@/views/warehouse/allocation'),
+        //     meta: { title: '调拨管理', icon: 'tree' }
+        // },
         {
             path: 'qc',
             name: 'Qc',
             component: () => import('@/views/warehouse/qc'),
-            meta: { title: 'QC管理', icon: 'tree' }
+            meta: { title: 'QC分配', icon: 'tree' }
+        },
+        {
+            path: 'qc_detail',
+            name: 'QcDetail',
+            hidden: true,
+            component: () => import('@/views/warehouse/qc/detail'),
+            meta: { title: 'QC分配详情', icon: 'tree', activeMenu: '/warehouse/qc' }
         },
         {
             path: 'supplier',
             name: 'Supplier',
             component: () => import('@/views/warehouse/supplier'),
             meta: { title: '供应商管理', icon: 'tree' }
-        }
+        },
+        {
+            path: 'supplier_add',
+            name: 'supplier_add',
+            hidden: true,
+            component: () => import('@/views/warehouse/supplier/edit'),
+            meta: { title: '新增供应商', activeMenu: '/warehouse/supplier' }
+        },
+        {
+            path: 'supplier_edit',
+            name: 'supplier_edit',
+            hidden: true,
+            component: () => import('@/views/warehouse/supplier/edit'),
+            meta: { title: '编辑供应商', activeMenu: '/warehouse/supplier' }
+        },
     ]
 }
 

@@ -105,6 +105,12 @@ const basicRouter = {
                     component: () => import('@/views/basic/goods/store_item/detail'),
                     meta: { title: '门店单品详情', icon: 'tree',activeMenu: '/basic/goods/store_item' }
                 },
+                {
+                    path: 'material_seasoning',
+                    name: 'MaterialSeasoning',
+                    component: () => import('@/views/basic/goods/material_seasoning'),
+                    meta: { title: '材料调料管理', icon: 'tree' }
+                },
             ]
         },
         {

@@ -3,7 +3,7 @@
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
-          placeholder="请输入搜索内容"
+          placeholder="请输入套餐名称搜索"
           v-model="listData.name"
         ></el-input>
       </el-col>

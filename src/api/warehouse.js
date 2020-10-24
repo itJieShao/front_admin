@@ -45,7 +45,7 @@ export function inventoryList(data) {
   })
 }
 
-//QC管理列表
+//QC分配列表
 export function allocationList(data) {
   return request({
     url: '/product/allocation/list',
@@ -54,10 +54,46 @@ export function allocationList(data) {
   })
 }
 
-//供应商管理列表
+//QC分配详情
+export function allocationDetail(data) {
+  return request({
+    url: '/product/allocation/detail',
+    method: 'post',
+    data
+  })
+}
+
+//供应商下拉框
 export function supplierList(data) {
   return request({
+    url: '/product/supplier/get-list',
+    method: 'post',
+    data
+  })
+}
+
+//供应商管理列表
+export function getSupplierList(data) {
+  return request({
     url: '/product/supplier/list',
+    method: 'post',
+    data
+  })
+}
+
+//供应商详情
+export function supplierDetail(data) {
+  return request({
+    url: '/product/supplier/detail',
+    method: 'post',
+    data
+  })
+}
+
+//新增/编辑供应商
+export function updateSupplier(data) {
+  return request({
+    url: '/product/supplier/update',
     method: 'post',
     data
   })

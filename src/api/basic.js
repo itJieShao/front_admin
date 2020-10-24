@@ -153,6 +153,132 @@ export function labelList(data) {
   })
 }
 
+//材料列表
+export function materialList(data) {
+  return request({
+    url: '/product/material/list',
+    method: 'post',
+    data
+  })
+}
+
+//材料详情
+export function materialDetail(data) {
+  return request({
+    url: '/product/material/detail',
+    method: 'post',
+    data
+  })
+}
+
+//新增材料
+export function materialAdd(data) {
+  return request({
+    url: '/product/material/add',
+    method: 'post',
+    data
+  })
+}
+
+//编辑材料
+export function materialEdit(data) {
+  return request({
+    url: '/product/material/edit',
+    method: 'post',
+    data
+  })
+}
+
+//调料列表
+export function seasoningList(data) {
+  return request({
+    url: '/product/seasoning/list',
+    method: 'post',
+    data
+  })
+}
+
+//调料详情
+export function seasoningDetail(data) {
+  return request({
+    url: '/product/seasoning/detail',
+    method: 'post',
+    data
+  })
+}
+
+//新增调料
+export function seasoningAdd(data) {
+  return request({
+    url: '/product/seasoning/add',
+    method: 'post',
+    data
+  })
+}
+
+//编辑调料
+export function seasoningEdit(data) {
+  return request({
+    url: '/product/seasoning/edit',
+    method: 'post',
+    data
+  })
+}
+
+//包装列表
+export function packageBoxList(data) {
+  return request({
+    url: '/product/package-box/list',
+    method: 'post',
+    data
+  })
+}
+
+//包装详情
+export function packageBoxDetail(data) {
+  return request({
+    url: '/product/package-box/detail',
+    method: 'post',
+    data
+  })
+}
+
+//新增包装
+export function packageBoxAdd(data) {
+  return request({
+    url: '/product/package-box/add',
+    method: 'post',
+    data
+  })
+}
+
+//编辑包装
+export function packageBoxEdit(data) {
+  return request({
+    url: '/product/package-box/edit',
+    method: 'post',
+    data
+  })
+}
+
+//获取材料/调料/包装标签下拉框数据
+export function labelData(data) {
+  return request({
+    url: '/product/label/get-list',
+    method: 'post',
+    data
+  })
+}
+
+//获取单位
+export function unitData(data) {
+  return request({
+    url: '/product/unit/get-list',
+    method: 'post',
+    data
+  })
+}
+
 //获取包装
 export function packageBox(data) {
   return request({
@@ -225,6 +351,15 @@ export function userList(data) {
   })
 }
 
+//启用/禁用 用户
+export function userUpdateStatus(data) {
+  return request({
+    url: '/customer/customer/disable-user',
+    method: 'post',
+    data
+  })
+}
+
 //用户积分列表
 export function integralList(data) {
   return request({
@@ -238,6 +373,15 @@ export function integralList(data) {
 export function customerDetail(data) {
   return request({
     url: '/customer/customer/get-user-data',
+    method: 'post',
+    data
+  })
+}
+
+//用户资料卡券
+export function customerCouponList(data) {
+  return request({
+    url: '/order/coupon/get-customer-coupon-list',
     method: 'post',
     data
   })

@@ -260,6 +260,11 @@ export default {
         vendor_package_id: this.$route.query.vendor_package_id,
       }).then((res) => {
         this.formData = res;
+        this.checkedPackageData = {
+          name: res.package_name,
+          main_image: res.main_image,
+          image: res.image,
+        };
       });
     },
     //标签列表

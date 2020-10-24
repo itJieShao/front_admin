@@ -8,15 +8,15 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column width="200" align="center" label="盘货ID">
+      <el-table-column width="200" align="center" label="QC分配ID">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.allocation_id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="盘货日期">
+      <el-table-column width="200" align="center" label="售卖时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.inventory_at }}</span>
+          <span>{{ scope.row.saled_at }}</span>
         </template>
       </el-table-column>
 
@@ -32,66 +32,59 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="130" align="center" label="烹饪盘数">
+        <template slot-scope="scope">
+          <span>{{ scope.row.plate_num }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="130" align="center" label="单品">
         <template slot-scope="scope">
           <span>{{ scope.row.product_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="入库总份数">
+      <el-table-column width="130" align="center" label="应分配份数">
         <template slot-scope="scope">
-          <span>{{ scope.row.qty }}</span>
+          <span>{{ scope.row.product_num }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="销售总份数">
+      <el-table-column width="130" align="center" label="实际分配份数">
         <template slot-scope="scope">
-          <span>{{ scope.row.sale_qty }}</span>
+          <span>{{ scope.row.allocation_product_num }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="应存库存">
+      <el-table-column width="130" align="center" label="分配差额">
         <template slot-scope="scope">
-          <span>{{ scope.row.stock_qty }}</span>
+          <span>{{ scope.row.diff_product_num }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="实际库存">
+      <el-table-column width="130" align="center" label="QC人员">
         <template slot-scope="scope">
-          <span>{{ scope.row.real_qty }}</span>
+          <span>{{ scope.row.qc_user_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="盘货差额">
+      <el-table-column width="200" align="center" label="分配时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.diff_qty }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="盘货店员">
-        <template slot-scope="scope">
-          <span>{{ scope.row.inventory_user_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="配货时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.inventory_at }}</span>
+          <span>{{ scope.row.allocation_at }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="180" align="center" label="配货状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="warning" effect="dark">待分配</el-tag>
-          <el-tag v-else-if="scope.row.status == 1 && scope.row.diff_qty == 0" type="success" effect="dark">库存一致</el-tag>
-          <el-tag v-else-if="scope.row.status == 1 && scope.row.diff_qty > 0" effect="dark">库存增加</el-tag>
-          <el-tag v-else type="danger" effect="dark">库存减少</el-tag>
+          <el-tag v-else-if="scope.row.status == 1" type="danger" effect="dark">分配减少</el-tag>
+          <el-tag v-else type="success" effect="dark">分配正常</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail(scope.row.id)"
+          <el-button size="mini" @click="goDetail(scope.row.allocation_id)"
             >详情</el-button
           >
         </template>
@@ -108,7 +101,7 @@
 </template>
 
 <script>
-import { inventoryList } from "@/api/warehouse";
+import { allocationList } from "@/api/warehouse";
 import Pagination from "@/components/Pagination";
 export default {
   props: {
@@ -134,14 +127,14 @@ export default {
     this.getList();
   },
   methods: {
-    goDetail(inventory_id) {
+    goDetail(allocation_id) {
       this.$router.push(
-        `/warehouse/qc_detail?inventory_id=${inventory_id}`
+        `/warehouse/qc_detail?allocation_id=${allocation_id}`
       );
     },
     getList() {
       this.loading = true;
-      inventoryList(this.listData).then((res) => {
+      allocationList(this.listData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;

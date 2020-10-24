@@ -137,29 +137,51 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-divider />
+    <el-card shadow="always">
+      <el-table :data="couponList" stripe style="width: 100%">
+        <el-table-column prop="id" label="优惠券/红包ID" width="180">
+        </el-table-column>
+        <el-table-column prop="type_name" label="优惠券/红包" width="180">
+        </el-table-column>
+        <el-table-column prop="name" label="名称">
+        </el-table-column>
+        <el-table-column prop="favourable_price" label="金额">
+        </el-table-column>
+        <el-table-column prop="condition_price" label="门槛金额">
+        </el-table-column>
+        <el-table-column prop="created_at" label="领取时间">
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { customerDetail } from "@/api/basic";
+import { customerDetail,customerCouponList } from "@/api/basic";
 export default {
   data() {
     return {
       customer_id: "",
       detail: {},
+      couponList:[]
     };
   },
   created() {
     this.customer_id = this.$route.query.customer_id;
     this.getDetail();
+    this.getCouponList();
   },
   methods: {
     getDetail() {
       customerDetail({ customer_id: this.customer_id }).then((res) => {
-        console.log(res);
-
         this.detail = res;
       });
+    },
+    getCouponList(){
+      customerCouponList({ customer_id: this.customer_id }).then(res => {
+        this.couponList = res
+      })
     },
   },
 };

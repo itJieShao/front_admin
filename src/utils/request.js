@@ -15,14 +15,14 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    if (config.method=='post'){
+    if (config.method == 'post') {
       config.data = config.data ? config.data : {};
       axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
       config.data.token = getToken()
       config.data = qs.stringify(config.data)
     }
-    
-    
+
+
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -52,14 +52,18 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res.status)
-    if (!res.status){
+    if (!res.status) {
+      if (res.error.errorcode == 666) {
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
+      }
       Message({
         message: res.error.errormsg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
-    }else{
+    } else {
       return res.data
     }
 
@@ -90,7 +94,7 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log(error) // for debug
     Message({
       message: error.message,
       type: 'error',

@@ -107,6 +107,11 @@
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="updateStatus(scope.row.id, scope.row.status)"
+            >{{ scope.row.status ? "启用" : "禁用" }}</el-button
+          >
           <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
           >
@@ -124,7 +129,7 @@
 </template>
 
 <script>
-import { userList } from "@/api/basic";
+import { userList, userUpdateStatus } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   name: "preinstall_meal",
@@ -145,6 +150,23 @@ export default {
     this.getList();
   },
   methods: {
+    updateStatus(id, status) {
+      userUpdateStatus({
+        customer_id: id,
+        type: status ? 2 : 1,
+      }).then((res) => {
+        if (res) {
+          let index = this.list.findIndex((item) => item.id == id);
+          this.$set(this.list[index], "status", status ? 0 : 1);
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1500,
+          });
+        }
+      });
+    },
     goDetail(id) {
       this.$router.push(`/basic/user/detail?customer_id=${id}`);
     },
