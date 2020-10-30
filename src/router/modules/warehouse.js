@@ -19,11 +19,31 @@ const warehouseRouter = {
                     meta: { title: '进货列表', icon: 'table' }
                 },
                 {
+                    path: 'purchase_detail',
+                    name: 'PurchaseDetail',
+                    hidden: true,
+                    component: () => import('@/views/warehouse/purchase/list/detail'),
+                    meta: { title: '进货详情', activeMenu: '/warehouse/purchase/purchase_list' }
+                },
+                {
                     path: 'purchase_add',
-                    name: 'Purchase_add',
+                    name: 'PurchaseAdd',
                     hidden: true,
                     component: () => import('@/views/warehouse/purchase/list/add'),
-                    meta: { title: '新增进货', activeMenu: '/warehouse/purchase/list' }
+                    meta: { title: '新增进货', activeMenu: '/warehouse/purchase/purchase_list' }
+                },
+                {
+                    path: 'summary_list',
+                    name: 'SummaryList',
+                    component: () => import('@/views/warehouse/purchase/summary'),
+                    meta: { title: '进货汇总管理', icon: 'table' }
+                },
+                {
+                    path: 'summary_detail',
+                    name: 'SummaryDetail',
+                    hidden: true,
+                    component: () => import('@/views/warehouse/purchase/summary/detail'),
+                    meta: { title: '进货汇总详情', activeMenu: '/warehouse/purchase/summary_list' }
                 },
             ]
         },
@@ -47,8 +67,8 @@ const warehouseRouter = {
             meta: { title: '盘货管理', icon: 'tree' }
         },
         {
-            path: 'inventory',
-            name: 'Inventory',
+            path: 'inventory_detail',
+            name: 'InventoryDetail',
             hidden: true,
             component: () => import('@/views/warehouse/inventory/detail'),
             meta: { title: '盘货详情', icon: 'tree',activeMenu: '/warehouse/inventory' }

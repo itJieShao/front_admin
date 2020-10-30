@@ -109,6 +109,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
+            :type="scope.row.status ? 'success' : 'danger'"
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status ? "启用" : "禁用" }}</el-button
           >

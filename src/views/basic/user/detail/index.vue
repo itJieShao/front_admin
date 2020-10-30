@@ -187,23 +187,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.el-card {
-  display: flex;
-  justify-content: center;
-}
+<style scoped>
 p {
   margin: 0;
-}
-.l_user img {
-  display: block;
-  margin: 0 auto;
-}
-.l_user p {
-  word-wrap: break-word;
-  word-break: break-all;
-  margin-top: 10px;
-  text-align: center;
 }
 .item_flex {
   display: flex;
@@ -215,8 +201,10 @@ p {
 }
 .item_flex p:last-child {
   width: 100%;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
-  padding-top: 10px;
+  padding-top: 5px;
   margin-top: 10px;
   border-top: 1px solid #ddd;
   color: #999;

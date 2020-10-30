@@ -9,6 +9,69 @@ export function purchaseList(data) {
   })
 }
 
+//生成进货汇总
+export function purchaseTotalAdd(data) {
+  return request({
+    url: '/product/purchase-total/add',
+    method: 'post',
+    data
+  })
+}
+
+//进货详情
+export function purchaseDetail(data) {
+  return request({
+    url: '/product/purchase/detail',
+    method: 'post',
+    data
+  })
+}
+
+//采购单品列表
+export function purchaseProductData(data) {
+  return request({
+    url: '/product/purchase/product-data',
+    method: 'post',
+    data
+  })
+}
+
+//进货汇总列表
+export function purchaseTotalList(data) {
+  return request({
+    url: '/product/purchase-total/list',
+    method: 'post',
+    data
+  })
+}
+
+//进货汇总详情
+export function purchaseTotalDetail(data) {
+  return request({
+    url: '/product/purchase-total/detail',
+    method: 'post',
+    data
+  })
+}
+
+//更新材料进货价
+export function updateMaterialPurchasePrice(data) {
+  return request({
+    url: '/product/purchase-total/update-material-purchase-price',
+    method: 'post',
+    data
+  })
+}
+
+//更新调料进货价
+export function updateSeasoningPurchasePrice(data) {
+  return request({
+    url: '/product/purchase-total/update-seasoning-purchase-price',
+    method: 'post',
+    data
+  })
+}
+
 //门店套餐列表
 export function vendorPackageList(data) {
   return request({

@@ -190,6 +190,11 @@ export default {
       }
       this.detailApi({ [key]: this.jumpId }).then((res) => {
         this.formData = res;
+        if (res.image) {
+          this.detailMainImgFile = [
+            { name: "detailMainImgFile", url: res.image },
+          ];
+        }
       });
     },
     //删除主图

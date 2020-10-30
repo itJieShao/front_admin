@@ -41,45 +41,11 @@
 </template>
 
 <script>
-import { vendorPackageList } from "@/api/warehouse";
 export default {
-  props: ['vendor_id','saled_at'],
-  data() {
-    return {
-      list: [],
-      loading: false,
-    };
-  },
-  watch: {
-    "vendor_id"() {
-      if (this.saled_at) {
-        this.getVendorPackageList();
-      }
-    },
-    "saled_at"(val) {
-      if (this.vendor_id && val) {
-        this.getVendorPackageList();
-      }
-    },
-  },
-  created() {
-    this.getVendorPackageList();
-  },
+  props: ['list','loading'],
   methods: {
     changeNum(id,num){
-      if (num){
-        this.$emit('addPurchaseData',{vendor_package_id:id,num})
-      }
-    },
-    getVendorPackageList() {
-      this.loading = true;
-      vendorPackageList({vendor_id:this.vendor_id,saled_at:this.saled_at}).then((res) => {
-        if (res){
-          res.forEach((item) => (item.num = 0));
-        }
-        this.loading = false;
-        this.list = res
-      });
+      this.$emit('addPurchaseData',{vendor_package_id:id,num})
     },
   },
 };

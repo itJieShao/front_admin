@@ -9,7 +9,7 @@
       </el-col> -->
       <el-col :span="24" style="display: flex; justify-content: flex-end">
         <el-button type="success" @click="addPurchase">新增进货</el-button>
-        <el-button type="warning">生成进货汇总</el-button>
+        <el-button type="warning" @click="addSummary">生成进货汇总</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -19,7 +19,10 @@
       fit
       highlight-current-row
       style="width: 100%"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" fixed="left" align="center" width="55">
+      </el-table-column>
       <el-table-column align="center" label="进货ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -105,7 +108,9 @@
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail">详情</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -120,7 +125,7 @@
 </template>
 
 <script>
-import { purchaseList } from "@/api/warehouse";
+import { purchaseList,purchaseTotalAdd } from "@/api/warehouse";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -135,14 +140,17 @@ export default {
       },
       loading: false,
       total: 0,
+      checkedSummaryList: [], //表格选中的项
     };
   },
   created() {
     this.getList();
   },
   methods: {
-    goDetail() {
-      this.$router.push("/order/detail");
+    goDetail(purchase_id) {
+      this.$router.push(
+        `/warehouse/purchase/purchase_detail?purchase_id=${purchase_id}`
+      );
     },
     addPurchase() {
       this.$router.push("/warehouse/purchase/purchase_add");
@@ -153,6 +161,32 @@ export default {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
+      });
+    },
+    handleSelectionChange(val) {
+      this.checkedSummaryList = val;
+    },
+    //生成进货汇总
+    addSummary() {
+      let list = this.checkedSummaryList;
+      if (list.length === 0) {
+        return this.$message.error("请先选中要汇总的门店");
+      }
+      if (list.findIndex((item) => item.status != 1) != -1) {
+        return this.$message.error('请选中状态为"审核通过"的门店');
+      }
+      let purchase_ids = [];
+      list.forEach(item => purchase_ids.push(item.id));
+      this.$confirm("是否生成进货汇总", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      }).then(() => {
+        purchaseTotalAdd({purchase_ids}).then(res => {
+          if (res){
+            console.log(res)
+            this.$router.push(`/warehouse/purchase/summary_detail?purchase_total_id=${res.purchast_total_id}`)
+          }
+        })
       });
     },
   },

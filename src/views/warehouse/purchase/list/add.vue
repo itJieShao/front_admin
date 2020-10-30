@@ -21,8 +21,8 @@
         </el-form-item>
         <el-form-item label="售卖日期">
           <el-date-picker
+            style="width: 100%"
             value-format="yyyy-MM-dd"
-            align="right"
             type="date"
             placeholder="请选择售卖日期"
             v-model="saled_at"
@@ -34,17 +34,17 @@
         <p>门店套餐列表</p>
         <el-tabs v-model="active" style="margin-top: 15px" type="border-card">
           <el-tab-pane
-            v-for="item in tabMapOptions"
-            :key="item.key"
-            :label="item.label"
-            :name="item.key"
+            v-for="item in list"
+            :key="item.time_type"
+            :label="item.time"
+            :name="item.time_type"
           >
             <keep-alive>
               <tab-pane
                 @addPurchaseData="addPurchaseData"
-                v-if="active == item.key"
-                :vendor_id="vendor_id"
-                :saled_at="saled_at"
+                v-if="active == item.time_type"
+                :list="item.vendor_package_data"
+                :loading="loading"
               />
             </keep-alive>
           </el-tab-pane>
@@ -58,28 +58,32 @@
 </template>
 <script>
 import { searchStoreList } from "@/api/basic";
-import { addPurchase } from "@/api/warehouse";
+import { addPurchase, vendorPackageList } from "@/api/warehouse";
 import TabPane from "./components/TabPane";
 export default {
   components: { TabPane },
   data() {
     return {
-      tabMapOptions: [
-        { label: "早餐", key: "1" },
-        { label: "午餐", key: "2" },
-        { label: "下午茶", key: "3" },
-      ],
-      active: "1",
+      list: [],
       loading: false,
-      purchase_data: {
-        1: [],
-        2: [],
-        3: [],
-      },
+      active: "",
       vendor_id: "",
       saled_at: "",
       storeList: [],
+      purchase_data: {},
     };
+  },
+  watch: {
+    vendor_id() {
+      if (this.saled_at) {
+        this.getVendorPackageList();
+      }
+    },
+    saled_at(val) {
+      if (this.vendor_id && val) {
+        this.getVendorPackageList();
+      }
+    },
   },
   created() {
     this.getStoreList();
@@ -89,11 +93,35 @@ export default {
       let index = this.purchase_data[this.active].findIndex(
         (item) => item.vendor_package_id == data.vendor_package_id
       );
-      if (index === -1) {
-        this.purchase_data[this.active].push(data);
+      if (data.num > 0) {
+        if (index === -1) {
+          this.purchase_data[this.active].push(data);
+        } else {
+          this.purchase_data[this.active][index] = data;
+        }
       } else {
-        this.purchase_data[this.active][index] = data;
+        this.purchase_data[this.active].splice(index,1)
       }
+    },
+    getVendorPackageList() {
+      this.loading = true;
+      vendorPackageList({
+        vendor_id: this.vendor_id,
+        saled_at: this.saled_at,
+      }).then((res) => {
+        let purchase_data = {};
+        res.forEach((item) => {
+          item.time_type = item.time_type.toString();
+          purchase_data[item.time_type] = [];
+          item.vendor_package_data.forEach((it) => {
+            it.num = 0;
+          });
+        });
+        this.purchase_data = purchase_data;
+        this.active = res[0].time_type;
+        this.loading = false;
+        this.list = res;
+      });
     },
     getStoreList() {
       searchStoreList().then((res) => {

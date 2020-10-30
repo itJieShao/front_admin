@@ -140,7 +140,7 @@ export default {
     getOrderDetail(){
       orderDetail({order_id:this.order_id}).then(res => {
         console.log(res)
-        const packageArr = [];
+        let packageArr = [];
         for(let i=0;i<res.package_data.length;i+=3){
             packageArr.push(res.package_data.slice(i,i+3));
         }

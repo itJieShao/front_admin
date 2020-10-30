@@ -123,6 +123,7 @@
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
+            :type="scope.row.status ? 'danger' : 'success'"
             size="mini"
             @click="
               updateStatus([scope.row.vendor_package_id], scope.row.status)

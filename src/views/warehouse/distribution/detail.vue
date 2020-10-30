@@ -196,6 +196,8 @@ p {
 }
 .item_flex p:last-child {
   width: 100%;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   padding-top: 10px;
   margin-top: 10px;
