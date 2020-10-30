@@ -61,7 +61,7 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 5) {
+      if (!value) {
         callback(new Error('请输入密码'))
       } else {
         callback()
