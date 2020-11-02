@@ -1,17 +1,38 @@
 <template>
   <div class="app-container">
     <h2>{{ detail.type_name }}编辑</h2>
-    <el-table v-loading="loading" :data="detail.user_ids" style="width: 100%">
+    <el-table v-loading="loading" :data="user_data" style="width: 100%">
       <el-table-column align="center" label="级别">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span v-if="scope.row.id"
+            >{{ toChinesNum(scope.$index + 1) }}级审核</span
+          >
+          <span v-else>+添加审核级别</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="账户">
         <template slot-scope="scope">
           <el-select
+            v-if="scope.row.id"
             style="width: 100%"
-            v-model="scope.row.username"
+            v-model="scope.row.id"
+            filterable
+            placeholder="请选择系统账户"
+          >
+            <el-option
+              v-for="item in userData"
+              :key="item.id"
+              :label="item.username"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+
+          <el-select
+            @change="checkUser"
+            v-else
+            style="width: 100%"
+            v-model="addUserId"
             filterable
             placeholder="请选择系统账户"
           >
@@ -31,14 +52,27 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
-        <template slot-scope="scope"> </template>
+        <template slot-scope="scope" v-if="scope.row.id">
+          <el-button @click="del(scope.$index)" size="mini" type="danger"
+            >删除</el-button
+          >
+        </template>
       </el-table-column>
     </el-table>
+    <el-row
+      style="margin: 40px 20px 0 0"
+      type="flex"
+      class="row-bg"
+      justify="end"
+    >
+      <el-button style="margin-right: 10px" @click="back">取消</el-button>
+      <el-button type="success" @click="onSubmit">保存</el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { auditEditData, userData } from "@/api/system/examine";
+import { auditEditData, userData, auditEdit } from "@/api/system/examine";
 export default {
   data() {
     return {
@@ -46,10 +80,10 @@ export default {
       user_data: [], //列表数据
       detail: {},
       userData: [], //下拉框数据
-      loading: false,
+      loading: true,
+      addUserId: "",
     };
   },
-  computed: {},
   async created() {
     if (this.$route.query.id) {
       this.audit_type_id = this.$route.query.id;
@@ -58,6 +92,45 @@ export default {
     }
   },
   methods: {
+    checkUser(id) {
+      this.user_data.splice(this.user_data.length - 1, 0, {
+        id,
+        username: this.userData.find((item) => item.id == id).username,
+        name: this.userData.find((item) => item.id == id).name,
+      });
+      this.addUserId = "";
+    },
+    back() {
+      this.$router.go(-1);
+    },
+    del(index) {
+      this.user_data.splice(index, 1);
+    },
+    onSubmit() {
+      let user_ids = [];
+      this.user_data.forEach((item) => {
+        if (item.id) {
+          user_ids.push(item.id);
+        }
+      });
+      let aData = {
+        audit_type_id: this.audit_type_id,
+        user_ids,
+      };
+      auditEdit(aData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1500,
+            onClose: () => {
+              this.$router.go(-1);
+            },
+          });
+        }
+      });
+    },
     getUserData() {
       return userData().then((res) => {
         this.userData = res;
@@ -69,14 +142,21 @@ export default {
         if (res.user_ids.length > 0) {
           res.user_ids.forEach((item) => {
             this.userData.forEach((it) => {
-              this.user_data.push({
-                id: item,
-                name: it.name,
-                user_name: it.username,
-              });
+              if (item == it.id) {
+                this.user_data.push({
+                  id: item,
+                  name: it.name,
+                  user_name: it.username,
+                });
+              }
             });
           });
         }
+        this.user_data.push({
+          id: "",
+          name: "",
+          user_name: "",
+        });
         this.detail = res;
         this.loading = false;
       });

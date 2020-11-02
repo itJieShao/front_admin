@@ -22,18 +22,18 @@ export default {
   components: { TabPane },
   data() {
     return {
-      tabActive: "1",
+      tabActive: "3",
       tabCon:[
           {
-              key:"1",
+              key:"3",
               name:'材料'
           },
           {
-              key:"2",
+              key:"4",
               name:'调料'
           },
           {
-              key:"3",
+              key:"6",
               name:'包装'
           }
       ]

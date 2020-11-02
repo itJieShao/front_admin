@@ -57,7 +57,10 @@
                   :key="index"
                 >
                   <p>{{ item.product_name }}</p>
-                  <el-input-number :min="1" v-model="item.product_num"></el-input-number>
+                  <el-input-number
+                    :min="1"
+                    v-model="item.product_num"
+                  ></el-input-number>
                   <i @click="deleteProduct(index)" class="el-icon-delete"></i>
                 </div>
               </div>
@@ -73,9 +76,9 @@
           >
             <el-option
               v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -157,12 +160,8 @@
   </div>
 </template>
 <script>
-import {
-  updatePackage,
-  productList,
-  packageLabelList,
-  packageDetail,
-} from "@/api/basic";
+import { updatePackage, productList, packageDetail } from "@/api/basic";
+import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -218,15 +217,14 @@ export default {
             res.image.forEach((item, index) => {
               imgsArr.push({ name: `detailImagesFile${index}`, url: item });
             });
-            this.detailImagesFile = imgsArr
+            this.detailImagesFile = imgsArr;
           }
         }
       );
     },
-    //预设单品标签列表
+    //预设套餐标签列表
     getLabelList() {
-      packageLabelList().then((res) => {
-        console.log(res);
+      categoryData({ type: 1 }).then((res) => {
         this.labelList = res;
       });
     },

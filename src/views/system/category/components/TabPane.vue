@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-input
           v-model="listData.name"
-          :placeholder="`请输入${type_name}名称搜索`"
+          placeholder="请输入标签名称搜索"
         ></el-input>
       </el-col>
       <el-col :span="4">
@@ -14,74 +14,26 @@
       </el-col>
       <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button type="success" icon="el-icon-plus" @click="openDialog()"
-          >新增{{ type_name }}</el-button
+          >新增标签</el-button
         >
       </el-col>
     </el-row>
-    <el-table v-loading="loading" :data="list" border style="width: 100%">
-      <el-table-column align="center" :label="`${type_name}ID`">
+    <el-table v-loading="loading" :data="list" style="width: 100%">
+      <el-table-column width="50" align="center" label="顺序">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column width="160" align="center" :label="`${type_name}名称`">
+      <el-table-column align="center" label="标签名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" label="标签">
-        <template slot-scope="scope">
-          <span>{{ scope.row.label_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="单位">
-        <template slot-scope="scope">
-          <span>{{ scope.row.unit_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column v-if="type == 3" align="center" label="规格">
-        <template slot-scope="scope">
-          <span>{{ scope.row.specifications }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="上次进货价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.last_purchase_price }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="成本预警价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.warn_cost_price }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="基础成本价">
-        <template slot-scope="scope">
-          <span>{{ scope.row.cost_price }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="供应商">
-        <template slot-scope="scope">
-          <span>{{ scope.row.supplier_name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="200" align="center" label="创建时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openDialog(scope.row.id)">编辑</el-button>
+          <el-button size="mini" @click="openDialog(scope.row.id,scope.row.name)"
+            >修改</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -93,73 +45,84 @@
       @pagination="getList"
     />
 
-    <el-dialog @open="timer = new Date().getTime()" :title="dialogFormTitle" :visible.sync="dialogFormVisible">
-      <Edit :key="timer" :type="type" :type_name="type_name" :jumpId="jumpId" @closeDialog="closeDialog" />
+    <el-dialog
+      :title="category_id ? '修改标签' : '新增标签'"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form label-width="100px">
+        <el-form-item label="标签名称">
+          <el-input v-model="name" placeholder="请输入标签名称"></el-input>
+        </el-form-item>
+        <div style="display: flex; justify-content: flex-end">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="updateCategory">确 定</el-button>
+        </div>
+      </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { materialList, seasoningList, packageBoxList } from "@/api/basic";
+import { categoryList, categoryUpdate } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
-import Edit from "@/views/basic/goods/material_seasoning/edit";
 export default {
   props: ["type"],
-  components: { Pagination,Edit },
+  components: { Pagination },
   data() {
     return {
-      type_name: "",
       list: [],
       listData: {
         page: 1,
         page_size: 10,
         name: "",
+        type: this.type,
       },
       loading: false,
       total: 0,
-      getListApi: null, //获取列表的api方法
-      dialogFormVisible:false,
-      dialogFormTitle:'',
-      jumpId:'',
-      timer:''
+      dialogFormVisible: false,
+      dialogFormTitle: "",
+      category_id: "",
+      name: "",
     };
   },
   created() {
-    switch (this.type) {
-      case "1":
-        this.type_name = "材料";
-        this.getListApi = materialList;
-        break;
-      case "2":
-        this.type_name = "调料";
-        this.getListApi = seasoningList;
-        break;
-      case "3":
-        this.type_name = "包装";
-        this.getListApi = packageBoxList;
-        break;
-    }
     this.getList();
   },
   methods: {
-    //新增/编辑打开弹窗
-    openDialog(id){
-      this.jumpId = id;
-      this.dialogFormTitle = id ? `编辑${this.type_name}` : `新增${this.type_name}`;
-      this.dialogFormVisible = true
+    openDialog(category_id,name) {
+      this.category_id = category_id || "";
+      this.name = name;
+      this.dialogFormVisible = true;
+    },
+    updateCategory() {
+      let aData = {
+        category_id: this.category_id,
+        type: this.type,
+        name: this.name,
+      };
+      categoryUpdate(aData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+            onClose: () => {
+              this.dialogFormVisible = false;
+              this.getList();
+            },
+          });
+        }
+      });
     },
     getList() {
       this.loading = true;
-      this.getListApi(this.listData).then((res) => {
+      categoryList(this.listData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
       });
     },
-    closeDialog(refresh){
-      if (refresh) this.getList();
-      this.dialogFormVisible = false
-    }
   },
 };
 </script>

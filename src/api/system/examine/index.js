@@ -26,3 +26,12 @@ export function userData(data) {
         data
     })
 }
+
+//审核流程编辑
+export function auditEdit(data) {
+    return request({
+        url: '/product/audit/edit',
+        method: 'post',
+        data
+    })
+}

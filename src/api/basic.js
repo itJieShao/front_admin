@@ -117,15 +117,6 @@ export function productDetail(data) {
   })
 }
 
-//套餐标签列表
-export function packageLabelList(data) {
-  return request({
-    url: '/product/package/get-label-list',
-    method: 'post',
-    data
-  })
-}
-
 //预设套餐详情接口
 export function packageDetail(data) {
   return request({
@@ -297,32 +288,6 @@ export function supplierList(data) {
   })
 }
 
-//获取味型  
-export function tasteList(data) {
-  return request({
-    url: '/product/taste/get-data',
-    method: 'post',
-    data
-  })
-}
-
-//获取材料  
-export function materialData(data) {
-  return request({
-    url: '/product/material/get-data',
-    method: 'post',
-    data
-  })
-}
-
-//获取调料
-export function seasoningData(data) {
-  return request({
-    url: '/product/seasoning/get-data',
-    method: 'post',
-    data
-  })
-}
 
 //会员卡列表
 export function memberCardList(data) {

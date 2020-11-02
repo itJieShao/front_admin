@@ -126,15 +126,15 @@ export default {
   },
   created() {
     switch (this.type) {
-      case "1":
+      case "3":
         this.type_name = "材料";
         this.getListApi = materialList;
         break;
-      case "2":
+      case "4":
         this.type_name = "调料";
         this.getListApi = seasoningList;
         break;
-      case "3":
+      case "6":
         this.type_name = "包装";
         this.getListApi = packageBoxList;
         break;

@@ -186,7 +186,7 @@ export default {
           title: "成功",
           message: "操作成功",
           type: "success",
-          duration: 1500,
+          duration: 1000,
         });
       });
     },
@@ -210,7 +210,7 @@ export default {
             title: "成功",
             message: "添加成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.dialogFormVisible = false;
               this.getList();
@@ -223,19 +223,24 @@ export default {
       this.formData.status = checked ? "0" : "1";
     },
     deleteUser(users_id, index) {
-      return console.log(index);
-      userRemove({ users_id }).then((res) => {
-        if (res) {
-          this.$notify({
-            title: "成功",
-            message: "删除成功",
-            type: "success",
-            duration: 1500,
-            onClose: () => {
-              this.list.splice(index, 1);
-            },
-          });
-        }
+      this.$confirm("是否确定删除该管理员", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        userRemove({ users_id }).then((res) => {
+          if (res) {
+            this.$notify({
+              title: "成功",
+              message: "删除成功",
+              type: "success",
+              duration: 1000,
+              onClose: () => {
+                this.list.splice(index, 1);
+              },
+            });
+          }
+        });
       });
     },
   },

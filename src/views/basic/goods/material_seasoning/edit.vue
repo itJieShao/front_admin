@@ -51,7 +51,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="规格" v-show="type == 3">
+      <el-form-item label="规格" v-show="type == 6">
         <el-input v-model="formData.specifications"></el-input>
       </el-form-item>
       <el-form-item label="成本预警价">
@@ -102,10 +102,9 @@ import {
   materialDetail,
   seasoningDetail,
   packageBoxDetail,
-  labelData,
-  unitData,
   supplierList,
 } from "@/api/basic";
+import { categoryData } from "@/api/system/category";
 export default {
   props: ["type", "type_name", "jumpId"],
   data() {
@@ -132,19 +131,19 @@ export default {
   },
   created() {
     switch (this.type) {
-      case "1":
+      case "3":
         this.addApi = materialAdd;
         this.editApi = materialEdit;
         this.detailApi = materialDetail;
         this.formData.material_id = this.jumpId;
         break;
-      case "2":
+      case "4":
         this.addApi = seasoningAdd;
         this.editApi = seasoningEdit;
         this.detailApi = seasoningDetail;
         this.formData.seasoning_id = this.jumpId;
         break;
-      case "3":
+      case "6":
         this.addApi = packageBoxAdd;
         this.editApi = packageBoxEdit;
         this.detailApi = packageBoxDetail;
@@ -161,12 +160,12 @@ export default {
   },
   methods: {
     getLabelData() {
-      labelData({ type: this.type }).then((res) => {
+      categoryData({ type: this.type }).then((res) => {
         this.labelData = res;
       });
     },
     getUnitData() {
-      unitData().then((res) => {
+      categoryData({type:7}).then((res) => {
         this.unitData = res;
       });
     },
@@ -178,13 +177,13 @@ export default {
     getDetail() {
       let key = "";
       switch (this.type) {
-        case "1":
+        case "3":
           key = "material_id";
           break;
-        case "2":
+        case "4":
           key = "seasoning_id";
           break;
-        case "3":
+        case "6":
           key = "package_box_id";
           break;
       }

@@ -34,9 +34,9 @@
           >
             <el-option
               v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -317,14 +317,10 @@
 import {
   updateProduct,
   productList,
-  packageLabelList,
   productDetail,
-  packageBox,
-  tasteList,
   supplierList,
-  materialData,
-  seasoningData,
 } from "@/api/basic";
+import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -469,19 +465,19 @@ export default {
     },
     //预设单品标签列表
     getLabelList() {
-      packageLabelList().then((res) => {
+      categoryData({type:2}).then((res) => {
         this.labelList = res;
       });
     },
     //包装列表
     getPackageBox() {
-      packageBox().then((res) => {
+      categoryData({type:6}).then((res) => {
         this.packageBox = res;
       });
     },
     //味型列表
     getTasteList() {
-      tasteList().then((res) => {
+      categoryData({type:5}).then((res) => {
         this.tasteList = res;
       });
     },
@@ -493,13 +489,13 @@ export default {
     },
     //材料列表
     getMaterialData() {
-      materialData().then((res) => {
+      categoryData({type:3}).then((res) => {
         this.materialData = res;
       });
     },
     //调料列表
     getSeasoningData() {
-      seasoningData().then((res) => {
+      seasoningData({type:4}).then((res) => {
         this.seasoningData = res;
       });
     },

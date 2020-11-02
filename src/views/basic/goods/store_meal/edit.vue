@@ -66,9 +66,9 @@
           >
             <el-option
               v-for="item in labelList"
-              :key="item.package_label_id"
-              :label="item.package_label_name"
-              :value="item.package_label_id"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -178,12 +178,12 @@
 import {
   updateVendorPackage,
   packageList,
-  packageLabelList,
   vendorPackageDetail,
   packageDetail,
   couponList,
   searchStoreList,
 } from "@/api/basic";
+import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -269,7 +269,7 @@ export default {
     },
     //标签列表
     getLabelList() {
-      packageLabelList().then((res) => {
+      categoryData({type:1}).then((res) => {
         this.labelList = res;
       });
     },
