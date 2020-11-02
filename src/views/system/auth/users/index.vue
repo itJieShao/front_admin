@@ -17,7 +17,7 @@
           type="success"
           icon="el-icon-plus"
           @click="dialogFormVisible = true"
-          >添加账户</el-button
+          >新增账户</el-button
         >
       </el-col>
     </el-row>
@@ -82,7 +82,7 @@
       @pagination="getList"
     />
 
-    <el-dialog title="新增任务" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增账户" :visible.sync="dialogFormVisible">
       <el-form label-width="80px">
         <el-form-item label="选择角色">
           <el-select

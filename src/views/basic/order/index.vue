@@ -66,6 +66,7 @@ export default {
   methods: {
     getStoreList() {
       searchStoreList().then((res) => {
+        res.forEach(item => item.vendor_id = item.vendor_id.toString());
         this.tabActive = res[0].vendor_id;
         this.storeList = res;
       });

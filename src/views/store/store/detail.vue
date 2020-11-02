@@ -205,15 +205,20 @@
     <el-divider />
     <el-card shadow="always">
       <div>
-        <p>设备列表</p>    
+        <p>设备列表</p>
       </div>
     </el-card>
+    <echart />   
   </div>
 </template>
 
 <script>
 import { vendorDetail } from "@/api/store";
+import Echart from "@/components/Echart";
 export default {
+  components: {
+    Echart,
+  },
   data() {
     return {
       detail: {},
