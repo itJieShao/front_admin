@@ -53,7 +53,14 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/basic'
+    redirect: '/index',
+    children: [
+      {
+        path: '/index',
+        component: () => import('@/views/admin'),
+        meta: { title: '首页', icon: 'dashboard' },
+      }
+    ]
   },
 
   basicRouter,

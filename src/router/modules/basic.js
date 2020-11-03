@@ -3,7 +3,6 @@ import Layout from '@/layout'
 const basicRouter = {
     path: '/basic',
     component: Layout,
-    redirect: '/basic/order',
     meta: { title: '基础管理', icon: 'el-icon-menu' },
     children: [
         {
