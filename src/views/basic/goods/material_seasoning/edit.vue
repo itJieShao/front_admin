@@ -165,7 +165,7 @@ export default {
       });
     },
     getUnitData() {
-      categoryData({type:7}).then((res) => {
+      categoryData({ type: 7 }).then((res) => {
         this.unitData = res;
       });
     },
@@ -188,7 +188,9 @@ export default {
           break;
       }
       this.detailApi({ [key]: this.jumpId }).then((res) => {
-        this.formData = res;
+        for (let key in this.formData) {
+          this.formData[key] = res[key];
+        }
         if (res.image) {
           this.detailMainImgFile = [
             { name: "detailMainImgFile", url: res.image },

@@ -31,13 +31,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="标签">
+      <el-table-column width="140" align="center" label="标签">
         <template slot-scope="scope">
           <span>{{ scope.row.label_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="单位">
+      <el-table-column width="100" align="center" label="单位">
         <template slot-scope="scope">
           <span>{{ scope.row.unit_name }}</span>
         </template>
