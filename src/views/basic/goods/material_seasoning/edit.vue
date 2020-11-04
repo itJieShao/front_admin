@@ -196,6 +196,9 @@ export default {
             { name: "detailMainImgFile", url: res.image },
           ];
         }
+        if (this.type == 6) {
+          this.formData.package_box_id = res.id;
+        }
       });
     },
     //删除主图
@@ -224,7 +227,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$emit("closeDialog", "1"); //有参数则刷新父组件表格
             },

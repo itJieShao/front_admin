@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-if="">
     <h2>订单详情</h2>
     <el-row :gutter="12">
       <el-col :span="4">
@@ -29,7 +29,7 @@
         <el-card shadow="always"> 应付总价：{{detail.total_price}} </el-card>
       </el-col>
       <el-col :span="4">
-        <el-card shadow="always"> 优惠：{{detail.favourable_price}} </el-card>
+        <el-card shadow="always"> 优惠：{{detail.favourable_price.toFixed(2)}} </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always"> 实付总价：{{detail.real_price}} </el-card>

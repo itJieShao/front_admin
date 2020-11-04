@@ -159,8 +159,17 @@
               </el-col>
             </el-row>
           </el-col>
-        </el-form-item>
+        </el-form-item> 
         <el-divider />
+        <el-form-item label="温度曲线" v-if="detail.xAxis">
+          <echart
+            :id="'chart'"
+            :width="'100%'"
+            :height="'300px'"
+            :xAxis="detail.xAxis"
+            :series="detail.series"
+          />
+        </el-form-item>
       </el-form>
     </el-card>
   </div>
@@ -168,11 +177,15 @@
 
 <script>
 import { productDetail } from "@/api/basic";
+import echart from "@/components/Echart";
 export default {
   data() {
     return {
       detail: {},
     };
+  },
+  components: {
+    echart,
   },
   created() {
     this.getDetail();
@@ -192,6 +205,14 @@ export default {
         }
         res.material_data = material_data;
         res.seasoning_data = seasoning_data;
+        const xAxis = [],
+          series = [];
+        res.temperature_curve.forEach((item) => {
+          xAxis.push(item.time);
+          series.push(item.temperature);
+        });
+        res.xAxis = xAxis;
+        res.series = series;
         this.detail = res;
       });
     },
@@ -211,16 +232,14 @@ p {
   word-wrap: break-word;
   word-break: break-all;
 }
-.item_flex p:first-child{
+.item_flex p{
   height: 30px;
   line-height: 30px;
 }
 .item_flex p:last-child {
   width: 100%;
-  height: 30px;
-  line-height: 30px;
   text-align: center;
-  padding-top: 5px;
+  padding-top: 7px;
   margin-top: 10px;
   border-top: 1px solid #ddd;
   color: #999;

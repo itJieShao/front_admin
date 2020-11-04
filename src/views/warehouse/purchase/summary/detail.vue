@@ -328,7 +328,7 @@ p {
 .item_flex p:last-child {
   width: 100%;
   text-align: center;
-  padding-top: 10px;
+  padding-top: 8px;
   margin-top: 10px;
   border-top: 1px solid #ddd;
   color: #999;

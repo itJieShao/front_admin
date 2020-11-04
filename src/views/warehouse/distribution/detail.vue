@@ -96,7 +96,11 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>配货状态</p>
-            <p>{{ detail.status }}</p>
+            <p>
+              <el-tag effect="dark" type="warning" v-if="detail.status == 0">待核对</el-tag>
+              <el-tag effect="dark" v-else-if="detail.status == 1">待入柜</el-tag>
+              <el-tag effect="dark" type="success" v-else>已配货</el-tag>
+            </p>
           </div>
         </el-card>
       </el-col>
@@ -138,6 +142,7 @@
     </el-row>
     <el-divider />
     <el-card shadow="always">
+      <p class="item_title">烹饪盘列表</p>
       <el-table :data="detail.product_data" stripe style="width: 100%">
         <el-table-column prop="plate_name" label="烹饪盘ID" width="180">
         </el-table-column>
@@ -203,5 +208,10 @@ p {
   margin-top: 10px;
   border-top: 1px solid #ddd;
   color: #999;
+}
+.item_title {
+  font-size: 16px;
+  color: #666;
+  margin: 10px auto 20px;
 }
 </style>

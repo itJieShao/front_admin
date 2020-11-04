@@ -279,6 +279,24 @@ export function packageBox(data) {
   })
 }
 
+//获取材料
+export function materialData(data) {
+  return request({
+    url: '/product/material/get-data',
+    method: 'post',
+    data
+  })
+}
+
+//获取调料
+export function seasoningData(data) {
+  return request({
+    url: '/product/seasoning/get-data',
+    method: 'post',
+    data
+  })
+}
+
 //获取供应商
 export function supplierList(data) {
   return request({
@@ -287,7 +305,6 @@ export function supplierList(data) {
     data
   })
 }
-
 
 //会员卡列表
 export function memberCardList(data) {

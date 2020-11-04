@@ -28,7 +28,7 @@ const basicRouter = {
                     path: 'preinstall_meal',
                     name: 'PreinstallMeal',
                     component: () => import('@/views/basic/goods/preinstall_meal/index'),
-                    meta: { title: '预设套餐', icon: 'table' }
+                    meta: { title: '预设套餐', icon: 'example' }
                 },
                 {
                     path: 'preinstall_meal_add',
@@ -49,13 +49,13 @@ const basicRouter = {
                     name: 'PreinstallMealDetail',
                     hidden: true,
                     component: () => import('@/views/basic/goods/preinstall_meal/detail'),
-                    meta: { title: '预设套餐详情', activeMenu: 'preinstall_meal' }
+                    meta: { title: '预设套餐详情', activeMenu: '/basic/goods/preinstall_meal' }
                 },
                 {
                     path: 'store_meal',
                     name: 'StoreMeal',
                     component: () => import('@/views/basic/goods/store_meal'),
-                    meta: { title: '门店套餐', icon: 'tree' }
+                    meta: { title: '门店套餐', icon: 'example' }
                 },
                 {
                     path: 'store_meal_add',
@@ -72,10 +72,17 @@ const basicRouter = {
                     meta: { title: '编辑门店套餐', activeMenu: '/basic/goods/store_meal' }
                 },
                 {
+                    path: 'store_meal_detail',
+                    name: 'StoreMealDetail',
+                    hidden: true,
+                    component: () => import('@/views/basic/goods/store_meal/detail'),
+                    meta: { title: '门店套餐详情', activeMenu: '/basic/goods/store_meal' }
+                },
+                {
                     path: 'preinstall_item',
                     name: 'PreinstallItem',
                     component: () => import('@/views/basic/goods/preinstall_item'),
-                    meta: { title: '预设单品', icon: 'tree' }
+                    meta: { title: '预设单品', icon: 'ysitem' }
                 },
                 {
                     path: 'preinstall_item_add',
@@ -92,10 +99,17 @@ const basicRouter = {
                     meta: { title: '编辑预设单品', activeMenu: '/basic/goods/preinstall_item' }
                 },
                 {
+                    path: 'preinstall_item_detail',
+                    name: 'PreinstallItemDetail',
+                    hidden: true,
+                    component: () => import('@/views/basic/goods/preinstall_item/detail'),
+                    meta: { title: '预设单品详情', activeMenu: '/basic/goods/preinstall_item' }
+                },
+                {
                     path: 'store_item',
                     name: 'StoreItem',
                     component: () => import('@/views/basic/goods/store_item'),
-                    meta: { title: '门店单品', icon: 'tree' }
+                    meta: { title: '门店单品', icon: 'ysitem' }
                 },
                 {
                     path: 'store_item_detail',

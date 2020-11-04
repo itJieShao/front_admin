@@ -288,7 +288,7 @@
                       v-model="time"
                     ></el-input>
                   </div>
-                  <div>
+                  <div style="margin-left:20px;">
                     <el-input
                       placeholder="请输入温度"
                       v-model="temperature"
@@ -319,6 +319,9 @@ import {
   productList,
   productDetail,
   supplierList,
+  materialData,
+  seasoningData,
+  packageBox
 } from "@/api/basic";
 import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
@@ -471,7 +474,7 @@ export default {
     },
     //包装列表
     getPackageBox() {
-      categoryData({type:6}).then((res) => {
+      packageBox().then((res) => {
         this.packageBox = res;
       });
     },
@@ -489,7 +492,7 @@ export default {
     },
     //材料列表
     getMaterialData() {
-      categoryData({type:3}).then((res) => {
+      materialData().then((res) => {
         this.materialData = res;
       });
     },

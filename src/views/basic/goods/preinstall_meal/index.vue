@@ -32,53 +32,56 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="套餐图片">
+      <el-table-column width="180" align="center" label="套餐图片">
         <template slot-scope="scope">
           <img style="max-width:100px;max-height:100px;" :src="scope.row.main_image" alt="" />
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="套餐名称">
+      <el-table-column width="180" align="center" label="套餐名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="标签">
+      <el-table-column width="120" align="center" label="标签">
         <template slot-scope="scope">
           <span>{{ scope.row.package_label_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="建议销售价">
+      <el-table-column width="120" align="center" label="建议销售价">
         <template slot-scope="scope">
           <span>{{ scope.row.sale_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="厨师">
+      <el-table-column width="100" align="center" label="厨师">
         <template slot-scope="scope">
           <span>{{ scope.row.created_user_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="创建时间">
+      <el-table-column width="180" align="center" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" align="center" label="状态">
+      <el-table-column width="120" class-name="status-col" align="center" label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status" type="success">启用</el-tag>
           <el-tag v-else type="danger">禁用</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作">
+      <el-table-column fixed="right" width="200" align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="goEdit(scope.row.package_id)"
             >编辑</el-button
+          >
+          <el-button size="mini" @click="goDetail(scope.row.package_id)"
+            >详情</el-button
           >
         </template>
       </el-table-column>
@@ -123,7 +126,9 @@ export default {
       this.$router.push(
         `/basic/goods/preinstall_meal_edit?package_id=${package_id}`
       );
-      //this.$router.push("/basic/goods/preinstall_meal_detail");
+    },
+    goDetail(package_id) {
+      this.$router.push(`/basic/goods/preinstall_meal_detail?package_id=${package_id}`);
     },
     getList() {
       this.loading = true;

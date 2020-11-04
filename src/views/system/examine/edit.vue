@@ -13,6 +13,7 @@
       <el-table-column align="center" label="账户">
         <template slot-scope="scope">
           <el-select
+            @change="changeUser"
             v-if="scope.row.id"
             style="width: 100%"
             v-model="scope.row.id"
@@ -92,6 +93,10 @@ export default {
     }
   },
   methods: {
+    changeUser(id){
+      let index = this.user_data.findIndex(item => item.id == id);
+      this.user_data[index].name = this.userData.find(item => item.id == id).name;
+    },
     checkUser(id) {
       this.user_data.splice(this.user_data.length - 1, 0, {
         id,

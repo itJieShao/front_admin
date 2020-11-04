@@ -217,14 +217,14 @@ export default {
   components: { Pagination },
   computed: {
     discount_price() {
+      console.log(this.discount_rate, this.formData.coupon_id);
       if (this.discount_rate && this.formData.coupon_id) {
-        return this.formData.sale_price * this.discount_rate;
-      } else {
-        return this.formData.discount_price;
+        return (this.formData.sale_price * this.discount_rate).toFixed(2);
       }
     },
   },
-  created() {
+  async created() {
+    await this.getCouponList();
     if (this.$route.query.vendor_package_id) {
       this.formData.vendor_package_id = this.$route.query.vendor_package_id;
       this.getDetail();
@@ -232,8 +232,7 @@ export default {
       this.getStoreList();
     }
     this.getpackageList();
-    this.getLabelList();
-    this.getCouponList();
+    this.getLabelList(); 
   },
   methods: {
     //选择优惠之后计算折扣率
@@ -244,7 +243,7 @@ export default {
     },
     //优惠下拉列表
     getCouponList() {
-      couponList().then((res) => {
+      return couponList().then((res) => {
         this.couponList = res;
       });
     },
@@ -265,11 +264,14 @@ export default {
           main_image: res.main_image,
           image: res.image,
         };
+        this.discount_rate = this.couponList.find(
+          (item) => item.id == res.coupon_id
+        ).discount;
       });
     },
     //标签列表
     getLabelList() {
-      categoryData({type:1}).then((res) => {
+      categoryData({ type: 1 }).then((res) => {
         this.labelList = res;
       });
     },
@@ -301,7 +303,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$router.go(-1);
             },

@@ -23,7 +23,7 @@
     >
       <el-table-column type="selection" fixed="left" align="center" width="55">
       </el-table-column>
-      <el-table-column align="center" label="进货ID">
+      <el-table-column width="100" align="center" label="进货ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -47,37 +47,37 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="运营管理人员">
+      <el-table-column width="160" align="center" label="运营管理人员">
         <template slot-scope="scope">
           <span>{{ scope.row.created_user_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="下级审核人">
+      <el-table-column width="160" align="center" label="下级审核人">
         <template slot-scope="scope">
           <span>{{ scope.row.audit_user_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="采购单品">
+      <el-table-column width="120" align="center" label="采购单品">
         <template slot-scope="scope">
           <span>{{ scope.row.product_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="总份数">
+      <el-table-column width="100" align="center" label="总份数">
         <template slot-scope="scope">
           <span>{{ scope.row.product_num }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="预估总金额">
+      <el-table-column width="160" align="center" label="预估总金额">
         <template slot-scope="scope">
           <span>{{ scope.row.purchase_price_total }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150" align="center" label="实际总金额">
+      <el-table-column width="160" align="center" label="实际总金额">
         <template slot-scope="scope">
           <span>{{ scope.row.real_purchase_price_total }}</span>
         </template>

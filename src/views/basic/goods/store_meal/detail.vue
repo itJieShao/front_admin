@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>预设套餐详情</h2>
+    <h2>门店套餐详情</h2>
     <el-card shadow="always">
       <el-form label-width="100px">
         <el-form-item label="套餐标题">
@@ -20,7 +20,15 @@
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>套餐ID</p>
-                  <p>{{ detail.package_id }}</p>
+                  <p>{{ detail.vendor_package_id }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>门店</p>
+                  <p>{{ detail.vendor_name }}</p>
                 </div>
               </el-card>
             </el-col>
@@ -35,24 +43,78 @@
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
-                  <p>建议销售价</p>
-                  <p>{{ detail.sale_price }}</p>
+                  <p>库存</p>
+                  <p>{{ detail.qty }}</p>
                 </div>
               </el-card>
             </el-col>
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
-                  <p>厨师</p>
-                  <p>{{ detail.created_user_name }}</p>
+                  <p>进货价</p>
+                  <p>{{ detail.purchase_price }}</p>
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="3">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>销售原价</p>
+                  <p>{{ detail.sale_price }}</p>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 15px" :gutter="12">
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>优惠</p>
+                  <p>{{ detail.coupon_name }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>套餐号</p>
+                  <p>{{ detail.take_code }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>上架时间</p>
+                  <p>{{ detail.shelves_at }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>创建时间</p>
                   <p>{{ detail.created_at }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>套餐状态</p>
+                  <p>{{ detail.status == 1 ? "已上架" : "已下架" }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>操作</p>
+                  <p>
+                    <el-tag @click="updateStatus" style="cursor: pointer;" :type="detail.status == 1 ? 'danger':'success'" effect="dark">
+                      {{ detail.status == 1 ? "下架" : "上架" }}
+                    </el-tag>
+                  </p>
                 </div>
               </el-card>
             </el-col>
@@ -79,7 +141,7 @@
 </template>
 
 <script>
-import { packageDetail } from "@/api/basic";
+import { vendorPackageDetail,vendorPackageUpdateStatus } from "@/api/basic";
 export default {
   data() {
     return {
@@ -90,13 +152,27 @@ export default {
     this.getDetail();
   },
   methods: {
-    //预设套餐详情
+    //门店套餐详情
     getDetail() {
-      packageDetail({ package_id: this.$route.query.package_id }).then(
-        (res) => {
-          this.detail = res;
-        }
-      );
+      vendorPackageDetail({
+        vendor_package_id: this.$route.query.vendor_package_id,
+      }).then((res) => {
+        this.detail = res;
+      });
+    },
+    updateStatus() {
+      vendorPackageUpdateStatus({
+        vendor_package_ids:[this.detail.vendor_package_id],
+        status: this.detail.status ? 0 : 1,
+      }).then((res) => {
+        this.detail.status = this.detail.status ? 0 : 1;
+        this.$notify({
+          title: "成功",
+          message: "操作成功",
+          type: "success",
+          duration: 1000,
+        });
+      });
     },
   },
 };

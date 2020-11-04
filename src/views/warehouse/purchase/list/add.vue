@@ -30,7 +30,7 @@
           </el-date-picker>
         </el-form-item>
       </el-form>
-      <div v-show="vendor_id && saled_at">
+      <div v-show="vendor_id && saled_at && list.length">
         <p>门店套餐列表</p>
         <el-tabs v-model="active" style="margin-top: 15px" type="border-card">
           <el-tab-pane
@@ -100,7 +100,7 @@ export default {
           this.purchase_data[this.active][index] = data;
         }
       } else {
-        this.purchase_data[this.active].splice(index,1)
+        this.purchase_data[this.active].splice(index, 1);
       }
     },
     getVendorPackageList() {
@@ -109,6 +109,14 @@ export default {
         vendor_id: this.vendor_id,
         saled_at: this.saled_at,
       }).then((res) => {
+        if (res.length === 0) {
+          this.list = [];
+          return this.$message({
+            message: "该门店没有可进货的时段",
+            type: "error",
+            duration: 1000,
+          });
+        }
         let purchase_data = {};
         res.forEach((item) => {
           item.time_type = item.time_type.toString();
@@ -141,7 +149,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$router.go(-1);
             },

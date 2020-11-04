@@ -32,9 +32,14 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="180" align="center" label="单品图片">
+        <template slot-scope="scope">
+          <img style="width:100px;height:100px;" :src="scope.row.image" alt="" />
+        </template>
+      </el-table-column>
+
       <el-table-column width="200" align="center" label="单品名称">
         <template slot-scope="scope">
-          <img :src="scope.row.main_image" alt="" />
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -51,43 +56,43 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="味型">
+      <el-table-column width="100" align="center" label="味型">
         <template slot-scope="scope">
           <span>{{ scope.row.taste_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="温度曲线">
+      <el-table-column width="100" align="center" label="温度曲线">
         <template slot-scope="scope">
-          <span>{{ scope.row.temperature_curve }}</span>
+          <span>{{ scope.row.temperature_curve }}段</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="材料">
+      <el-table-column width="80" align="center" label="材料">
         <template slot-scope="scope">
           <span>{{ scope.row.material_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="调料">
+      <el-table-column width="80" align="center" label="调料">
         <template slot-scope="scope">
           <span>{{ scope.row.seasoning_species }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="成本预警价">
+      <el-table-column width="120" align="center" label="成本预警价">
         <template slot-scope="scope">
           <span>{{ scope.row.warn_cost_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130" align="center" label="基础成本价">
+      <el-table-column width="120" align="center" label="基础成本价">
         <template slot-scope="scope">
           <span>{{ scope.row.cost_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="毛利率">
+      <el-table-column width="80" align="center" label="毛利率">
         <template slot-scope="scope">
           <span>{{ scope.row.profit_rate }}</span>
         </template>
@@ -99,7 +104,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="厨师">
+      <el-table-column width="100" align="center" label="厨师">
         <template slot-scope="scope">
           <span>{{ scope.row.created_user_name }}</span>
         </template>
@@ -108,6 +113,7 @@
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -149,6 +155,9 @@ export default {
     },
     goEdit(id) {
       this.$router.push(`/basic/goods/preinstall_item_edit?id=${id}`);
+    },
+    goDetail(id) {
+      this.$router.push(`/basic/goods/preinstall_item_detail?id=${id}`);
     },
     getList() {
       this.loading = true;
