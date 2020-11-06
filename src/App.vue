@@ -6,6 +6,12 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
+<style>
+img[src=""],
+img:not([src]) {
+  opacity: 0;
+}
+</style>

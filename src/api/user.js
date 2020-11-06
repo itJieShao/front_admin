@@ -16,9 +16,10 @@ export function getUserMenu(role_id) {
   })
 }
 
-export function logout() {
+export function logout(data) {
   return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
+    url: '/admin/admin/user-logout',
+    method: 'post',
+    data
   })
 }

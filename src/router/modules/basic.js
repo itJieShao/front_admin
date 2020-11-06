@@ -116,7 +116,7 @@ const basicRouter = {
                     name: 'StoreItemDetail',
                     hidden: true,
                     component: () => import('@/views/basic/goods/store_item/detail'),
-                    meta: { title: '门店单品详情', icon: 'tree',activeMenu: '/basic/goods/store_item' }
+                    meta: { title: '门店单品详情', icon: 'tree', activeMenu: '/basic/goods/store_item' }
                 },
                 {
                     path: 'material_seasoning',
@@ -133,10 +133,24 @@ const basicRouter = {
             meta: { title: '优惠红包管理', icon: 'el-icon-s-ticket' }
         },
         {
+            path: 'red_package_detail',
+            name: 'RedPackageDetail',
+            hidden: true,
+            component: () => import('@/views/basic/red_package/detail'),
+            meta: { title: '优惠红包详情', activeMenu: '/basic/red_package' }
+        },
+        {
             path: 'vip_card',
             name: 'VipCard',
             component: () => import('@/views/basic/vip_card'),
             meta: { title: '会员卡管理', icon: 'el-icon-platform-eleme' }
+        },
+        {
+            path: 'vip_card_detail',
+            name: 'VipCardDetail',
+            hidden: true,
+            component: () => import('@/views/basic/vip_card/detail'),
+            meta: { title: '会员卡详情', activeMenu: '/basic/vip_card' }
         },
         {
             path: 'user',

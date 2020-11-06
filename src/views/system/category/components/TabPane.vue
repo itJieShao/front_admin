@@ -31,7 +31,9 @@
       </el-table-column>
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="openDialog(scope.row.id,scope.row.name)"
+          <el-button
+            size="mini"
+            @click="openDialog(scope.row.id, scope.row.name, scope.$index)"
             >修改</el-button
           >
         </template>
@@ -83,13 +85,15 @@ export default {
       dialogFormTitle: "",
       category_id: "",
       name: "",
+      editIndex: 0,
     };
   },
   created() {
     this.getList();
   },
   methods: {
-    openDialog(category_id,name) {
+    openDialog(category_id, name, index) {
+      this.editIndex = index;
       this.category_id = category_id || "";
       this.name = name;
       this.dialogFormVisible = true;
@@ -109,7 +113,7 @@ export default {
             duration: 1000,
             onClose: () => {
               this.dialogFormVisible = false;
-              this.getList();
+              this.list[this.editIndex].name = aData.name;
             },
           });
         }

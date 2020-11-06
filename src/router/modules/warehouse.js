@@ -11,7 +11,7 @@ const warehouseRouter = {
             name: 'Purchase',
             component: () => import('@/views/warehouse/purchase'),
             meta: { title: '进货管理', icon: 'table' },
-            children:[
+            children: [
                 {
                     path: 'purchase_list',
                     name: 'PurchaseList',
@@ -71,20 +71,21 @@ const warehouseRouter = {
             name: 'InventoryDetail',
             hidden: true,
             component: () => import('@/views/warehouse/inventory/detail'),
-            meta: { title: '盘货详情', icon: 'tree',activeMenu: '/warehouse/inventory' }
+            meta: { title: '盘货详情', icon: 'tree', activeMenu: '/warehouse/inventory' }
         },
         {
-            path: 'frmLoss',
-            name: 'FrmLoss',
-            component: () => import('@/views/warehouse/frmLoss'),
+            path: 'frmloss',
+            name: 'Frmloss',
+            component: () => import('@/views/warehouse/frmloss'),
             meta: { title: '报损管理', icon: 'tree' }
         },
-        // {
-        //     path: 'allocation',
-        //     name: 'Allocation',
-        //     component: () => import('@/views/warehouse/allocation'),
-        //     meta: { title: '调拨管理', icon: 'tree' }
-        // },
+        {
+            path: 'frmloss_detail',
+            name: 'frmlossDetail',
+            hidden: true,
+            component: () => import('@/views/warehouse/frmloss/detail'),
+            meta: { title: '报损详情', activeMenu: '/warehouse/frmloss' }
+        },
         {
             path: 'qc',
             name: 'Qc',

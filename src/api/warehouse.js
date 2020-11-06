@@ -170,3 +170,21 @@ export function addPurchase(data) {
     data
   })
 }
+
+//报损列表
+export function lossList(data) {
+  return request({
+    url: '/product/loss/list',
+    method: 'post',
+    data
+  })
+}
+
+//报损详情
+export function lossDetail(data) {
+  return request({
+    url: '/product/loss/detail',
+    method: 'post',
+    data
+  })
+}

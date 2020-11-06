@@ -11,26 +11,10 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="账户">
-        <template slot-scope="scope">
+        <template slot-scope="scope">  
+          <p v-if="scope.row.id">{{ scope.row.username }}</p>
           <el-select
-            @change="changeUser"
-            v-if="scope.row.id"
-            style="width: 100%"
-            v-model="scope.row.id"
-            filterable
-            placeholder="请选择系统账户"
-          >
-            <el-option
-              v-for="item in userData"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-
-          <el-select
-            @change="checkUser"
+            @change="addUser"
             v-else
             style="width: 100%"
             v-model="addUserId"
@@ -93,22 +77,22 @@ export default {
     }
   },
   methods: {
-    changeUser(id){
-      let index = this.user_data.findIndex(item => item.id == id);
-      this.user_data[index].name = this.userData.find(item => item.id == id).name;
-    },
-    checkUser(id) {
+    addUser(id) {
+      let item = this.userData.find((item) => item.id == id)
+      let index = this.userData.findIndex((item) => item.id == id)
       this.user_data.splice(this.user_data.length - 1, 0, {
         id,
-        username: this.userData.find((item) => item.id == id).username,
-        name: this.userData.find((item) => item.id == id).name,
+        username: item.username,
+        name: item.name,
       });
+      this.userData.splice(index,1)
       this.addUserId = "";
     },
     back() {
       this.$router.go(-1);
     },
     del(index) {
+      this.userData.push(this.user_data[index])
       this.user_data.splice(index, 1);
     },
     onSubmit() {
@@ -128,7 +112,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$router.go(-1);
             },
@@ -146,13 +130,14 @@ export default {
       auditEditData({ audit_type_id: this.audit_type_id }).then((res) => {
         if (res.user_ids.length > 0) {
           res.user_ids.forEach((item) => {
-            this.userData.forEach((it) => {
+            this.userData.forEach((it,index) => {
               if (item == it.id) {
                 this.user_data.push({
                   id: item,
                   name: it.name,
-                  user_name: it.username,
+                  username: it.username,
                 });
+                this.userData.splice(index,1)
               }
             });
           });
@@ -160,7 +145,7 @@ export default {
         this.user_data.push({
           id: "",
           name: "",
-          user_name: "",
+          username: "",
         });
         this.detail = res;
         this.loading = false;
@@ -203,6 +188,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

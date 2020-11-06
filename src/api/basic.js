@@ -306,15 +306,6 @@ export function supplierList(data) {
   })
 }
 
-//会员卡列表
-export function memberCardList(data) {
-  return request({
-    url: '/customer/customer/get-member-card-list',
-    method: 'post',
-    data
-  })
-}
-
 //门店单品列表
 export function vendorProductList(data) {
   return request({

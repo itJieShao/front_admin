@@ -121,7 +121,7 @@
         </el-form-item>
         <el-divider />
         <el-row :gutter="20">
-          <el-col :span="5">
+          <el-col :span="4">
             <el-form-item label="材料"> </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -187,7 +187,7 @@
         </el-row>
         <el-divider />
         <el-row :gutter="20">
-          <el-col :span="5">
+          <el-col :span="4">
             <el-form-item label="调料"> </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -253,7 +253,7 @@
         </el-row>
         <el-divider />
         <el-row :gutter="20">
-          <el-col :span="5">
+          <el-col :span="4">
             <el-form-item label="温度曲线"> </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -510,7 +510,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$router.go(-1);
             },

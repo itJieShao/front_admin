@@ -111,7 +111,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100" class-name="status-col" align="center" label="套餐状态">
+      <el-table-column
+        width="100"
+        class-name="status-col"
+        align="center"
+        label="套餐状态"
+      >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status" type="success">已上架</el-tag>
           <el-tag v-else type="danger">已下架</el-tag>
@@ -124,7 +129,11 @@
             :type="scope.row.status ? 'danger' : 'success'"
             size="mini"
             @click="
-              updateStatus([scope.row.vendor_package_id], scope.row.status)
+              updateStatus(
+                [scope.row.vendor_package_id],
+                scope.row.status,
+                scope.$index
+              )
             "
             >{{ scope.row.status ? "下架" : "上架" }}</el-button
           >
@@ -198,21 +207,20 @@ export default {
         this.loading = false;
       });
     },
-    updateStatus(vendor_package_ids, status) {
+    updateStatus(vendor_package_ids, status, index) {
       vendorPackageUpdateStatus({
         vendor_package_ids,
         status: status ? 0 : 1,
       }).then((res) => {
-        let index = this.list.findIndex(
-          (item) => item.vendor_package_id == vendor_package_ids[0]
-        );
-        this.$set(this.list[index], "status", status ? 0 : 1);
-        this.$notify({
-          title: "成功",
-          message: "操作成功",
-          type: "success",
-          duration: 1000,
-        });
+        if (res) {
+          this.list[index].status = status ? 0 : 1;
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
       });
     },
   },
