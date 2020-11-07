@@ -53,10 +53,10 @@
     <el-dialog title="新增任务" :visible.sync="dialogFormVisible">
       <el-form label-width="80px">
         <el-form-item label="任务标题">
-          <el-input v-model="title"></el-input>
+          <el-input placeholder="请输入任务标题" v-model="title"></el-input>
         </el-form-item>
         <el-form-item label="任务内容">
-          <el-input type="textarea" :rows="10" v-model="content"></el-input>
+          <el-input placeholder="请输入任务内容" type="textarea" :rows="10" v-model="content"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -99,7 +99,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.dialogFormVisible = false;
             },

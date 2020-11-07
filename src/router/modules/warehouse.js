@@ -119,6 +119,13 @@ const warehouseRouter = {
             component: () => import('@/views/warehouse/supplier/edit'),
             meta: { title: '编辑供应商', activeMenu: '/warehouse/supplier' }
         },
+        {
+            path: 'supplier_detail',
+            name: 'supplier_detail',
+            hidden: true,
+            component: () => import('@/views/warehouse/supplier/detail'),
+            meta: { title: '供应商详情', activeMenu: '/warehouse/supplier' }
+        },
     ]
 }
 

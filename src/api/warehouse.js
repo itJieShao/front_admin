@@ -108,6 +108,15 @@ export function inventoryList(data) {
   })
 }
 
+//盘货管理列表
+export function inventoryDetail(data) {
+  return request({
+    url: '/product/inventory/detail',
+    method: 'post',
+    data
+  })
+}
+
 //QC分配列表
 export function allocationList(data) {
   return request({

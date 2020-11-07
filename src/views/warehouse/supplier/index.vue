@@ -101,6 +101,7 @@
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="goEdit(scope.row.supplier_id)">编辑</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.supplier_id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -137,6 +138,9 @@ export default {
   methods: {
     goEdit(supplier_id) {
       this.$router.push(`/warehouse/supplier_edit?supplier_id=${supplier_id}`);
+    },
+    goDetail(supplier_id) {
+      this.$router.push(`/warehouse/supplier_detail?supplier_id=${supplier_id}`);
     },
     goAdd() {
       this.$router.push("/warehouse/supplier_add");

@@ -318,12 +318,14 @@ export default {
           { name: "", condition_price: "", favourable_price: "", valid_at: "" },
         ],
       },
+      defaultFormData:{}, //formData默认数据，为了能在添加优惠红包后清空表单数据
       dialogTitle: "",
       dialogFormVisible: false,
     };
   },
   components: { Pagination },
   created() {
+    this.defaultFormData = Object.assign({},this.formData);
     this.getList();
     this.getStoreList();
   },
@@ -358,6 +360,7 @@ export default {
             onClose: () => {
               this.getList();
               this.dialogFormVisible = false;
+              this.formData = JSON.parse(JSON.stringify(this.defaultFormData));
             },
           });
         }

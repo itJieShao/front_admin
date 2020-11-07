@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
-    <h2>QC分配记录详情</h2>
+    <h2>盘货记录详情</h2>
     <el-row :gutter="12">
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>QC分配ID</p>
-            <p>{{ detail.allocation_id }}</p>
+            <p>盘货ID</p>
+            <p>{{ detail.id }}</p>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>门店ID</p>
@@ -18,7 +18,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>门店名称</p>
@@ -26,17 +26,15 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>售卖日期</p>
-            <p>{{ detail.saled_at }}</p>
+            <p>盘货时间</p>
+            <p>{{ detail.inventory_at }}</p>
           </div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-row style="margin-top: 15px" :gutter="12">
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>运营管理人员</p>
@@ -44,35 +42,11 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>QC人员</p>
-            <p>{{ detail.qc_user_name }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>分配时间</p>
-            <p>{{ detail.allocation_at }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>分配情况</p>
-            <p v-if="detail.status == 0">
-              <el-tag type="warning" effect="dark">待分配</el-tag>
-            </p>
-            <p v-else-if="detail.status == 1">
-              <el-tag type="danger" effect="dark">分配减少</el-tag>
-            </p>
-            <p v-else>
-              <el-tag type="success" effect="dark">分配正常</el-tag>
-            </p>
+            <p>盘货人员</p>
+            <p>{{ detail.inventory_user_name }}</p>
           </div>
         </el-card>
       </el-col>
@@ -82,70 +56,115 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>烹饪盘数</p>
-            <p>{{ detail.plate_num }}</p>
+            <p>盘货情况</p>
+            <p v-if="detail.status == 0">
+              <el-tag type="warning" effect="dark">待盘货</el-tag>
+            </p>
+            <p v-else>
+              <el-tag v-if="detail.diff_qty == 0" type="success" effect="dark"
+                >库存一致</el-tag
+              >
+              <el-tag v-else-if="detail.diff_qty > 0" effect="dark"
+                >库存增加</el-tag
+              >
+              <el-tag v-else type="danger" effect="dark">库存减少</el-tag>
+            </p>
           </div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>单品数量</p>
-            <p>{{ detail.product_species }}</p>
+            <p>套餐款数</p>
+            <p>{{ detail.qc_user_name }}</p>
           </div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>应分配份数</p>
-            <p>{{ detail.product_num }}</p>
+            <p>入库总份数</p>
+            <p>{{ detail.qty }}</p>
           </div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>实际分配份数</p>
-            <p>{{ detail.allocation_product_num }}</p>
+            <p>销售总份数</p>
+            <p>{{ detail.sale_qty }}</p>
           </div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>分配差额</p>
-            <p>{{ detail.diff_product_num }}</p>
+            <p>报损总份数</p>
+            <p>{{ detail.loss_qty }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>应存库存</p>
+            <p>{{ detail.stock_qty }}</p>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-divider />
+    <el-row :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>实际库存</p>
+            <p>{{ detail.real_qty }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>盘货差额</p>
+            <p>{{ detail.diff_qty }}</p>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <el-divider />
     <el-card shadow="always">
-      <p style="text-align: center;margin-bottom:10px;">QC分配单品列表</p>
-      <el-table :data="detail.product_data" stripe style="width: 100%">
-        <el-table-column prop="product_id" label="单品ID" width="180">
+      <p class="item_title">盘货套餐列表</p>
+      <el-table :data="detail.package_data" stripe style="width: 100%">
+        <el-table-column prop="vendor_package_id" label="套餐ID" width="180">
         </el-table-column>
-        <el-table-column prop="product_name" label="单品名称" width="180">
+        <el-table-column
+          prop="vendor_package_name"
+          label="套餐名称"
+          width="180"
+        >
         </el-table-column>
-        <el-table-column prop="package_box_name" label="包装规格">
-        </el-table-column>
-        <el-table-column prop="product_num" label="应分配份数">
-        </el-table-column>
-        <el-table-column prop="allocation_product_num" label="实际分配份数">
-        </el-table-column>
-        <el-table-column prop="diff_product_num" label="分配差额"> </el-table-column>
-        <el-table-column prop="plate_names" label="烹饪盘">
-        </el-table-column>
-        <el-table-column prop="plate_product_nums" label="烹饪盘分配数量">
-        </el-table-column>
+        <el-table-column prop="take_code" label="套餐号"> </el-table-column>
+        <el-table-column prop="qty" label="入库数量"> </el-table-column>
+        <el-table-column prop="sale_qty" label="销售数量"> </el-table-column>
+        <el-table-column prop="loss_qty" label="报损数量"> </el-table-column>
+        <el-table-column prop="stock_qty" label="应存库存"> </el-table-column>
+        <el-table-column prop="real_qty" label="实际库存"> </el-table-column>
+        <el-table-column prop="diff_qty" label="盘货差额"> </el-table-column>
+        <el-table-column v-if="diff_qty == 0" label="盘货差额"
+          >库存一致</el-table-column
+        >
+        <el-table-column v-else-if="diff_qty > 0" label="盘货差额"
+          >库存增加</el-table-column
+        >
+        <el-table-column v-else label="盘货差额">库存减少</el-table-column>
       </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
-import { allocationDetail } from "@/api/warehouse";
+import { inventoryDetail } from "@/api/warehouse";
 export default {
   data() {
     return {
@@ -157,8 +176,8 @@ export default {
   },
   methods: {
     getDetail() {
-      allocationDetail({
-        allocation_id: this.$route.query.allocation_id,
+      inventoryDetail({
+        inventory_id: this.$route.query.inventory_id,
       }).then((res) => {
         this.detail = res;
       });

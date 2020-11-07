@@ -122,7 +122,7 @@
     </el-row>
     <el-divider />
     <el-card shadow="always">
-      <p style="margin-bottom:20px;color:#666;">QC分配单品列表</p>
+      <p class="item_title">QC分配单品列表</p>
       <el-table :data="detail.product_data" stripe style="width: 100%">
         <el-table-column prop="product_id" label="单品ID" width="180">
         </el-table-column>

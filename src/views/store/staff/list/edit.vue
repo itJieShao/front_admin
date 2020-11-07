@@ -19,7 +19,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="员工名称">
-          <el-input v-model="formData.name"></el-input>
+          <el-input placeholder="请输入员工名称" v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="岗位">
           <el-select
@@ -52,16 +52,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="年龄">
-          <el-input v-model="formData.age"></el-input>
+          <el-input placeholder="请输入年龄" v-model="formData.age"></el-input>
         </el-form-item>
         <el-form-item label="学历">
-          <el-input v-model="formData.education"></el-input>
+          <el-input placeholder="请输入学历" v-model="formData.education"></el-input>
         </el-form-item>
         <el-form-item label="籍贯">
-          <el-input v-model="formData.native_place"></el-input>
+          <el-input placeholder="请输入籍贯" v-model="formData.native_place"></el-input>
         </el-form-item>
-        <el-form-item label="手机">
-          <el-input v-model="formData.phone"></el-input>
+        <el-form-item label="手机号码">
+          <el-input placeholder="请输入手机号码" v-model="formData.phone"></el-input>
         </el-form-item>
         <el-form-item label="入职时间">
           <el-date-picker
@@ -200,7 +200,7 @@ export default {
             title: "成功",
             message: "提交成功",
             type: "success",
-            duration: 1500,
+            duration: 1000,
             onClose: () => {
               this.$router.go(-1);
             },

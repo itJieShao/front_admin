@@ -263,9 +263,11 @@ export default {
         price: "",
         number: "",
       },
+      defaultFormData:{}
     };
   },
   created() {
+    this.defaultFormData = Object.assign({},this.formData);
     this.getList();
   },
   methods: {
@@ -299,7 +301,21 @@ export default {
       });
     },
     addMemberCard() {
-      addMemberCard(this.formData).then((res) => {});
+      addMemberCard(this.formData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false;
+              this.formData = JSON.parse(JSON.stringify(this.defaultFormData));
+            },
+          });
+        }
+      });
     },
   },
 };
