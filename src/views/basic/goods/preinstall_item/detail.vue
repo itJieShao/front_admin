@@ -197,31 +197,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-p {
-  margin: 0;
-}
 img {
   width: 200px;
   height: 200px;
-}
-.item_flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-  p {
-    height: 30px;
-    line-height: 30px;
-  }
-  p:last-child {
-    width: 100%;
-    text-align: center;
-    padding-top: 8px;
-    margin-top: 10px;
-    border-top: 1px solid #ddd;
-    color: #999;
-  }
 }
 </style>

@@ -35,38 +35,38 @@
           </el-upload>
         </el-form-item>
         <el-divider />
-        <el-row :gutter="20">
-          <el-col :span="5">
-            <el-form-item label="套餐单品">
-              <el-button type="success" @click="dialogTableVisible = true"
-                >添加套餐单品</el-button
-              >
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" v-show="formData.product_data.length > 0">
-            <el-card shadow="always">
-              <div>
-                <div class="item_title">
-                  <p>单品</p>
-                  <p>数量</p>
-                </div>
-                <el-divider />
-                <div
-                  class="item_content"
-                  v-for="(item, index) in formData.product_data"
-                  :key="index"
-                >
-                  <p>{{ item.product_name }}</p>
-                  <el-input-number
-                    :min="1"
-                    v-model="item.product_num"
-                  ></el-input-number>
-                  <i @click="deleteProduct(index)" class="el-icon-delete"></i>
-                </div>
+        <div style="display: flex">
+          <el-form-item label="套餐单品">
+            <el-button type="success" @click="dialogTableVisible = true"
+              >添加套餐单品</el-button
+            >
+          </el-form-item>
+          <el-card
+            style="flex: 1; margin: 0 20px"
+            shadow="always"
+            v-show="formData.product_data.length > 0"
+          >
+            <div style="padding-right:50px;">
+              <div class="item_title">
+                <p>单品</p>
+                <p>数量</p>
               </div>
-            </el-card>
-          </el-col>
-        </el-row>
+              <el-divider />
+              <div
+                class="item_content"
+                v-for="(item, index) in formData.product_data"
+                :key="index"
+              >
+                <p>{{ item.product_name }}</p>
+                <el-input-number
+                  :min="1"
+                  v-model="item.product_num"
+                ></el-input-number>
+                <i @click="deleteProduct(index)" class="el-icon-delete"></i>
+              </div>
+            </div>
+          </el-card>
+        </div>
         <el-form-item label="套餐标签" style="margin-top: 35px">
           <el-select
             style="width: 100%"
@@ -237,6 +237,13 @@ export default {
     },
     //添加到套餐
     addPackage() {
+      if (!this.checkedProductData.length) {
+        return this.$message({
+          message: "请先选择要添加到套餐的单品",
+          type: "error",
+          duration: 1000,
+        });
+      }
       let product_data = this.formData.product_data.concat(
           this.checkedProductData
         ),
@@ -328,13 +335,8 @@ p {
     flex: 1;
   }
 }
-.item_title p:first-child {
-  margin-left: -40px;
-}
-.item_title p:last-child {
-  margin-left: -60px;
-}
 .item_content {
+  position: relative;
   margin-bottom: 20px;
   align-items: center;
 }
@@ -342,7 +344,8 @@ p {
   flex: 1;
 }
 .el-icon-delete {
-  margin-left: 20px;
+  right: -45px;
+  position: absolute;
   cursor: pointer;
 }
 .main_img_hide .el-upload--picture-card {

@@ -13,7 +13,10 @@
         >
       </el-col>
       <el-col :span="4" style="display: flex; justify-content: flex-end">
-        <el-button type="success" icon="el-icon-plus" @click="dialogFormVisible = true"
+        <el-button
+          type="success"
+          icon="el-icon-plus"
+          @click="dialogFormVisible = true"
           >新增会员卡</el-button
         >
       </el-col>
@@ -118,10 +121,10 @@
             @click="updateStatus(scope.row.id, scope.row.status, scope.$index)"
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
-          <el-button size="mini" @click="copy(scope.row.id)"
-            >复制</el-button
+          <el-button size="mini" @click="copy(scope.row.id)">复制</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)"
+            >详情</el-button
           >
-          <el-button size="mini" @click="goDetail(scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -197,9 +200,16 @@
             v-model="formData.discount"
           ></el-input>
         </el-form-item>
-        <el-form-item v-if="formData.type != 1" :label="(formData.type == 2 ? '红包': '折扣') + '领取次数'">
+        <el-form-item
+          v-if="formData.type != 1"
+          :label="(formData.type == 2 ? '红包' : '折扣') + '领取次数'"
+        >
           <el-input
-            :placeholder="'请输入会员卡发放周期内，' + (formData.type == 2 ? '红包': '折扣') + '限领次数'"
+            :placeholder="
+              '请输入会员卡发放周期内，' +
+              (formData.type == 2 ? '红包' : '折扣') +
+              '限领次数'
+            "
             v-model="formData.discounts_num"
           ></el-input>
         </el-form-item>
@@ -225,7 +235,7 @@
 </template>
 
 <script>
-import { memberCardList, updateMemberCard,addMemberCard } from "@/api/basic/vip_card";
+import { memberCardList, updateMemberCard, addMemberCard } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   name: "preinstall_meal",
@@ -241,18 +251,18 @@ export default {
       loading: false,
       total: 0,
       dialogFormVisible: false,
-      formData:{
-        name:'',
-        type:'',
-        card_type:'',
-        issue_cycle:'',
-        num:'',
-        red_packet:'',
-        discount:'',
-        discounts_num:'',
-        price:'',
-        number:''
-      }
+      formData: {
+        name: "",
+        type: "",
+        card_type: "",
+        issue_cycle: "",
+        num: "",
+        red_packet: "",
+        discount: "",
+        discounts_num: "",
+        price: "",
+        number: "",
+      },
     };
   },
   created() {
@@ -260,7 +270,9 @@ export default {
   },
   methods: {
     goDetail(member_card_id) {
-      this.$router.push(`/basic/vip_card_detail?member_card_id=${member_card_id}`);
+      this.$router.push(
+        `/basic/vip_card_detail?member_card_id=${member_card_id}`
+      );
     },
     getList() {
       this.loading = true;
@@ -286,10 +298,8 @@ export default {
         }
       });
     },
-    addMemberCard(){
-      addMemberCard(this.formData).then(res => {
-
-      })
+    addMemberCard() {
+      addMemberCard(this.formData).then((res) => {});
     },
   },
 };

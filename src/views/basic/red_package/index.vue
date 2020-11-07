@@ -201,10 +201,16 @@
       </el-form>
       <el-form label-width="100px" v-else-if="formData.type == 1">
         <el-form-item label="名称">
-          <el-input placeholder="请输入折扣名称" v-model="formData.name"></el-input>
+          <el-input
+            placeholder="请输入折扣名称"
+            v-model="formData.name"
+          ></el-input>
         </el-form-item>
         <el-form-item label="折扣率">
-          <el-input placeholder="请输入0-1的折扣率" v-model="formData.discount"></el-input>
+          <el-input
+            placeholder="请输入0-1的折扣率"
+            v-model="formData.discount"
+          ></el-input>
         </el-form-item>
         <el-form-item label="有效期">
           <el-date-picker
@@ -219,7 +225,10 @@
       </el-form>
       <el-form label-width="100px" v-else>
         <el-form-item label="名称">
-          <el-input placeholder="请输入优惠券/红包的名称" v-model="formData.name"></el-input>
+          <el-input
+            placeholder="请输入优惠券/红包的名称"
+            v-model="formData.name"
+          ></el-input>
         </el-form-item>
         <el-form-item label="类型">
           <el-select
@@ -276,8 +285,12 @@
 </template>
 
 <script>
-import { searchStoreList } from "@/api/basic";
-import { couponList, disableCoupon, addCoupon } from "@/api/basic/red_package";
+import {
+  searchStoreList,
+  couponList,
+  disableCoupon,
+  addCoupon,
+} from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -335,20 +348,20 @@ export default {
       });
     },
     addCoupon() {
-      addCoupon(this.formData).then(res => {
-        if(res){
+      addCoupon(this.formData).then((res) => {
+        if (res) {
           this.$notify({
             title: "成功",
             message: "提交成功",
             type: "success",
             duration: 1000,
-            onClose:() => {
+            onClose: () => {
               this.getList();
-              this.dialogFormVisible = false;          
-            }
+              this.dialogFormVisible = false;
+            },
           });
         }
-      })
+      });
     },
     getStoreList() {
       searchStoreList().then((res) => {
@@ -356,7 +369,7 @@ export default {
       });
     },
     copy(id) {},
-    goDetail(coupon_id){
+    goDetail(coupon_id) {
       this.$router.push(`/basic/red_package_detail?coupon_id=${coupon_id}`);
     },
     disable(coupon_id, index) {

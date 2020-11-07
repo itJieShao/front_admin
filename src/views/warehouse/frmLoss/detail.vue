@@ -81,9 +81,42 @@
     <el-card shadow="always">
       <p class="item_title">报损列表</p>
       <el-table :data="detail.loss_package_data" stripe style="width: 100%">
-        <el-table-column prop="vendor_package_name" label="套餐名称" width="180">
+        <el-table-column prop="vendor_package_name" label="套餐名称">
         </el-table-column>
-        <el-table-column prop="sale_price" label="套餐售价" width="180">
+        <el-table-column prop="sale_price" label="套餐售价"> </el-table-column>
+        <el-table-column prop="loss_vendor_package_num" label="报损套餐数">
+        </el-table-column>
+        <el-table-column prop="purchase_price" label="套餐进货价">
+        </el-table-column>
+        <el-table-column align="center" label="报损单品">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.loss_product_names">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="报损单品份数">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.loss_product_nums">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="套餐关联单品">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.contact_product_names">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="关联单品份数">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.contact_product_nums">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="单品进货价">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.product_purchase_prices">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column width="200" align="center" label="报损照片">
+          <template slot-scope="scope">
+            <img style="width:150px;height:150px;" v-for="item in scope.row.image" :src="item" alt="">
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -112,32 +145,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-p {
-  margin: 0;
-}
-.item_flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-}
-.item_flex p:last-child {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  padding-top: 10px;
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  color: #999;
-}
-.item_title {
-  font-size: 16px;
-  color: #666;
-  margin: 10px auto 20px;
-}
-</style>

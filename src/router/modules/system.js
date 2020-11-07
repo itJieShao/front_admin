@@ -7,7 +7,7 @@ const systemRouter = {
     meta: { title: '系统设置', icon: 'el-icon-s-help' },
     children: [
         {
-            path: '/auth',
+            path: 'auth',
             component: () => import('@/views/system/auth'),
             name: 'Auth',
             meta: { title: '账户权限', icon: 'el-icon-s-help' },
@@ -27,19 +27,19 @@ const systemRouter = {
             ]
         },
         {
-            path: '/category',
+            path: 'category',
             component: () => import('@/views/system/category'),
             name: 'Category',
             meta: { title: '分类', icon: 'el-icon-s-help' },
         },
         {
-            path: '/examine',
+            path: 'examine',
             component: () => import('@/views/system/examine'),
             name: 'Examine',
             meta: { title: '审核流程', icon: 'el-icon-s-help' },
         },
         {
-            path: '/examine_edit',
+            path: 'examine_edit',
             component: () => import('@/views/system/examine/edit'),
             name: 'ExamineEdit',
             hidden: true,

@@ -3,9 +3,9 @@
     <h2>用户资料</h2>
     <el-row :gutter="12">
       <el-col :span="4">
-        <el-card class="l_user" shadow="always">
-          <img :src="detail.headImg" alt="" />
-          <p>{{ detail.nickName }}</p>
+        <el-card shadow="always">
+          <img style="width:100%;" :src="detail.headImg" alt="" />
+          <p style="text-align:center;margin-top:10px;">{{ detail.nickName }}</p>
         </el-card>
       </el-col>
       <el-col :span="20">
@@ -186,27 +186,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-p {
-  margin: 0;
-}
-.item_flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-}
-.item_flex p:last-child {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  padding-top: 5px;
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  color: #999;
-}
-</style>

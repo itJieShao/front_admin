@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     goEdit(id) {
-      this.$router.push(`/examine_edit?id=${id}`);
+      this.$router.push(`/system/examine_edit?id=${id}`);
     },
     getList() {
       this.loading = true;

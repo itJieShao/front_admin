@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+//订单管理模块 --- start
 //订单列表
 export function orderList(data) {
   return request({
@@ -8,7 +9,6 @@ export function orderList(data) {
     data
   })
 }
-
 //订单详情
 export function orderDetail(data) {
   return request({
@@ -17,20 +17,12 @@ export function orderDetail(data) {
     data
   })
 }
+//订单管理模块 --- end
 
 //门店列表
 export function storeList(data) {
   return request({
     url: '/vendor/vendor/get-vendor-list',
-    method: 'post',
-    data
-  })
-}
-
-//可查看门店列表（用于搜索功能）
-export function searchStoreList(data) {
-  return request({
-    url: '/vendor/vendor/vendor-list',
     method: 'post',
     data
   })
@@ -90,8 +82,8 @@ export function vendorPackageUpdateStatus(data) {
   })
 }
 
-//优惠列表
-export function couponList(data) {
+//优惠下拉框列表
+export function selectCouponList(data) {
   return request({
     url: '/order/coupon/get-discount-list',
     method: 'post',
@@ -364,6 +356,76 @@ export function customerCouponList(data) {
 export function uploadImg(data) {
   return request({
     url: '/vendor/vendor/upload_image',
+    method: 'post',
+    data
+  })
+}
+//优惠红包管理模块 --- start
+//优惠红包列表
+export function couponList(data) {
+  return request({
+    url: '/order/coupon/list',
+    method: 'post',
+    data
+  })
+}
+//禁用优惠红包
+export function disableCoupon(data) {
+  return request({
+    url: '/order/coupon/disable',
+    method: 'post',
+    data
+  })
+}
+//新增优惠红包
+export function addCoupon(data) {
+  return request({
+    url: '/order/coupon/add',
+    method: 'post',
+    data
+  })
+}
+//优惠红包详情
+export function couponDetail(data) {
+  return request({
+    url: '/order/coupon/detail',
+    method: 'post',
+    data
+  })
+}
+//优惠红包管理模块 --- end
+
+//会员卡管理模块 --- start
+//会员卡列表
+export function memberCardList(data) {
+  return request({
+      url: '/customer/customer/get-member-card-list',
+      method: 'post',
+      data
+  })
+}
+//禁用(启用)会员卡
+export function updateMemberCard(data) {
+  return request({
+      url: '/customer/customer/disable-member-card',
+      method: 'post',
+      data
+  })
+}
+//添加会员卡
+export function addMemberCard(data) {
+  return request({
+      url: '/customer/customer/add-member-card',
+      method: 'post',
+      data
+  })
+}
+//会员卡管理模块 --- end
+
+//可查看门店列表（用于搜索功能）
+export function searchStoreList(data) {
+  return request({
+    url: '/vendor/vendor/vendor-list',
     method: 'post',
     data
   })

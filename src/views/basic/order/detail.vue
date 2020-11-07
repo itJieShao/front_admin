@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-if="">
+  <div class="app-container" v-if="JSON.stringify(detail) != '{}'">
     <h2>订单详情</h2>
     <el-row :gutter="12">
       <el-col :span="4">
@@ -29,7 +29,7 @@
         <el-card shadow="always"> 应付总价：{{detail.total_price}} </el-card>
       </el-col>
       <el-col :span="4">
-        <el-card shadow="always"> 优惠：{{detail.favourable_price.toFixed(2)}} </el-card>
+        <el-card shadow="always"> 优惠：{{detail.favourable_price}} </el-card>
       </el-col>
       <el-col :span="4">
         <el-card shadow="always"> 实付总价：{{detail.real_price}} </el-card>
@@ -139,12 +139,12 @@ export default {
   methods:{
     getOrderDetail(){
       orderDetail({order_id:this.order_id}).then(res => {
-        console.log(res)
         let packageArr = [];
         for(let i=0;i<res.package_data.length;i+=3){
             packageArr.push(res.package_data.slice(i,i+3));
         }
         res.package_data = packageArr
+        res.favourable_price = res.favourable_price.toFixed(2)
         this.detail = res
       });
     }

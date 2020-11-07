@@ -219,29 +219,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-p {
-  margin: 0;
-}
-.item_flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  word-wrap: break-word;
-  word-break: break-all;
-}
-.item_flex p{
-  height: 30px;
-  line-height: 30px;
-}
-.item_flex p:last-child {
-  width: 100%;
-  text-align: center;
-  padding-top: 7px;
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  color: #999;
-}
-</style>

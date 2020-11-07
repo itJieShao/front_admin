@@ -180,7 +180,7 @@ import {
   packageList,
   vendorPackageDetail,
   packageDetail,
-  couponList,
+  selectCouponList,
   searchStoreList,
 } from "@/api/basic";
 import { categoryData } from "@/api/system/category";
@@ -243,7 +243,7 @@ export default {
     },
     //优惠下拉列表
     getCouponList() {
-      return couponList().then((res) => {
+      return selectCouponList().then((res) => {
         this.couponList = res;
       });
     },
