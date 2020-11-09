@@ -50,6 +50,9 @@ export default {
       default: ''
     }
   },
+  created(){
+    console.log(this.item)
+  },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function

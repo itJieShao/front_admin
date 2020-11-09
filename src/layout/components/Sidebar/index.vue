@@ -31,6 +31,8 @@ export default {
       'sidebar'
     ]),
     routes() {
+      this.$router.options.routes.splice(3,1)
+      console.log(this.$router)
       return this.$router.options.routes
     },
     activeMenu() {
