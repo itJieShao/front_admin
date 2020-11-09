@@ -41,6 +41,10 @@
           <el-button @click="del(scope.$index)" size="mini" type="danger"
             >删除</el-button
           >
+          <div style="display:inline-block;width:100px;">
+            <i @click="userChangePosition(1,scope.$index)" class="el-icon-top" v-show="user_data.length > 2 && scope.$index != 0"></i>
+            <i @click="userChangePosition(2,scope.$index)" class="el-icon-bottom" v-show="user_data.length > 2 && scope.$index != user_data.length - 2"></i>
+          </div>     
         </template>
       </el-table-column>
     </el-table>
@@ -94,6 +98,14 @@ export default {
     del(index) {
       this.userData.push(this.user_data[index])
       this.user_data.splice(index, 1);
+    },
+    userChangePosition(type,index){
+      let user_data = this.user_data;
+      if (type == 1){
+        user_data[index] = user_data.splice(index-1, 1, user_data[index])[0];
+      }else{
+        user_data[index] = user_data.splice(index+1, 1, user_data[index])[0];
+      }
     },
     onSubmit() {
       let user_ids = [];
@@ -188,3 +200,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .el-icon-top,.el-icon-bottom{
+    margin-left: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+  }
+</style>

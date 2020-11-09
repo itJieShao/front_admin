@@ -11,6 +11,7 @@ import basicRouter from './modules/basic'
 import warehouseRouter from './modules/warehouse'
 import storeRouter from './modules/store'
 import financeRouter from './modules/finance'
+import operateRouter from './modules/operate'
 import systemRouter from './modules/system'
 import messageRouter from './modules/message'
 
@@ -69,6 +70,7 @@ export const constantRoutes = [
   warehouseRouter,
   storeRouter,
   financeRouter,
+  operateRouter,
   systemRouter,
   messageRouter,
   
@@ -80,6 +82,7 @@ export const asyncRoutes = [
   warehouseRouter,
   storeRouter,
   financeRouter,
+  operateRouter,
   systemRouter,
   messageRouter,
 
