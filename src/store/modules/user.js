@@ -1,4 +1,4 @@
-import { login, logout, getUserMenu } from '@/api/user'
+import { login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -7,7 +7,6 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    admin_data: {},
     roles: []
   }
 }
@@ -27,46 +26,22 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  ADMIN_DATA: (state, admin_data) => {
-    state.admin_data = admin_data
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
+  SET_ROLE_ID: (state, role_id) => {
+    state.role_id = role_id
   }
 }
 
 const actions = {
   // user login
-  login({ commit, }, userInfo) {
+  login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { token,admin_data } = response
+        const { token,admin_data } = response   
         commit('SET_TOKEN', token)
-        commit('ADMIN_DATA', admin_data)
+        commit('SET_ROLE_ID',admin_data.role_id)
         setToken(token)
         resolve(response)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // get user menu
-  getUserMenu({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getUserMenu(state.admin_data.rold_id).then(response => {
-        const { data } = response
-        console.log(data)
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
-
-        // const { name, avatar } = data
-
-        // commit('SET_NAME', name)
-        // commit('SET_AVATAR', avatar)
-        resolve(data)
       }).catch(error => {
         reject(error)
       })
@@ -80,6 +55,8 @@ const actions = {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
+        localStorage.removeItem("userName")
+        localStorage.removeItem("router")
         resolve()
       }).catch(error => {
         reject(error)
@@ -92,6 +69,8 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
+      localStorage.removeItem("userName")
+      localStorage.removeItem("router")
       resolve()
     })
   }

@@ -3,13 +3,14 @@ import Layout from '@/layout'
 const basicRouter = {
     path: '/basic',
     component: Layout,
+    alwaysShow: true,
     meta: { title: '基础管理', icon: 'el-icon-menu' },
     children: [
         {
             path: 'order',
             name: 'Order',
             component: () => import('@/views/basic/order'),
-            meta: { title: '订单管理', icon: 'el-icon-message-solid' }
+            meta: { title: '订单管理', icon: 'el-icon-message-solid', auth: "order_list" }
         },
         {
             path: 'order_detail',
@@ -28,7 +29,7 @@ const basicRouter = {
                     path: 'preinstall_meal',
                     name: 'PreinstallMeal',
                     component: () => import('@/views/basic/goods/preinstall_meal/index'),
-                    meta: { title: '预设套餐', icon: 'example' }
+                    meta: { title: '预设套餐', icon: 'example', auth: "preinstall_meal_list" }
                 },
                 {
                     path: 'preinstall_meal_add',
@@ -55,7 +56,7 @@ const basicRouter = {
                     path: 'store_meal',
                     name: 'StoreMeal',
                     component: () => import('@/views/basic/goods/store_meal'),
-                    meta: { title: '门店套餐', icon: 'example' }
+                    meta: { title: '门店套餐', icon: 'example', auth: "store_meal_list" }
                 },
                 {
                     path: 'store_meal_add',
@@ -82,7 +83,7 @@ const basicRouter = {
                     path: 'preinstall_item',
                     name: 'PreinstallItem',
                     component: () => import('@/views/basic/goods/preinstall_item'),
-                    meta: { title: '预设单品', icon: 'ysitem' }
+                    meta: { title: '预设单品', icon: 'ysitem', auth: "preinstall_item_list" }
                 },
                 {
                     path: 'preinstall_item_add',
@@ -109,7 +110,7 @@ const basicRouter = {
                     path: 'store_item',
                     name: 'StoreItem',
                     component: () => import('@/views/basic/goods/store_item'),
-                    meta: { title: '门店单品', icon: 'ysitem' }
+                    meta: { title: '门店单品', icon: 'ysitem', auth: "store_item_list" }
                 },
                 {
                     path: 'store_item_detail',
@@ -122,7 +123,7 @@ const basicRouter = {
                     path: 'material_seasoning',
                     name: 'MaterialSeasoning',
                     component: () => import('@/views/basic/goods/material_seasoning'),
-                    meta: { title: '材料调料管理', icon: 'tree' }
+                    meta: { title: '材料调料管理', icon: 'tree', auth: "material_seasoning_list" }
                 },
             ]
         },
@@ -130,7 +131,7 @@ const basicRouter = {
             path: 'red_package',
             name: 'RedPackage',
             component: () => import('@/views/basic/red_package'),
-            meta: { title: '优惠红包管理', icon: 'el-icon-s-ticket' }
+            meta: { title: '优惠红包管理', icon: 'el-icon-s-ticket', auth: "red_package_list" }
         },
         {
             path: 'red_package_detail',
@@ -143,7 +144,7 @@ const basicRouter = {
             path: 'vip_card',
             name: 'VipCard',
             component: () => import('@/views/basic/vip_card'),
-            meta: { title: '会员卡管理', icon: 'el-icon-platform-eleme' }
+            meta: { title: '会员卡管理', icon: 'el-icon-platform-eleme', auth: "vip_card_list" }
         },
         {
             path: 'vip_card_detail',
@@ -162,7 +163,7 @@ const basicRouter = {
                     path: 'list',
                     name: 'List',
                     component: () => import('@/views/basic/user/list'),
-                    meta: { title: '用户列表', icon: 'table' }
+                    meta: { title: '用户列表', icon: 'table', auth: "user_list" }
                 },
                 {
                     path: 'detail',
@@ -175,7 +176,7 @@ const basicRouter = {
                     path: 'integral',
                     name: 'Integral',
                     component: () => import('@/views/basic/user/integral'),
-                    meta: { title: '积分列表', icon: 'table' }
+                    meta: { title: '积分列表', icon: 'table', auth: "integral_list" }
                 }
             ]
         },

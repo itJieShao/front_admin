@@ -31,9 +31,7 @@ export default {
       'sidebar'
     ]),
     routes() {
-      //this.$router.options.routes.splice(3,1)
-      console.log(this.$router)
-      return this.$router.options.routes
+      return localStorage.getItem("router") ? JSON.parse(localStorage.getItem("router")) : this.$router.options.routes     
     },
     activeMenu() {
       const route = this.$route

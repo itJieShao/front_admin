@@ -4,6 +4,7 @@ const warehouseRouter = {
     path: '/warehouse',
     component: Layout,
     name: 'Warehouse',
+    alwaysShow: true,
     meta: { title: '仓库管理', icon: 'el-icon-s-help' },
     children: [
         {
@@ -16,7 +17,7 @@ const warehouseRouter = {
                     path: 'purchase_list',
                     name: 'PurchaseList',
                     component: () => import('@/views/warehouse/purchase/list'),
-                    meta: { title: '进货列表', icon: 'table' }
+                    meta: { title: '进货列表', icon: 'table', auth: "purchase_list" }
                 },
                 {
                     path: 'purchase_detail',
@@ -36,7 +37,7 @@ const warehouseRouter = {
                     path: 'summary_list',
                     name: 'SummaryList',
                     component: () => import('@/views/warehouse/purchase/summary'),
-                    meta: { title: '进货汇总管理', icon: 'table' }
+                    meta: { title: '进货汇总管理', icon: 'table', auth: "summary_list" }
                 },
                 {
                     path: 'summary_detail',
@@ -51,7 +52,7 @@ const warehouseRouter = {
             path: 'distribution',
             name: 'Distribution',
             component: () => import('@/views/warehouse/distribution'),
-            meta: { title: '配货管理', icon: 'tree' },
+            meta: { title: '配货管理', icon: 'tree', auth: "distribution_list" },
         },
         {
             path: 'distribution_detail',
@@ -64,7 +65,7 @@ const warehouseRouter = {
             path: 'inventory',
             name: 'Inventory',
             component: () => import('@/views/warehouse/inventory'),
-            meta: { title: '盘货管理', icon: 'tree' }
+            meta: { title: '盘货管理', icon: 'tree', auth: "inventory_list" }
         },
         {
             path: 'inventory_detail',
@@ -77,7 +78,7 @@ const warehouseRouter = {
             path: 'frmloss',
             name: 'Frmloss',
             component: () => import('@/views/warehouse/frmloss'),
-            meta: { title: '报损管理', icon: 'tree' }
+            meta: { title: '报损管理', icon: 'tree', auth: "frmloss_list" }
         },
         {
             path: 'frmloss_detail',
@@ -90,7 +91,7 @@ const warehouseRouter = {
             path: 'qc',
             name: 'Qc',
             component: () => import('@/views/warehouse/qc'),
-            meta: { title: 'QC分配', icon: 'tree' }
+            meta: { title: 'QC分配', icon: 'tree', auth: "qc_list" }
         },
         {
             path: 'qc_detail',
@@ -103,7 +104,7 @@ const warehouseRouter = {
             path: 'supplier',
             name: 'Supplier',
             component: () => import('@/views/warehouse/supplier'),
-            meta: { title: '供应商管理', icon: 'tree' }
+            meta: { title: '供应商管理', icon: 'tree', auth: "supplier_list" }
         },
         {
             path: 'supplier_add',

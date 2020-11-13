@@ -10,14 +10,14 @@ const messageRouter = {
             path: 'index',
             component: () => import('@/views/message'),
             name: 'Index',
-            meta: { title: '消息中心', icon: 'el-icon-s-help' },
+            meta: { title: '消息中心', icon: 'el-icon-s-help', auth: "message_list" },
         },
         {
             path: 'detail',
             component: () => import('@/views/message/detail'),
             name: 'Detail',
-            hidden:true,
-            meta: { title: '消息详情', activeMenu:'/message/index' },
+            hidden: true,
+            meta: { title: '消息详情', activeMenu: '/message/index' },
         },
     ]
 }

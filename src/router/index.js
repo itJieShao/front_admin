@@ -61,7 +61,7 @@ export const constantRoutes = [
       {
         path: '/index',
         component: () => import('@/views/admin'),
-        meta: { title: '首页', icon: 'dashboard' },
+        meta: { title: '首页', icon: 'dashboard', auth:"index" },
       }
     ]
   },

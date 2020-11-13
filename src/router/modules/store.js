@@ -4,13 +4,14 @@ const storeRouter = {
     path: '/store',
     component: Layout,
     name: 'Store',
+    alwaysShow: true,
     meta: { title: '门店管理', icon: 'el-icon-s-help' },
     children: [
         {
             path: 'store_list',
             name: 'StoreList',
             component: () => import('@/views/store/store'),
-            meta: { title: '门店列表', icon: 'table' }
+            meta: { title: '门店列表', icon: 'table', auth: "store_list" }
         },
         {
             path: 'store_detail',
@@ -43,7 +44,7 @@ const storeRouter = {
                     path: 'staff_list',
                     name: 'StaffList',
                     component: () => import('@/views/store/staff/list'),
-                    meta: { title: '员工列表', icon: 'table' }
+                    meta: { title: '员工列表', icon: 'table', auth: "staff_list" }
                 },
                 {
                     path: 'staff_add',
@@ -63,7 +64,7 @@ const storeRouter = {
                     path: 'staff_task',
                     name: 'StaffTask',
                     component: () => import('@/views/store/staff/task'),
-                    meta: { title: '员工任务', icon: 'table' }
+                    meta: { title: '员工任务', icon: 'table', auth: "staff_task_list" }
                 },
                 {
                     path: 'staff_task_detail',

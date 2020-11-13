@@ -11,14 +11,14 @@ const financeRouter = {
             path: 'invoice',
             component: () => import('@/views/finance/invoice'),
             name: 'Invoice',
-            meta: { title: '发票', icon: 'el-icon-s-help' },
+            meta: { title: '发票', icon: 'el-icon-s-help', auth: "invoice_list" },
         },
         {
             path: 'invoice_detail',
             component: () => import('@/views/finance/invoice/detail'),
             name: 'InvoiceDetail',
-            hidden:true,
-            meta: { title: '发票详情', activeMenu:'/finance/invoice' },
+            hidden: true,
+            meta: { title: '发票详情', activeMenu: '/finance/invoice' },
         },
     ]
 }

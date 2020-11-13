@@ -138,10 +138,10 @@
           </el-row>
         </el-form-item>
         <el-form-item label="温度曲线" v-if="detail.xAxis">
-          <echart
-            :id="'chart'"
-            :width="'100%'"
-            :height="'300px'"
+          <Echart
+            id="chart"
+            width="100%"
+            height="300px"
             :xAxis="detail.xAxis"
             :series="detail.series"
           />
@@ -153,7 +153,7 @@
 
 <script>
 import { productDetail } from "@/api/basic";
-import echart from "@/components/Echart";
+import Echart from "@/components/Echart";
 export default {
   data() {
     return {
@@ -161,7 +161,7 @@ export default {
     };
   },
   components: {
-    echart,
+    Echart,
   },
   created() {
     this.getDetail();

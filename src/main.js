@@ -33,9 +33,9 @@ if (process.env.NODE_ENV === 'production') {
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 
-//el-select 下拉框定义的一个分页指令
-import {selectLoadMore} from './directives'
-Vue.use(selectLoadMore)
+//el-select 下拉框定义的一个分页指令（暂时用不到）
+//import {selectLoadMore} from './directives'
+//Vue.use(selectLoadMore)
 
 Vue.config.productionTip = false
 

@@ -13,7 +13,12 @@
         >
       </el-col>
       <el-col :span="4" style="display: flex; justify-content: flex-end">
-        <el-button type="success" icon="el-icon-plus">新增角色</el-button>
+        <el-button
+          @click="dialogFormVisible = true"
+          type="success"
+          icon="el-icon-plus"
+          >新增角色</el-button
+        >
       </el-col>
     </el-row>
     <el-table
@@ -52,6 +57,7 @@
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
+          <!-- <el-button size="mini">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -62,16 +68,50 @@
       :limit.sync="listData.page_size"
       @pagination="getList"
     />
+    <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
+      <el-form label-width="80px">
+        <el-form-item label="角色名称">
+          <el-input v-model="name" placeholder="请输入角色名称"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单权限">
+          <el-tree
+            ref="rolesTree"
+            :data="roleMenuList"
+            show-checkbox
+            node-key="id"
+            :default-expanded-keys="defaultExpandedKeys"
+            :default-checked-keys="defaultCheckedKeys"
+          >
+          </el-tree>
+        </el-form-item>
+        <el-form-item label="价格显示">
+          <el-checkbox-group v-model="priceCheckList">
+            <el-checkbox label="last_purchase_price">上次进货价</el-checkbox>
+            <el-checkbox label="warning_price">预警价</el-checkbox>
+            <el-checkbox label="base_cost_price">基础成本价</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRoles">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { roleList, roleUpdateStatus } from "@/api/system/auth/roles";
+import {
+  roleList,
+  roleUpdateStatus,
+  roleMenuList,
+  addRole,
+} from "@/api/system/auth/roles";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
-      list: null,
+      list: [],
       listData: {
         page: 1,
         page_size: 10,
@@ -79,11 +119,18 @@ export default {
       },
       loading: false,
       total: 0,
+      name: "",
+      roleMenuList: [], //菜单权限树形列表
+      priceCheckList: [],
+      defaultExpandedKeys: [], //默认展开的节点的 key 的数组
+      defaultCheckedKeys: [], //默认勾选的节点的 key 的数组
+      dialogFormVisible: false,
     };
   },
   components: { Pagination },
   created() {
     this.getList();
+    this.getMenuList();
   },
   methods: {
     updateStatus(role_id, status) {
@@ -91,14 +138,16 @@ export default {
         role_id,
         type: status == 1 ? 0 : 1,
       }).then((res) => {
-        this.list.find((item) => item.id == role_id).status =
-          status == 1 ? 0 : 1;
-        this.$notify({
-          title: "成功",
-          message: "操作成功",
-          type: "success",
-          duration: 1000,
-        });
+        if (res) {
+          this.list.find((item) => item.id == role_id).status =
+            status == 1 ? 0 : 1;
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
       });
     },
     getList() {
@@ -107,6 +156,39 @@ export default {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
+      });
+    },
+    getMenuList() {
+      roleMenuList({ role_id: this.$store.state.user.role_id }).then((res) => {
+        this.roleMenuList = res;
+      });
+    },
+    saveRoles() {
+      let priceCheckList = JSON.parse(JSON.stringify(this.priceCheckList));
+      let aData = {
+        name: this.name,
+        last_purchase_price: priceCheckList.includes("last_purchase_price")
+          ? 1
+          : 0,
+        warning_price: priceCheckList.includes("warning_price") ? 1 : 0,
+        base_cost_price: priceCheckList.includes("base_cost_price") ? 1 : 0,
+        permission: this.$refs.rolesTree.getCheckedKeys().join(","),
+      };
+      console.log(aData);
+      addRole(aData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+            onClose:() => {
+              this.dialogFormVisible = false;
+            },
+          });
+          this.getList();
+        }
+        console.log(res);
       });
     },
   },

@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">一盒后台</h3>
       </div>
@@ -37,97 +43,144 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click.native.prevent="handleLogin"
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername } from "@/utils/validate";
+import {setRouter} from '@/utils/auth'
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入用户名'))
+        callback(new Error("请输入用户名"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入密码'))
+        callback(new Error("请输入密码"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: "admin",
+        password: "admin",
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: "blur", validator: validateUsername },
+        ],
+        password: [
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
-        console.log(route)
-        this.redirect = route.query && route.query.redirect
-        console.log(this.redirect)
+      handler: function (route) {
+        console.log(route);
+        this.redirect = route.query && route.query.redirect;
+        console.log(this.redirect);
       },
       //immediate: true
-    }
+    },
   },
   methods: {
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(res => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.loading = true;
+          this.$store
+            .dispatch("user/login", this.loginForm)
+            .then((res) => {
+              //加载路由菜单
+              let router = JSON.parse(JSON.stringify(this.$router.options.routes));
+              let roleArr = JSON.parse(
+                JSON.stringify(res.admin_data.path_string.split(","))
+              ); 
+              router.forEach((item_1) => {
+                if (item_1.children && item_1.children.length) {
+                  item_1.children.forEach((item_2) => {
+                    if (item_2.meta.auth) {
+                      if (!roleArr.includes(item_2.meta.auth)) {
+                        item_2.hidden = true;
+                      }
+                    } else {
+                      if (item_2.children && item_2.children.length) {
+                        item_2.children.forEach((item_3) => {
+                          if (!item_3.hidden) {
+                            if (!roleArr.includes(item_3.meta.auth)) {
+                              item_3.hidden = true;
+                            }
+                          }
+                        });
+                      }
+                    }
+                    if (item_2.children && item_2.children.length) {
+                      item_2.hidden = item_2.children.every(item => item.hidden);
+                    }
+                  });  
+                  item_1.hidden = item_1.children.every(item => item.hidden);
+                }
+              });
+              localStorage.setItem("userName",res.admin_data.name);
+              localStorage.setItem("router", JSON.stringify(router));
+              this.$router.push({ path: this.redirect || "/" });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
         } else {
-          console.log('error submit!!')
-          return false
+          console.log("error submit!!");
+          return false;
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -170,9 +223,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;

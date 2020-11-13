@@ -17,3 +17,22 @@ export function roleUpdateStatus(data) {
         data
     })
 }
+
+//角色菜单列表
+export function roleMenuList(data) {
+    return request({
+        url: '/admin/admin/get-menu-list',
+        method: 'post',
+        data
+    })
+}
+
+//添加角色
+export function addRole(data) {
+    return request({
+        url: '/admin/admin/create-role',
+        method: 'post',
+        data
+    })
+}
+
