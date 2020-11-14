@@ -325,7 +325,7 @@ export default {
   },
   components: { Pagination },
   created() {
-    this.defaultFormData = Object.assign({},this.formData);
+    this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
     this.getList();
     this.getStoreList();
   },
