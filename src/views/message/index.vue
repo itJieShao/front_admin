@@ -16,37 +16,37 @@
     <el-table v-loading="loading" :data="list" style="width: 100%">
       <el-table-column align="center" label="消息ID">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="收件人">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.view_user_name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="发件人">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.created_user_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="发件时间">
+      <el-table-column width="200" align="center" label="发件时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.status_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="消息标题">
+      <el-table-column width="400" align="center" label="消息标题">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
 
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { auditList } from "@/api/system/examine";
+import { messageList } from "@/api/message";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -92,7 +92,7 @@ export default {
     },
     getList() {
       this.loading = true;
-      auditList(this.listData).then((res) => {
+      messageList(this.listData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;

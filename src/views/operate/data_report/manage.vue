@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="loading">
     <h2>经营报表</h2>
     <el-card shadow="always">
       <el-tag
@@ -24,64 +24,632 @@
       </el-date-picker>
       <el-divider />
       <h3>运营数据</h3>
-      <el-row :gutter="20">
+      <el-row :gutter="10">
         <el-col :span="8">
-          <ManageItem title="营业额" unit="元" :data="63231" />
+          <el-card shadow="always">
+            <h4>营业额</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.turnover }}</p>
+              <p class="unit">元</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.turnover_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.total_price }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.turnover_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.total_price }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_turnover_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_turnover_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_turnover_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_turnover_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_turnover_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_turnover_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_turnover_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_turnover_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_turnover_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <ManageItem title="实际收入" unit="元" :data="63231" />
+          <el-card shadow="always">
+            <h4>实际收入</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.real }}</p>
+              <p class="unit">元</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.real_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.real_price }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.real_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.real_price }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_real_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_real_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_real_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_real_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_real_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_real_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_real_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_real_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_real_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <ManageItem title="订单总数" unit="元" :data="63231" />
+          <el-card shadow="always">
+            <h4>订单总数</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.order_num }}</p>
+              <p class="unit">条</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.order_num_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.order_num_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_order_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_order_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_order_num_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_order_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_order_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_order_num_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_order_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_order_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_order_num_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
       </el-row>
-      <el-row style="margin-top: 15px" :gutter="20">
+      <el-row style="margin-top: 15px" :gutter="10">
         <el-col :span="8">
-          <ManageItem title="套餐销量" unit="份" :data="63231" />
+          <el-card shadow="always">
+            <h4>套餐数量</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.vendor_pacakge_num }}</p>
+              <p class="unit">份</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div
+                  class="flex"
+                  v-for="item in detail.vendor_package_num_first"
+                >
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_package_name }}</p>
+                  <p>{{ item.vendor_package_num }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div
+                  class="flex"
+                  v-for="item in detail.vendor_package_num_last"
+                >
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_package_name }}</p>
+                  <p>{{ item.vendor_package_num }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_package_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_package_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_package_num_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_package_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_package_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_package_num_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_package_num_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_package_num_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_package_num_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <ManageItem title="退单数" unit="条" :data="63231" />
+          <el-card shadow="always">
+            <h4>退单数</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.refund }}</p>
+              <p class="unit">条</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.refund_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.refund_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_refund_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_refund_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_refund_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_refund_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_refund_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_refund_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_refund_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_refund_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_refund_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <ManageItem title="退单率" :data="63231" />
+          <el-card shadow="always">
+            <h4>退单率</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.refund_rate }}</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.refund_rate_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.refund_rate_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_refund_rate_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_refund_rate_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_refund_rate_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_refund_rate_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_refund_rate_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_refund_rate_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_refund_rate_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_refund_rate_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_refund_rate_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
       </el-row>
-      <el-row style="margin-top: 15px" :gutter="20">
+      <el-row style="margin-top: 15px" :gutter="10">
         <el-col :span="8">
-          <ManageItem title="成交订单" unit="条" :data="63231" />
+          <el-card shadow="always">
+            <h4>成交订单</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.reach }}</p>
+              <p class="unit">条</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.reach_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.reach_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_reach_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_reach_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_reach_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_reach_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_reach_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_reach_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_reach_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_reach_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_reach_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <ManageItem title="报损总数" unit="份" :data="63231" />
+          <el-card shadow="always">
+            <h4>报损总数</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.loss_num }}</p>
+              <p class="unit">份</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.loss_num_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.loss_num_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_loss_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_loss_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_loss_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_loss_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_loss_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_loss_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_loss_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_loss_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_loss_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="8">
           <el-card shadow="always">
             <h4>耗损成本</h4>
             <div class="data_box" style="margin-bottom: -30px">
-              <p class="data">63</p>
+              <p class="data">{{detail.loss_total}}</p>
               <p class="unit">元</p>
             </div>
-            <Echart id="chart" type="pie" width="100%" height="300px" />
+            <Echart
+              id="chart"
+              unit="元"
+              :pieData="detail.loss_detail"
+              type="pie"
+              width="100%"
+              height="300px"
+            />
           </el-card>
         </el-col>
       </el-row>
       <h3>用户数据</h3>
-      <el-row :gutter="20">
+      <el-row :gutter="10">
         <el-col :span="12">
-          <ManageItem title="新增用户" unit="人" :data="63231">
+          <el-card shadow="always">
+            <h4>新增用户</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.gender_data.count }}</p>
+              <p class="unit">人</p>
+            </div>
             <div class="sex_box">
               <div>
-                <el-tag type="danger" effect="dark"> 女 </el-tag>
-                <p>369</p>
+                <el-tag effect="dark"> 男 </el-tag>
+                <p>{{ detail.gender_data.man_count }}</p>
               </div>
               <div>
-                <el-tag effect="dark"> 男 </el-tag>
-                <p>369</p>
+                <el-tag type="danger" effect="dark"> 女 </el-tag>
+                <p>{{ detail.gender_data.women_count }}</p>
+              </div>
+              <div>
+                <el-tag type="warning" effect="dark"> 未知性别 </el-tag>
+                <p>{{ detail.gender_data.unknown_count }}</p>
               </div>
             </div>
-          </ManageItem>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.compare_data.last_day.type == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.compare_data.last_day.type == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.compare_data.last_day.rate }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.compare_data.last_week.type == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.compare_data.last_week.type == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.compare_data.last_week.rate }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.compare_data.last_month.type == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.compare_data.last_month.type == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.compare_data.last_month.rate }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
         <el-col :span="12">
-          <ManageItem title="老用户下单率" :data="63231" />
+          <el-card shadow="always">
+            <h4>老用户下单数</h4>
+            <div class="data_box">
+              <p class="data">{{ detail.old }}</p>
+            </div>
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.old_first">
+                  <i class="el-icon-caret-top"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="flex" v-for="item in detail.old_last">
+                  <i class="el-icon-caret-bottom"></i>
+                  <p class="fontw">{{ item.vendor_name }}</p>
+                  <p>{{ item.count }}</p>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.yesteday_old_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.yesteday_old_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>昨日{{ detail.yesteday_old_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_week_old_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_week_old_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上周{{ detail.last_week_old_diff }}</p>
+              </el-col>
+              <el-col class="flex" :span="8">
+                <i
+                  v-if="detail.last_month_old_trend == 1"
+                  class="el-icon-top-right"
+                ></i>
+                <i
+                  v-else-if="detail.last_month_old_trend == 2"
+                  class="el-icon-bottom-left"
+                ></i>
+                <p>上月{{ detail.last_month_old_diff }}</p>
+              </el-col>
+            </el-row>
+          </el-card>
         </el-col>
       </el-row>
     </el-card>
@@ -90,16 +658,15 @@
 
 <script>
 import { customerData } from "@/api/operate/data_report/manage";
-import ManageItem from "./components/ManageItem";
 import Echart from "@/components/Echart";
 import { start } from "nprogress";
 export default {
   components: {
     Echart,
-    ManageItem,
   },
   data() {
     return {
+      detail: {},
       time: "",
       timeList1: [
         { name: "日", type: "1" },
@@ -108,6 +675,7 @@ export default {
         { name: "年", type: "4" },
       ],
       time_type: "1",
+      loading: false,
     };
   },
   created() {
@@ -120,10 +688,11 @@ export default {
     },
     tabClick(time_type) {
       this.time = "";
-      this.time_type = time_type
+      this.time_type = time_type;
       this.getCustomerData();
     },
     getCustomerData() {
+      this.loading = true;
       let aData = {
         time_type: this.time_type,
       };
@@ -132,7 +701,8 @@ export default {
         aData.time_end = this.time[1];
       }
       customerData(aData).then((res) => {
-        console.log(res);
+        this.detail = res;
+        this.loading = false;
       });
     },
   },
@@ -142,6 +712,9 @@ export default {
 <style scoped lang="scss">
 h4 {
   margin: 0;
+}
+p {
+  font-size: 14px;
 }
 .time_type {
   padding: 0 20px;
@@ -185,9 +758,10 @@ h4 {
   }
 }
 .sex_box {
-  position: absolute;
-  right: 0;
+  margin: 10px auto;
   display: flex;
+  align-items: center;
+  justify-content: center;
   div {
     margin-left: 20px;
     display: flex;

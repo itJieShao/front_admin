@@ -59,7 +59,7 @@ module.exports = {
   devServer: {
     port: 8080,
     open: true,
-    proxy: proxy(['/admin','/order','/vendor','/customer','/package','/product','/invoice'])
+    proxy: proxy(['/admin','/order','/vendor','/customer','/package','/product','/invoice','/other'])
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

@@ -160,6 +160,32 @@
       <el-col :span="8">
         <el-card shadow="always">
           <div class="item_flex">
+            <p>发票号码</p>
+            <p style="height: 40px">
+              <el-input
+                v-model="detail.invoice_no"
+                placeholder="请输入发票号码"
+              ></el-input>
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>发票代码</p>
+            <p style="height: 40px">
+              <el-input
+                v-model="detail.invoice_code"
+                placeholder="请输入发票代码"
+              ></el-input>
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <!-- <el-col :span="8">
+        <el-card shadow="always">
+          <div class="item_flex">
             <p>开票日期</p>
             <p style="height: 40px">
               <el-date-picker
@@ -181,16 +207,19 @@
             </p>
           </div>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
     <el-upload
+      :file-list="uploadfile"
+      :on-success="upLoadInvoice"
+      :on-remove="removeInvoice"
+      :limit="1"
       style="margin: 15px 0"
       class="upload-demo"
       action="/invoice/invoice/upload-invoice-file"
       multiple
-      :limit="1"
     >
-      <el-button size="small" type="success">请添加电子发票文件</el-button>
+      <el-button size="small" type="success">添加电子发票文件</el-button>
     </el-upload>
     <el-row type="flex" class="row-bg" justify="end">
       <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -199,11 +228,12 @@
 </template>
 
 <script>
-import { invoiceDetail } from "@/api/finance/invoice";
+import { invoiceDetail, invoiceUpload } from "@/api/finance/invoice";
 export default {
   data() {
     return {
       detail: {},
+      uploadfile:[],
     };
   },
   created() {
@@ -214,7 +244,43 @@ export default {
       invoiceDetail({
         invoice_id: this.$route.query.invoice_id,
       }).then((res) => {
+        if (res.uploadfile){
+          this.uploadfile = [{name:res.uploadfile,url:res.uploadfile}]
+        }
         this.detail = res;
+      });
+    },
+    //上传发票
+    upLoadInvoice(res, file) {
+      console.log(file);
+      if (res.status) {
+        this.detail.uploadfile = res.data.image_url;
+      }
+    },
+    //删除发票
+    removeInvoice() {
+      this.detail.uploadfile = "";
+    },
+    onSubmit() {
+      let { id:invoice_id, uploadfile, invoice_no, invoice_code } = this.detail;
+      let aData = {
+        invoice_id,
+        uploadfile,
+        invoice_no,
+        invoice_code,
+      };
+      invoiceUpload(aData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+            onClose: () => {
+              this.$router.go(-1);
+            },
+          });
+        }
       });
     },
   },

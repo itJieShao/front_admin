@@ -5,7 +5,7 @@
 <script>
 import echarts from "echarts";
 export default {
-  props: ["id", "width", "height", "xAxis", "series", "type"],
+  props: ["id", "width", "height", "xAxis", "series", "type","title","pieData","unit"],
   mounted() {
     this.drawLine();
   },
@@ -40,9 +40,13 @@ export default {
       };
       // 饼图
       let pie_echart_option = {
+        title: {
+          text: this.title,
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
-          formatter: "{b} : ￥{c} ({d}%)",
+          formatter: `{b} : {c}${this.unit} ({d}%)`,
         },
         legend: {
           orient: "vertical",
@@ -53,11 +57,8 @@ export default {
           {
             type: "pie",
             radius: "55%",
-            center: ["50%", "60%"],
-            data: [
-              { value: 335, name: "滞销成本" },
-              { value: 310, name: "损耗成本" },
-            ],
+            center: ["50%", "50%"],
+            data: this.pieData,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,

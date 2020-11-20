@@ -66,19 +66,19 @@
         <template slot-scope="scope">
           <span>{{ scope.row.level_num }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="发票代码">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.invoice_code }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="发票号码">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_num }}</span>
+          <span>{{ scope.row.invoice_no }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">

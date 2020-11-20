@@ -2,20 +2,24 @@
   <el-card shadow="always">
     <h4>{{ title }}</h4>
     <div class="data_box">
-      <p class="data">{{ data }}</p>
+      <p class="data">{{ data.num }}</p>
       <p class="unit">{{ unit }}</p>
       <slot />
     </div>
     <el-row :gutter="20">
-      <el-col class="flex" :span="12">
-        <i class="el-icon-caret-top"></i>
-        <p class="fontw">体育西路店</p>
-        <p>9841.5</p>
+      <el-col :span="12">
+        <div class="flex" v-for="item in data.first">
+          <i class="el-icon-caret-top"></i>
+          <p class="fontw">{{ item.vendor_name }}</p>
+          <p>{{ item.total_price }}</p>
+        </div>
       </el-col>
-      <el-col class="flex" :span="12">
-        <i class="el-icon-caret-bottom"></i>
-        <p class="fontw">体育西路店</p>
-        <p>9841.5</p>
+      <el-col :span="12">
+        <div class="flex" v-for="item in data.last">
+          <i class="el-icon-caret-bottom"></i>
+          <p class="fontw">{{item.vendor_name}}</p>
+          <p>{{item.total_price}}</p>
+        </div>
       </el-col>
     </el-row>
     <el-row :gutter="20">

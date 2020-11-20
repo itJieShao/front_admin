@@ -14,6 +14,26 @@ const operateRouter = {
             meta: { title: '小程序菜单管理', icon: 'el-icon-s-help', auth: "front_menu_list" },
         },
         {
+            path: 'questionnaire',
+            component: () => import('@/views/operate/questionnaire'),
+            name: 'Questionnaire',
+            meta: { title: '调查问卷', icon: 'el-icon-s-help', auth: "questionnaire_list" },
+        },
+        {
+            path: 'questionnaire_add',
+            component: () => import('@/views/operate/questionnaire/add'),
+            name: 'QuestionnaireAdd',
+            hidden:true,
+            meta: { title: '新增问卷', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire' },
+        },
+        {
+            path: 'questionnaire_detail',
+            component: () => import('@/views/operate/questionnaire/detail'),
+            name: 'QuestionnaireDetail',
+            hidden:true,
+            meta: { title: '问卷详情', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire' },
+        },
+        {
             path: 'data_report',
             component: () => import('@/views/operate/data_report'),
             name: 'DataReport',

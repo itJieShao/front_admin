@@ -1,19 +1,28 @@
 import request from '@/utils/request'
 
 //发票列表
-export function invoiceList(query) {
+export function invoiceList(data) {
   return request({
     url: '/invoice/invoice/list',
     method: 'post',
-    data: query
+    data
   })
 }
 
 //发票详情
-export function invoiceDetail(query) {
+export function invoiceDetail(data) {
   return request({
     url: '/invoice/invoice/detail',
     method: 'post',
-    data: query
+    data
+  })
+}
+
+//上传发票
+export function invoiceUpload(data) {
+  return request({
+    url: '/invoice/invoice/upload',
+    method: 'post',
+    data
   })
 }
