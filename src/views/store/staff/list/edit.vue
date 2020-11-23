@@ -8,7 +8,7 @@
             :file-list="detailMainImgFile"
             :class="{ main_img_hide: formData.head_images }"
             :limit="1"
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"

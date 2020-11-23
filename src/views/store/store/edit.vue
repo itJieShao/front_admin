@@ -8,7 +8,7 @@
             :file-list="detailMainImgFile"
             :class="{ main_img_hide: formData.images }"
             :limit="1"
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
@@ -231,7 +231,7 @@
           <el-upload
             :file-list="detailImagesFile"
             multiple
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadImg"
             :on-preview="handlePictureCardPreview"
@@ -250,7 +250,7 @@
           <el-upload
             :file-list="detailFoodImagesFile"
             multiple
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadFoodImg"
             :on-preview="handlePictureCardPreview"

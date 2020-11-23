@@ -1,5 +1,6 @@
 <template>
-  <div class="app-container" v-loading="loading">
+  <div class="app-container">
+    <div class="loading" :style="loading?'z-index: 1;':'z-index: -1;'" v-loading="loading"></div>
     <h2>经营报表</h2>
     <el-card shadow="always">
       <el-tag
@@ -518,7 +519,7 @@
           <el-card shadow="always">
             <h4>耗损成本</h4>
             <div class="data_box" style="margin-bottom: -30px">
-              <p class="data">{{detail.loss_total}}</p>
+              <p class="data">{{ detail.loss_total }}</p>
               <p class="unit">元</p>
             </div>
             <Echart
@@ -687,9 +688,11 @@ export default {
       this.getCustomerData();
     },
     tabClick(time_type) {
-      this.time = "";
-      this.time_type = time_type;
-      this.getCustomerData();
+      if (this.time_type != time_type) {
+        this.time = "";
+        this.time_type = time_type;
+        this.getCustomerData();
+      }
     },
     getCustomerData() {
       this.loading = true;
@@ -715,6 +718,11 @@ h4 {
 }
 p {
   font-size: 14px;
+}
+.loading{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 .time_type {
   padding: 0 20px;

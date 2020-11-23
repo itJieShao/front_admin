@@ -96,7 +96,8 @@
       </el-table-column>
 
       <el-table-column
-        width="180"
+        width="140"
+        fixed="right"
         class-name="status-col"
         align="center"
         label="记录状态"
@@ -173,7 +174,7 @@ export default {
         return this.$message.error("请先选中要汇总的门店");
       }
       if (list.findIndex((item) => item.status != 1) != -1) {
-        return this.$message.error('请选中状态为"审核通过"的门店');
+        return this.$message.error('请选中记录状态为"审核通过"的门店');
       }
       let purchase_ids = [];
       list.forEach(item => purchase_ids.push(item.id));

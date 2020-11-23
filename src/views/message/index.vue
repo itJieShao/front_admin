@@ -3,8 +3,8 @@
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
-          v-model="listData.name"
-          placeholder="请输入搜索内容"
+          v-model="listData.title"
+          placeholder="请输入标题搜索"
         ></el-input>
       </el-col>
       <el-col :span="10">
@@ -76,7 +76,7 @@ export default {
       listData: {
         page: 1,
         page_size: 10,
-        name: "",
+        title: "",
       },
       loading: false,
       total: 0,

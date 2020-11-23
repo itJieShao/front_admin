@@ -57,7 +57,7 @@
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
-          <!-- <el-button size="mini">删除</el-button> -->
+          <el-button @click="editRoles(scope.row.id)" size="mini">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -133,6 +133,10 @@ export default {
     this.getMenuList();
   },
   methods: {
+    //编辑角色
+    editRoles(){
+
+    },
     updateStatus(role_id, status) {
       roleUpdateStatus({
         role_id,
@@ -174,7 +178,6 @@ export default {
         base_cost_price: priceCheckList.includes("base_cost_price") ? 1 : 0,
         permission: this.$refs.rolesTree.getCheckedKeys().join(","),
       };
-      console.log(aData);
       addRole(aData).then((res) => {
         if (res) {
           this.$notify({
@@ -188,7 +191,6 @@ export default {
           });
           this.getList();
         }
-        console.log(res);
       });
     },
   },

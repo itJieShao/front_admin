@@ -8,7 +8,7 @@
           <el-upload
             :class="{ img_hide: formData.image }"
             :limit="1"
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadImage"
             :on-preview="handlePictureCardPreview"
@@ -75,7 +75,7 @@
               <el-upload
                 :limit="1"
                 :class="{ img_hide: item.reward_image }"
-                action="/vendor/vendor/upload_image"
+                :action="$upLoadImgApi"
                 list-type="picture-card"
                 :on-success="(value) => upLoadRewardImage(index, value)"
                 :on-preview="handlePictureCardPreview"
@@ -375,6 +375,7 @@ export default {
   cursor: pointer;
 }
 .del_btn {
+  position: relative;
   color: red;
 }
 .add_btn {

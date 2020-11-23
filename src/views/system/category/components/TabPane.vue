@@ -113,7 +113,11 @@ export default {
             duration: 1000,
             onClose: () => {
               this.dialogFormVisible = false;
-              this.list[this.editIndex].name = aData.name;
+              if (aData.category_id) {
+                this.list[this.editIndex].name = aData.name;
+              } else {
+                this.getList();
+              }
             },
           });
         }

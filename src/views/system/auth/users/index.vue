@@ -68,9 +68,12 @@
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
-          <el-button @click="deleteUser(scope.row.id, scope.$index)" size="mini"
-            >删除</el-button
+          <el-button @click="editUser(scope.row.id)" size="mini"
+            >编辑</el-button
           >
+          <!-- <el-button @click="deleteUser(scope.row.id, scope.$index)" size="mini"
+            >删除</el-button
+          > -->
         </template>
       </el-table-column>
     </el-table>

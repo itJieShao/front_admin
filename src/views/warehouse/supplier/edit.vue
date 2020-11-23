@@ -8,7 +8,7 @@
             :file-list="detailImagesFile"
             multiple
             :limit="9"
-            action="/vendor/vendor/upload_image"
+            :action="$upLoadImgApi"
             list-type="picture-card"
             :on-success="upLoadImg"
             :on-preview="handlePictureCardPreview"
