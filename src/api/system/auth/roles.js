@@ -27,10 +27,28 @@ export function roleMenuList(data) {
     })
 }
 
+//角色菜单详情
+export function roleDetail(data) {
+    return request({
+        url: '/admin/admin/get-role-row',
+        method: 'post',
+        data
+    })
+}
+
 //添加角色
 export function addRole(data) {
     return request({
         url: '/admin/admin/create-role',
+        method: 'post',
+        data
+    })
+}
+
+//编辑角色
+export function editRole(data) {
+    return request({
+        url: '/admin/admin/edit-role',
         method: 'post',
         data
     })

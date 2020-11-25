@@ -98,8 +98,14 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" fixed="right" align="center" label="操作">
+      <el-table-column width="200" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
+          <el-button
+            :type="scope.row.status == 0 ? 'danger' : 'success'"
+            size="mini"
+            @click="updateStatus(scope.row.id, scope.row.status)"
+            >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
+          >
           <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
         </template>
       </el-table-column>
@@ -115,7 +121,7 @@
 </template>
 
 <script>
-import { vendorStaffList } from "@/api/store";
+import { vendorStaffList, disableEmployee } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -147,6 +153,23 @@ export default {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
+      });
+    },
+    updateStatus(employee_id, status) {
+      disableEmployee({
+        employee_id,
+        type: status == 1 ? 2 : 1,
+      }).then((res) => {
+        if (res) {
+          this.list.find((item) => item.id == employee_id).status =
+            status == 1 ? 0 : 1;
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
       });
     },
   },

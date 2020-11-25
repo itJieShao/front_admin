@@ -57,7 +57,9 @@
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
-          <el-button @click="editRoles(scope.row.id)" size="mini">编辑</el-button>
+          <el-button @click="editRoles(scope.row.id)" size="mini"
+            >编辑</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -68,7 +70,10 @@
       :limit.sync="listData.page_size"
       @pagination="getList"
     />
-    <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="role_id ? '编辑角色' : '新增角色'"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form label-width="80px">
         <el-form-item label="角色名称">
           <el-input v-model="name" placeholder="请输入角色名称"></el-input>
@@ -106,6 +111,8 @@ import {
   roleUpdateStatus,
   roleMenuList,
   addRole,
+  editRole,
+  roleDetail,
 } from "@/api/system/auth/roles";
 import Pagination from "@/components/Pagination";
 export default {
@@ -119,6 +126,7 @@ export default {
       },
       loading: false,
       total: 0,
+      role_id: "",
       name: "",
       roleMenuList: [], //菜单权限树形列表
       priceCheckList: [],
@@ -132,10 +140,34 @@ export default {
     this.getList();
     this.getMenuList();
   },
+  watch: {
+    dialogFormVisible(flag) {
+      if (!flag) {
+        this.role_id = "";
+        this.name = "";
+        this.priceCheckList = [];
+        this.$refs.rolesTree.setCheckedKeys([]);
+      }
+    },
+  },
   methods: {
     //编辑角色
-    editRoles(){
-
+    editRoles(role_id) {
+      this.dialogFormVisible = true;
+      this.role_id = role_id;
+      roleDetail({ role_id }).then((res) => {
+        this.name = res.name;
+        this.defaultCheckedKeys = res.permission.split(",");
+        if (res.base_cost_price == 0) {
+          this.priceCheckList.push("base_cost_price");
+        }
+        if (res.last_purchase_price == 0) {
+          this.priceCheckList.push("last_purchase_price");
+        }
+        if (res.warning_price == 0) {
+          this.priceCheckList.push("warning_price");
+        }
+      });
     },
     updateStatus(role_id, status) {
       roleUpdateStatus({
@@ -168,24 +200,26 @@ export default {
       });
     },
     saveRoles() {
+      let api = this.role_id ? editRole : addRole;
       let priceCheckList = JSON.parse(JSON.stringify(this.priceCheckList));
       let aData = {
+        role_id: this.role_id,
         name: this.name,
         last_purchase_price: priceCheckList.includes("last_purchase_price")
-          ? 1
-          : 0,
-        warning_price: priceCheckList.includes("warning_price") ? 1 : 0,
-        base_cost_price: priceCheckList.includes("base_cost_price") ? 1 : 0,
+          ? 0
+          : 1,
+        warning_price: priceCheckList.includes("warning_price") ? 0 : 1,
+        base_cost_price: priceCheckList.includes("base_cost_price") ? 0 : 1,
         permission: this.$refs.rolesTree.getCheckedKeys().join(","),
       };
-      addRole(aData).then((res) => {
+      api(aData).then((res) => {
         if (res) {
           this.$notify({
             title: "成功",
             message: "提交成功",
             type: "success",
             duration: 1000,
-            onClose:() => {
+            onClose: () => {
               this.dialogFormVisible = false;
             },
           });

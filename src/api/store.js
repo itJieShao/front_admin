@@ -107,3 +107,12 @@ export function vendorEmployeeDetail(data) {
         data
     })
 }
+
+//禁用（启用）员工
+export function disableEmployee(data) {
+    return request({
+        url: '/vendor/vendor/disable-employee',
+        method: 'post',
+        data
+    })
+}

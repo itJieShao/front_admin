@@ -19,7 +19,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="员工名称">
-          <el-input placeholder="请输入员工名称" v-model="formData.name"></el-input>
+          <el-input
+            placeholder="请输入员工名称"
+            v-model="formData.name"
+          ></el-input>
         </el-form-item>
         <el-form-item label="岗位">
           <el-select
@@ -36,12 +39,28 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="formData.station_id" :label="vendor_name">
+        <el-form-item :label="vendor_name">
           <el-select
+            ref="vendor"
+            v-if="formData.station_id == 1"
             style="width: 100%"
             placeholder="请选择门店"
             v-model="formData.vendor_id"
-            :multiple="formData.station_id != 1"
+          >
+            <el-option
+              v-for="item in vendorList"
+              :key="item.vendor_id"
+              :label="item.vendor_name"
+              :value="item.vendor_id"
+            ></el-option>
+          </el-select>
+          <el-select
+            ref="vendor"
+            v-else
+            style="width: 100%"
+            placeholder="请选择门店，可多选"
+            v-model="formData.vendor_id"
+            multiple
           >
             <el-option
               v-for="item in vendorList"
@@ -55,13 +74,22 @@
           <el-input placeholder="请输入年龄" v-model="formData.age"></el-input>
         </el-form-item>
         <el-form-item label="学历">
-          <el-input placeholder="请输入学历" v-model="formData.education"></el-input>
+          <el-input
+            placeholder="请输入学历"
+            v-model="formData.education"
+          ></el-input>
         </el-form-item>
         <el-form-item label="籍贯">
-          <el-input placeholder="请输入籍贯" v-model="formData.native_place"></el-input>
+          <el-input
+            placeholder="请输入籍贯"
+            v-model="formData.native_place"
+          ></el-input>
         </el-form-item>
         <el-form-item label="手机号码">
-          <el-input placeholder="请输入手机号码" v-model="formData.phone"></el-input>
+          <el-input
+            placeholder="请输入手机号码"
+            v-model="formData.phone"
+          ></el-input>
         </el-form-item>
         <el-form-item label="入职时间">
           <el-date-picker
@@ -97,7 +125,7 @@ export default {
       formData: {
         head_images: "",
         name: "",
-        vendor_id: "",
+        vendor_id: [],
         station_id: "",
         age: "",
         education: "",
@@ -142,7 +170,9 @@ export default {
   },
   methods: {
     stationChange() {
-      this.formData.vendor_id = this.formData.station_id == 1 ? "" : [];  
+      this.formData.vendor_id = this.formData.station_id == 1 ? "" : [];
+      this.$refs.vendor.focus()
+      this.$refs.vendor.blur()
     },
     getDetail() {
       vendorEmployeeDetail({ employee_id: this.formData.employee_id }).then(

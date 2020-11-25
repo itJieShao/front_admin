@@ -44,3 +44,21 @@ export function userRemove(data) {
         data
     })
 }
+
+//编辑管理员
+export function userEdit(data) {
+    return request({
+        url: '/admin/admin/edit-user',
+        method: 'post',
+        data
+    })
+}
+
+//管理员详情
+export function userDetail(data) {
+    return request({
+        url: '/admin/admin/get-user-row',
+        method: 'post',
+        data
+    })
+}

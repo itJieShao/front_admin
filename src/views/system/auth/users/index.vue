@@ -85,7 +85,10 @@
       @pagination="getList"
     />
 
-    <el-dialog title="新增账户" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="formData.user_id ? '编辑账户' : '新增账户'"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form label-width="80px">
         <el-form-item label="选择角色">
           <el-select
@@ -112,7 +115,7 @@
         <el-form-item label="账户密码">
           <el-input
             type="password"
-            placeholder="请输入帐户登录密码"
+            :placeholder="formData.role_id?'请输入帐户登录密码（编辑可不填，不填就还是原密码）':'请输入帐户登录密码'"
             v-model="formData.password"
           ></el-input>
         </el-form-item>
@@ -134,7 +137,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addUser">确 定</el-button>
+        <el-button type="primary" @click="saveUser">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -146,6 +149,8 @@ import {
   userUpdateStatus,
   roleData,
   userAdd,
+  userEdit,
+  userDetail,
   userRemove,
 } from "@/api/system/auth/users";
 import Pagination from "@/components/Pagination";
@@ -163,6 +168,7 @@ export default {
       dialogFormVisible: false,
       roleList: [],
       formData: {
+        user_id: "",
         username: "",
         name: "",
         role_id: "",
@@ -170,14 +176,32 @@ export default {
         phone: "",
         status: "0",
       },
+      defaultFormData: {},
     };
   },
   components: { Pagination },
+  watch: {
+    dialogFormVisible(flag) {
+      if (!flag) {
+        this.formData = JSON.parse(JSON.stringify(this.defaultFormData));
+      }
+    },
+  },
   created() {
+    this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
     this.getList();
     this.getRoleData();
   },
   methods: {
+    //编辑角色
+    editUser(user_id) {
+      this.dialogFormVisible = true;
+      this.formData.user_id = user_id;
+      userDetail({ user_id }).then((res) => {
+        this.formData = res[0];
+        this.formData.user_id = user_id;
+      });
+    },
     updateStatus(users_id, status) {
       userUpdateStatus({
         users_id,
@@ -206,8 +230,10 @@ export default {
         this.roleList = res;
       });
     },
-    addUser() {
-      userAdd(this.formData).then((res) => {
+    saveUser() {
+      console.log(this.formData.user_id)
+      let api = this.formData.user_id ? userEdit : userAdd;
+      api(this.formData).then((res) => {
         if (res) {
           this.$notify({
             title: "成功",

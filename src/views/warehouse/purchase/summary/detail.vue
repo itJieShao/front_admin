@@ -99,8 +99,8 @@
           "
         >
           <div style="display: flex">
-            <el-button type="success">同意进货</el-button>
-            <el-button type="danger">驳回进货</el-button>
+            <el-button @click="examine_click(1)" type="success">同意进货</el-button>
+            <el-button @click="examine_click(-1)" type="danger">驳回进货</el-button>
           </div>
         </template>
       </el-table-column>
@@ -259,6 +259,7 @@ import {
   updateMaterialPurchasePrice,
   updateSeasoningPurchasePrice,
 } from "@/api/warehouse";
+import {auditEdit} from '@/api/system/examine';
 export default {
   data() {
     return {
@@ -269,6 +270,19 @@ export default {
     this.getDetail();
   },
   methods: {
+    examine_click(status){
+      auditEdit({audit_process_id:this.detail.id,status}).then(res => {
+        if (res){
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+          this.detail.can_audit = 0;
+        }
+      })
+    },
     getDetail() {
       purchaseTotalDetail({
         purchase_total_id: this.$route.query.purchase_total_id,
