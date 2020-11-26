@@ -41,26 +41,11 @@
         </el-form-item>
         <el-form-item :label="vendor_name">
           <el-select
-            ref="vendor"
-            v-if="formData.station_id == 1"
+            :key="timer"
             style="width: 100%"
-            placeholder="请选择门店"
+            :placeholder="formData.station_id != 1 ?'请选择门店，可多选':'请选择门店'"
             v-model="formData.vendor_id"
-          >
-            <el-option
-              v-for="item in vendorList"
-              :key="item.vendor_id"
-              :label="item.vendor_name"
-              :value="item.vendor_id"
-            ></el-option>
-          </el-select>
-          <el-select
-            ref="vendor"
-            v-else
-            style="width: 100%"
-            placeholder="请选择门店，可多选"
-            v-model="formData.vendor_id"
-            multiple
+            :multiple="formData.station_id != 1"
           >
             <el-option
               v-for="item in vendorList"
@@ -142,6 +127,7 @@ export default {
       detailMainImgFile: [], //详情头像回显
       dialogImageUrl: "",
       dialogVisible: false,
+      timer: "",
     };
   },
   computed: {
@@ -171,8 +157,7 @@ export default {
   methods: {
     stationChange() {
       this.formData.vendor_id = this.formData.station_id == 1 ? "" : [];
-      this.$refs.vendor.focus()
-      this.$refs.vendor.blur()
+      this.timer = new Date().getTime();
     },
     getDetail() {
       vendorEmployeeDetail({ employee_id: this.formData.employee_id }).then(

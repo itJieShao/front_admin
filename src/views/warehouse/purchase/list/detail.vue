@@ -5,7 +5,7 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>配货ID</p>
+            <p>进货ID</p>
             <p>{{ detail.id }}</p>
           </div>
         </el-card>

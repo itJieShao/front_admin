@@ -98,7 +98,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="200" fixed="right" align="center" label="操作">
+      <el-table-column width="250" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             :type="scope.row.status == 0 ? 'danger' : 'success'"
@@ -107,6 +107,7 @@
             >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
           >
           <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id,scope.row.station_id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,6 +144,9 @@ export default {
   methods: {
     goEdit(employee_id) {
       this.$router.push(`/store/staff/staff_edit?employee_id=${employee_id}`);
+    },
+    goDetail(employee_id,station_id) {
+      this.$router.push(`/store/staff/staff_detail?employee_id=${employee_id}&station_id=${station_id}`);
     },
     goAdd() {
       this.$router.push("/store/staff/staff_add");

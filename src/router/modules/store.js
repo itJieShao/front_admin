@@ -51,14 +51,21 @@ const storeRouter = {
                     name: 'StaffAdd',
                     component: () => import('@/views/store/staff/list/edit'),
                     hidden: true,
-                    meta: { title: '添加员工', icon: 'table', activeMenu: '/store/staff/staff_list' }
+                    meta: { title: '添加员工', activeMenu: '/store/staff/staff_list' }
                 },
                 {
                     path: 'staff_edit',
                     name: 'StaffEdit',
                     component: () => import('@/views/store/staff/list/edit'),
                     hidden: true,
-                    meta: { title: '编辑员工', icon: 'table', activeMenu: '/store/staff/staff_list' }
+                    meta: { title: '编辑员工', activeMenu: '/store/staff/staff_list' }
+                },
+                {
+                    path: 'staff_detail',
+                    name: 'StaffDetail',
+                    component: () => import('@/views/store/staff/list/detail'),
+                    hidden: true,
+                    meta: { title: '员工详情', activeMenu: '/store/staff/staff_list' }
                 },
                 {
                     path: 'staff_task',

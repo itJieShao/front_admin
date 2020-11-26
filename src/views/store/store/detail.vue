@@ -82,7 +82,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="8">
         <el-card shadow="always">
           <div class="item_flex">
             <p>详细地址</p>
@@ -98,6 +98,8 @@
           </div>
         </el-card>
       </el-col>
+    </el-row>
+    <el-row style="margin-top: 15px" :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -106,8 +108,6 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-row style="margin-top: 15px" :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -116,7 +116,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>

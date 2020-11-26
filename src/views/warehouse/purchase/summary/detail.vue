@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     examine_click(status){
-      auditEdit({audit_process_id:this.detail.id,status}).then(res => {
+      auditEdit({audit_process_id:this.detail.audit_process_id,status}).then(res => {
         if (res){
           this.$notify({
             title: "成功",
