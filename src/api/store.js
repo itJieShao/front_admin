@@ -116,3 +116,12 @@ export function disableEmployee(data) {
         data
     })
 }
+
+//门店设备列表
+export function vendorDeviceList(data) {
+    return request({
+        url: '/vendor/device/list',
+        method: 'post',
+        data
+    })
+}

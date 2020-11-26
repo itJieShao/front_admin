@@ -259,7 +259,7 @@ import {
   updateMaterialPurchasePrice,
   updateSeasoningPurchasePrice,
 } from "@/api/warehouse";
-import {auditEdit} from '@/api/system/examine';
+import { audit } from "@/api/common";
 export default {
   data() {
     return {
@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     examine_click(status){
-      auditEdit({audit_process_id:this.detail.audit_process_id,status}).then(res => {
+      audit({audit_process_id:this.detail.audit_process_id,status}).then(res => {
         if (res){
           this.$notify({
             title: "成功",

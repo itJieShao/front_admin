@@ -206,14 +206,83 @@
     <el-card shadow="always">
       <div>
         <p>设备列表</p>
+        <el-tabs type="border-card" style="margin-top: 20px">
+          <el-tab-pane label="用户管理">
+            <el-row :gutter="12">
+              <el-col :span="20">
+                <el-row :gutter="12">
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>设备ID</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>设备名称</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>设备IMIE</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>设备电话号码</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>阿里云设备名称</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="12" style="margin-top:15px;">
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>启动状态</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-card shadow="always">
+                      <div class="item_flex">
+                        <p>关门状态</p>
+                        <p></p>
+                      </div>
+                    </el-card>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="4"> </el-col>
+            </el-row>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </el-card>
-    <echart />   
+    <echart />
   </div>
 </template>
 
 <script>
-import { vendorDetail } from "@/api/store";
+import { vendorDetail,vendorDeviceList } from "@/api/store";
 import Echart from "@/components/Echart";
 export default {
   components: {
@@ -222,10 +291,17 @@ export default {
   data() {
     return {
       detail: {},
+      listData:{
+        vendor_id:'',
+        page:1,
+        page_size:10,
+      }
     };
   },
   created() {
+    this.listData.vendor_id = this.$route.query.vendor_id;
     this.getDetail();
+    this.getVendorDeviceList();
   },
   methods: {
     getDetail() {
@@ -233,6 +309,11 @@ export default {
         this.detail = res;
       });
     },
+    getVendorDeviceList(){
+      vendorDeviceList(this.listData).then(res => {
+        console.log(res)
+      })
+    }
   },
 };
 </script>
