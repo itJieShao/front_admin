@@ -51,8 +51,30 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="品牌" v-show="type != 6">
+        <el-select
+          style="width: 100%"
+          v-model="formData.brand_id"
+          filterable
+          placeholder="请选择品牌"
+        >
+          <el-option
+            v-for="item in brandList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="规格" v-show="type == 6">
         <el-input v-model="formData.specifications"></el-input>
+      </el-form-item>
+      <el-form-item label="规格" v-show="type != 6">
+        <el-input v-model="formData.spec"></el-input>
+      </el-form-item>
+      <el-form-item label="型号" v-show="type != 6">
+        <el-input v-model="formData.type"></el-input>
       </el-form-item>
       <el-form-item label="成本预警价">
         <el-input v-model="formData.warn_cost_price">
@@ -126,7 +148,11 @@ export default {
       dialogImageUrl: "",
       labelData: [], //标签下拉框
       unitData: [], //单位下拉框
+      brandData: [], //品牌下拉框
       supplierList: [], //供应商下拉框
+      brand_id:'',
+      spec:'',
+      type:'',
     };
   },
   created() {
@@ -136,12 +162,14 @@ export default {
         this.editApi = materialEdit;
         this.detailApi = materialDetail;
         this.formData.material_id = this.jumpId;
+        this.getBrandData();
         break;
       case "4":
         this.addApi = seasoningAdd;
         this.editApi = seasoningEdit;
         this.detailApi = seasoningDetail;
         this.formData.seasoning_id = this.jumpId;
+        this.getBrandData();
         break;
       case "6":
         this.addApi = packageBoxAdd;
@@ -167,6 +195,11 @@ export default {
     getUnitData() {
       categoryData({ type: 7 }).then((res) => {
         this.unitData = res;
+      });
+    },
+    getBrandData() {
+      categoryData({ type: 8 }).then((res) => {
+        this.brandData = res;
       });
     },
     getSupplierList() {

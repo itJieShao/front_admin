@@ -203,11 +203,11 @@
       </el-col>
     </el-row>
     <el-divider />
-    <el-card shadow="always">
+    <el-card shadow="always" v-if="list.length">
       <div>
         <p>设备列表</p>
-        <el-tabs type="border-card" style="margin-top: 20px">
-          <el-tab-pane label="用户管理">
+        <el-tabs type="border-card" style="margin-top: 20px" v-loading="loading">
+          <el-tab-pane v-for="item in list" :label="item.device_alias">
             <el-row :gutter="12">
               <el-col :span="20">
                 <el-row :gutter="12">
@@ -215,7 +215,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>设备ID</p>
-                        <p></p>
+                        <p>{{item.device_no}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -223,7 +223,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>设备名称</p>
-                        <p></p>
+                        <p>{{item.device_alias}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -231,7 +231,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>设备IMIE</p>
-                        <p></p>
+                        <p>{{item.device_imie}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -239,7 +239,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>设备电话号码</p>
-                        <p></p>
+                        <p>{{item.device_phone}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -247,7 +247,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>阿里云设备名称</p>
-                        <p></p>
+                        <p>{{item.iot_device_name}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -257,7 +257,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>启动状态</p>
-                        <p></p>
+                        <p>{{item.online?'在线':'离线'}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -265,7 +265,7 @@
                     <el-card shadow="always">
                       <div class="item_flex">
                         <p>关门状态</p>
-                        <p></p>
+                        <p>{{item.close_status?'关门':'未关门'}}</p>
                       </div>
                     </el-card>
                   </el-col>
@@ -277,7 +277,7 @@
         </el-tabs>
       </div>
     </el-card>
-    <echart />
+    <!-- <echart /> -->
   </div>
 </template>
 
@@ -295,7 +295,10 @@ export default {
         vendor_id:'',
         page:1,
         page_size:10,
-      }
+      },
+      list:[],
+      loading: false,
+      total: 0,
     };
   },
   created() {
@@ -310,8 +313,11 @@ export default {
       });
     },
     getVendorDeviceList(){
+      this.loading = true;
       vendorDeviceList(this.listData).then(res => {
-        console.log(res)
+        this.total = res.count;
+        this.list = res.list;
+        this.loading = false;
       })
     }
   },

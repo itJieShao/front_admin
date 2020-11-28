@@ -74,7 +74,7 @@
       :title="role_id ? '编辑角色' : '新增角色'"
       :visible.sync="dialogFormVisible"
     >
-      <el-form label-width="80px">
+      <el-form label-width="80px" v-loading="dialogLoading">
         <el-form-item label="角色名称">
           <el-input v-model="name" placeholder="请输入角色名称"></el-input>
         </el-form-item>
@@ -129,10 +129,15 @@ export default {
       role_id: "",
       name: "",
       roleMenuList: [], //菜单权限树形列表
-      priceCheckList: [],
+      priceCheckList: [
+        "last_purchase_price",
+        "warning_price",
+        "base_cost_price",
+      ],
       defaultExpandedKeys: [], //默认展开的节点的 key 的数组
       defaultCheckedKeys: [], //默认勾选的节点的 key 的数组
       dialogFormVisible: false,
+      dialogLoading: false,
     };
   },
   components: { Pagination },
@@ -145,7 +150,11 @@ export default {
       if (!flag) {
         this.role_id = "";
         this.name = "";
-        this.priceCheckList = [];
+        this.priceCheckList = [
+          "last_purchase_price",
+          "warning_price",
+          "base_cost_price",
+        ];
         this.$refs.rolesTree.setCheckedKeys([]);
       }
     },
@@ -153,20 +162,35 @@ export default {
   methods: {
     //编辑角色
     editRoles(role_id) {
+      this.dialogLoading = true;
       this.dialogFormVisible = true;
       this.role_id = role_id;
       roleDetail({ role_id }).then((res) => {
         this.name = res.name;
         this.defaultCheckedKeys = res.permission.split(",");
-        if (res.base_cost_price == 0) {
-          this.priceCheckList.push("base_cost_price");
-        }
-        if (res.last_purchase_price == 0) {
-          this.priceCheckList.push("last_purchase_price");
-        }
-        if (res.warning_price == 0) {
-          this.priceCheckList.push("warning_price");
-        }
+        res.base_cost_price == 0
+          ? this.priceCheckList.push("base_cost_price")
+          : this.priceCheckList.splice(
+              this.priceCheckList.findIndex(
+                (item) => item == "base_cost_price"
+              ),
+              1
+            );
+        res.last_purchase_price == 0
+          ? this.priceCheckList.push("last_purchase_price")
+          : this.priceCheckList.splice(
+              this.priceCheckList.findIndex(
+                (item) => item == "last_purchase_price"
+              ),
+              1
+            );
+        res.warning_price == 0
+          ? this.priceCheckList.push("warning_price")
+          : this.priceCheckList.splice(
+              this.priceCheckList.findIndex((item) => item == "warning_price"),
+              1
+            );
+        this.dialogLoading = false;
       });
     },
     updateStatus(role_id, status) {

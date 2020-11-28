@@ -50,6 +50,10 @@ export default {
           {
               key:"7",
               name:'单位'
+          },
+          {
+              key:"8",
+              name:'品牌'
           }
       ]
     };

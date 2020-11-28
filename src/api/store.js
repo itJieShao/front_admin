@@ -108,6 +108,15 @@ export function vendorEmployeeDetail(data) {
     })
 }
 
+//员工今日任务表
+export function employeeTaskList(data) {
+    return request({
+        url: '/vendor/vendor/set-employee-task-list',
+        method: 'post',
+        data
+    })
+}
+
 //禁用（启用）员工
 export function disableEmployee(data) {
     return request({

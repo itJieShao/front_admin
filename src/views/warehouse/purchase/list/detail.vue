@@ -38,7 +38,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>运营管理人员</p>
-            <p>{{ detail.created_user_name }}</p>
+            <p>{{ detail.operating_user_name }}</p>
           </div>
         </el-card>
       </el-col>

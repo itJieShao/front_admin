@@ -89,7 +89,7 @@
       :title="formData.user_id ? '编辑账户' : '新增账户'"
       :visible.sync="dialogFormVisible"
     >
-      <el-form label-width="80px">
+      <el-form label-width="80px" v-loading="dialogLoading">
         <el-form-item label="选择角色">
           <el-select
             style="width: 100%"
@@ -177,6 +177,7 @@ export default {
         status: "0",
       },
       defaultFormData: {},
+      dialogLoading:false,
     };
   },
   components: { Pagination },
@@ -195,11 +196,13 @@ export default {
   methods: {
     //编辑角色
     editUser(user_id) {
+      this.dialogLoading = true;
       this.dialogFormVisible = true;
       this.formData.user_id = user_id;
       userDetail({ user_id }).then((res) => {
         this.formData = res[0];
         this.formData.user_id = user_id;
+        this.dialogLoading = false;
       });
     },
     updateStatus(users_id, status) {

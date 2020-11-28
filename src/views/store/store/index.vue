@@ -130,7 +130,7 @@ import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
-      list: null,
+      list: [],
       listData: {
         page: 1,
         page_size: 10,

@@ -43,9 +43,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="type == 3" align="center" label="规格">
+      <el-table-column v-if="type != 6" width="100" align="center" label="品牌">
         <template slot-scope="scope">
-          <span>{{ scope.row.specifications }}</span>
+          <span>{{ scope.row.brand_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="规格">
+        <template slot-scope="scope">
+          <span>{{ type == 6 ? scope.row.specifications : scope.row.spec }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if="type != 6" align="center" label="型号">
+        <template slot-scope="scope">
+          <span>{{ scope.row.type }}</span>
         </template>
       </el-table-column>
 
