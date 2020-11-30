@@ -271,7 +271,9 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="4"> </el-col>
+              <el-col :span="4">
+                <vue-qr text="A0001" :size="200"></vue-qr>
+              </el-col>
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -283,10 +285,12 @@
 
 <script>
 import { vendorDetail,vendorDeviceList } from "@/api/store";
+import vueQr from 'vue-qr';
 import Echart from "@/components/Echart";
 export default {
   components: {
     Echart,
+    vueQr
   },
   data() {
     return {

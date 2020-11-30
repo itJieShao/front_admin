@@ -36,7 +36,9 @@
         >
       </el-col>
       <el-col :span="12" style="display: flex; justify-content: flex-end">
-        <el-button @click="historyMenuListDialog = true" type="warning">历史版本</el-button>
+        <el-button @click="historyMenuListDialog = true" type="warning"
+          >历史版本</el-button
+        >
       </el-col>
     </el-row>
     <div class="menu_box" v-loading="pageLoading">
@@ -107,10 +109,7 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="历史版本"
-      :visible.sync="historyMenuListDialog"
-    >
+    <el-dialog title="历史版本" :visible.sync="historyMenuListDialog">
       <el-table :data="historyMenuList" style="width: 100%">
         <el-table-column prop="menu_type_name" align="center" label="菜单类型">
         </el-table-column>
@@ -289,7 +288,7 @@ export default {
       vendor_package_index: 0,
       vendorpackageChecked: [],
       historyMenuList: [],
-      historyMenuListDialog:false,
+      historyMenuListDialog: false,
     };
   },
   watch: {
@@ -316,29 +315,31 @@ export default {
     getMenuDetail() {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
-      menuDetail({ time_type, menu_type }).then((res) => {
-        if (res.length) {
-          this.formData.menu_data = res;
-        } else {
-          this.formData.menu_data = [];
-          switch (menu_type) {
-            case 1:
-              this.formData.menu_data.push([]);
-              break;
-            case 2:
-              for (let i = 0; i < 7; i++) {
+      menuDetail({ time_type, menu_type, vendor_id: this.vendor_id }).then(
+        (res) => {
+          if (res.length) {
+            this.formData.menu_data = res;
+          } else {
+            this.formData.menu_data = [];
+            switch (menu_type) {
+              case 1:
                 this.formData.menu_data.push([]);
-              }
-              break;
-            case 3:
-              for (let i = 0; i < 31; i++) {
-                this.formData.menu_data.push([]);
-              }
-              break;
+                break;
+              case 2:
+                for (let i = 0; i < 7; i++) {
+                  this.formData.menu_data.push([]);
+                }
+                break;
+              case 3:
+                for (let i = 0; i < 31; i++) {
+                  this.formData.menu_data.push([]);
+                }
+                break;
+            }
           }
+          this.pageLoading = false;
         }
-        this.pageLoading = false;
-      });
+      );
     },
     //切换分类
     typeClick(label, index) {
@@ -464,8 +465,7 @@ export default {
           });
         });
       });
-      aData.menu_data = JSON.stringify(menu_data);
-      console.log(aData);
+      aData.menu_data = menu_data;
       saveMenu(aData).then((res) => {
         if (res) {
           this.$notify({
