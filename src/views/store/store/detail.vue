@@ -272,7 +272,7 @@
                 </el-row>
               </el-col>
               <el-col :span="4">
-                <vue-qr text="A0001" :size="200"></vue-qr>
+                <vue-qr :text="item.device_no" :size="200"></vue-qr>
               </el-col>
             </el-row>
           </el-tab-pane>
