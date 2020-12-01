@@ -26,6 +26,7 @@
             type="date"
             placeholder="请选择售卖日期"
             v-model="saled_at"
+            :picker-options="expireTimeOption"
           >
           </el-date-picker>
         </el-form-item>
@@ -71,6 +72,11 @@ export default {
       saled_at: "",
       storeList: [],
       purchase_data: {},
+      expireTimeOption: {
+        disabledDate(date) {
+          return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        },
+      },
     };
   },
   watch: {

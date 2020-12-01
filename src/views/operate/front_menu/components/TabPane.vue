@@ -70,17 +70,20 @@
           <template v-for="(it, idx) in item">
             <div
               class="goods_item"
-              v-for="(itc, idxc) in it.vendor_package"
+              v-for="(itc, idxc) in it.vendor_package_data"
               v-if="it.checked"
             >
               <div class="goods_info">
-                <i class="el-icon-error"></i>
+                <i class="el-icon-error" @click="delGoods(index,idx,idxc)"></i>
                 <img class="goods_img" :src="itc.main_image" alt="" />
                 <div class="goods_sth">
                   <p class="goods_title">
                     {{ itc.name }}
                   </p>
-                  <p class="goods_price">￥9.9</p>
+                  <div class="goods_price">
+                    <p v-if="itc.discount_price" style="text-decoration:line-through;">￥{{itc.sale_price}}</p>
+                    <p style="color:red;">￥{{itc.discount_price?itc.discount_price:itc.sale_price}}</p>
+                  </div>
                 </div>
               </div>
               <div class="opt_goods">
@@ -92,7 +95,7 @@
                 <i
                   class="el-icon-bottom"
                   @click="changePackageIndex(2, index, idx, idxc)"
-                  v-show="idxc != it.vendor_package.length - 1"
+                  v-show="idxc != it.vendor_package_data.length - 1"
                 ></i>
               </div>
             </div>
@@ -110,7 +113,7 @@
       </div>
     </div>
     <el-dialog title="历史版本" :visible.sync="historyMenuListDialog">
-      <el-table :data="historyMenuList" style="width: 100%">
+      <el-table empty-text="暂无历史版本" :data="historyMenuList" style="width: 100%">
         <el-table-column prop="menu_type_name" align="center" label="菜单类型">
         </el-table-column>
         <el-table-column prop="created_at" align="center" label="创建时间">
@@ -276,6 +279,7 @@ export default {
       type_name: "",
       dialogTableVisible: false,
       listData: {
+        status:1,
         page: 1,
         vendor_ids: this.vendor_ids,
         page_size: 10,
@@ -318,6 +322,9 @@ export default {
       menuDetail({ time_type, menu_type, vendor_id: this.vendor_id }).then(
         (res) => {
           if (res.length) {
+            res.forEach(item => {
+              item[0].checked = true
+            })
             this.formData.menu_data = res;
           } else {
             this.formData.menu_data = [];
@@ -386,7 +393,7 @@ export default {
       } else {
         this.formData.menu_data[this.menu_data_index].push({
           label: this.type_name,
-          vendor_package: [],
+          vendor_package_data: [],
           checked: !this.formData.menu_data[this.menu_data_index].length
             ? true
             : false,
@@ -423,26 +430,30 @@ export default {
     addMenu() {
       let arr = this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package.concat(this.vendorpackageChecked);
+      ].vendor_package_data.concat(this.vendorpackageChecked);
       this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package = Array.from(new Set(arr));
+      ].vendor_package_data = Array.from(new Set(arr));
       this.dialogTableVisible = false;
+    },
+    //删除门店套餐
+    delGoods(index, idx, idxc){
+      this.formData.menu_data[index][idx].vendor_package_data.splice(idxc,1)
     },
     //门店套餐向上或向下调整位置
     changePackageIndex(type, index, idx, idxc) {
-      let vendor_package = this.formData.menu_data[index][idx].vendor_package;
+      let vendor_package_data = this.formData.menu_data[index][idx].vendor_package_data;
       if (type == 1) {
-        vendor_package[idxc] = vendor_package.splice(
+        vendor_package_data[idxc] = vendor_package_data.splice(
           idxc - 1,
           1,
-          vendor_package[idxc]
+          vendor_package_data[idxc]
         )[0];
       } else {
-        vendor_package[idxc] = vendor_package.splice(
+        vendor_package_data[idxc] = vendor_package_data.splice(
           idxc + 1,
           1,
-          vendor_package[idxc]
+          vendor_package_data[idxc]
         )[0];
       }
     },
@@ -451,12 +462,13 @@ export default {
       let aData = JSON.parse(JSON.stringify(this.formData));
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
+      console.log(aData.menu_data)
       aData.menu_data.forEach((item, index) => {
         menu_data.push([]);
         item.forEach((it, idx) => {
           menu_data[index].push([]);
           let vendor_package_ids = [];
-          it.vendor_package.forEach((itd) => {
+          it.vendor_package_data.forEach((itd) => {
             vendor_package_ids.push(itd.vendor_package_id);
           });
           menu_data[index][idx].push({
@@ -570,9 +582,12 @@ img:not([src]) {
               color: #666;
             }
             .goods_price {
+              display: flex;
               margin-top: 10px;
               font-size: 14px;
-              color: red;
+              p{
+                margin-right: 10px;
+              }
             }
           }
         }

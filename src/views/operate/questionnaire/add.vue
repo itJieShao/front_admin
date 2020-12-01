@@ -162,7 +162,8 @@
           </div>
           <el-radio v-model="item.answer_type" label="1">单选题</el-radio>
           <el-radio v-model="item.answer_type" label="2">多选题</el-radio>
-          <div class="answer_box">
+          <el-radio v-model="item.answer_type" label="3">填空题</el-radio>
+          <div class="answer_box" v-show="item.answer_type != 3">
             <div
               class="flex_aic"
               v-for="(it, idx) in item.answer"

@@ -307,9 +307,13 @@ export default {
       let updateApi =
         type == 1 ? updateMaterialPurchasePrice : updateSeasoningPurchasePrice;
       let json = {
-        purchase_total_id: this.$route.query.purchase_total_id,
-        material_data: [{ material_id: id, purchase_price }],
+        purchase_total_id: this.$route.query.purchase_total_id
       };
+      if (type == 1){
+        json.material_data = JSON.stringify([{ material_id: id, purchase_price }]);
+      }else{
+        json.seasoning_data = JSON.stringify([{ seasoning_id: id, purchase_price }]);
+      }
       updateApi(json).then((res) => {
         if (res) {
           this.$notify({

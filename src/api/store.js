@@ -134,3 +134,21 @@ export function vendorDeviceList(data) {
         data
     })
 }
+
+//任务下拉框列表
+export function vendorTaskData(data) {
+    return request({
+        url: '/vendor/vendor/vendor-task-list',
+        method: 'post',
+        data
+    })
+}
+
+//新增员工任务
+export function addEmployeeTask(data) {
+    return request({
+        url: '/vendor/vendor/add-employee-task',
+        method: 'post',
+        data
+    })
+}

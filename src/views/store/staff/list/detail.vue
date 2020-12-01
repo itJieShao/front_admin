@@ -195,9 +195,9 @@
             placeholder="请选择任务"
           >
             <el-option
-              v-for="item in []"
+              v-for="item in vendorTaskList"
               :key="item.id"
-              :label="item.name"
+              :label="item.title"
               :value="item.id"
             >
             </el-option>
@@ -214,11 +214,13 @@
           <el-time-picker
             style="width: 100%"
             is-range
-            v-model="value1"
+            v-model="time"
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             placeholder="选择时间范围"
+            format="HH:mm"
+            value-format="HH:mm"
           >
           </el-time-picker>
         </el-form-item>
@@ -283,14 +285,16 @@ import {
   vendorEmployeeDetail,
   employeeTaskList,
   disableEmployee,
+  vendorTaskData,
+  addEmployeeTask,
 } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
+      time: "",
       pageTitle: "",
       station_id: "",
-      employee_id: "",
       detail: {},
       taskList: [],
       page: 1,
@@ -322,13 +326,25 @@ export default {
         { type: 5, name: "星期五" },
         { type: 6, name: "星期六" },
       ],
+      vendorTaskList: [],
     };
+  },
+  watch: {
+    "formData.task_id"(id) {
+      let item = this.vendorTaskList.find((item) => item.id == id);
+      this.formData.title = item.title;
+      this.formData.content = item.content;
+    },
+    time(val) {
+      this.formData.stipulate_start_time = val[0];
+      this.formData.stipulate_end_time = val[1];
+    },
   },
   components: { Pagination },
   async created() {
     let { employee_id, station_id } = this.$route.query;
     this.station_id = station_id;
-    this.employee_id = employee_id;
+    this.formData.employee_id = employee_id;
     switch (station_id) {
       case "1":
         this.pageTitle = "门店员工";
@@ -340,12 +356,31 @@ export default {
         this.pageTitle = "QC人员";
         break;
     }
+    this.getVendorTaskData();
     await this.getDetail();
     this.getTaskList();
   },
   methods: {
+    //获取任务列表
+    getVendorTaskData() {
+      vendorTaskData().then((res) => {
+        this.vendorTaskList = res.list;
+      });
+    },
     //新增员工任务
-    addTask() {},
+    addTask() {
+      addEmployeeTask(this.formData).then((res) => {
+        if (res) {
+          this.dialogVisible = false;
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
     //删除员工任务
     delTask(id) {},
     getDetail() {
@@ -371,7 +406,7 @@ export default {
     updateStatus() {
       let status = this.detail.status;
       disableEmployee({
-        employee_id: this.employee_id,
+        employee_id: this.formData.employee_id,
         type: status == 1 ? 2 : 1,
       }).then((res) => {
         if (res) {
