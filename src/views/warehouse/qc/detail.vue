@@ -124,20 +124,27 @@
     <el-card shadow="always">
       <p class="item_title">QC分配单品列表</p>
       <el-table :data="detail.product_data" stripe style="width: 100%">
-        <el-table-column prop="product_id" label="单品ID" width="180">
+        <el-table-column align="center" prop="product_id" label="单品ID" width="180">
         </el-table-column>
-        <el-table-column prop="product_name" label="单品名称" width="180">
+        <el-table-column align="center" prop="product_name" label="单品名称" width="180">
         </el-table-column>
-        <el-table-column prop="package_box_name" label="包装规格">
+        <el-table-column align="center" prop="package_box_name" label="包装规格">
         </el-table-column>
-        <el-table-column prop="product_num" label="应分配份数">
+        <el-table-column align="center" prop="product_num" label="应分配份数">
         </el-table-column>
-        <el-table-column prop="allocation_product_num" label="实际分配份数">
+        <el-table-column align="center" prop="allocation_product_num" label="实际分配份数">
         </el-table-column>
-        <el-table-column prop="diff_product_num" label="分配差额"> </el-table-column>
-        <el-table-column prop="plate_names" label="烹饪盘">
+        <el-table-column align="center" prop="diff_product_num" label="分配差额">
         </el-table-column>
-        <el-table-column prop="plate_product_nums" label="烹饪盘分配数量">
+        <el-table-column align="center" label="烹饪盘">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.plate_names">{{ item }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="烹饪盘分配数量">
+          <template slot-scope="scope">
+            <p v-for="item in scope.row.plate_product_nums">{{ item }}</p>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>

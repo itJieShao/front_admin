@@ -279,21 +279,21 @@
                 <vue-qr :text="item.device_no" :size="200"></vue-qr>
               </el-col>
             </el-row>
+            <h5 style="margin-top:40px;">单元格列表</h5>
             <el-divider />
-            <h4>单元格列表</h4>
             <el-table :data="item.cell" style="width: 100%">
               <el-table-column type="expand">
-                <template slot-scope="props">
-
+                <template slot-scope="scope">
+                  <p v-if="scope.row.connect_status" class="no_cell_font">当前单元格无法联网，请检查设备！</p>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="编号" prop="no"> </el-table-column>
-              <el-table-column align="center" label="单元格名称" prop="name"> </el-table-column>
+              <el-table-column align="center" label="单元格名称" prop=""> </el-table-column>
               <el-table-column align="center" label="规格" prop="spec"> </el-table-column>
               <el-table-column align="center" label="最大容量" prop="spec_nums"> </el-table-column>
-              <el-table-column align="center" label="库存" prop="desc"> </el-table-column>
-              <el-table-column align="center" label="实时温度" prop="desc"> </el-table-column>
-              <el-table-column align="center" label="最近上报时间" prop="desc"> </el-table-column>
+              <el-table-column align="center" label="库存" prop=""> </el-table-column>
+              <el-table-column align="center" label="实时温度" prop=""> </el-table-column>
+              <el-table-column align="center" width="200" label="最近上报时间" prop="updated_at"> </el-table-column>
               <el-table-column align="center" label="连线状态">
                 <template slot-scope="scope">
                   <el-tag :type="scope.row.connect_status?'success':'danger'"> 
@@ -301,7 +301,11 @@
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="二维码" prop="desc"> </el-table-column>
+              <el-table-column width="200" align="center" label="二维码">
+                <template slot-scope="scope">
+                  <vue-qr :text="scope.row.no" :size="150"></vue-qr>
+                </template>
+              </el-table-column>
             </el-table>
           </el-tab-pane>
         </el-tabs>
@@ -409,5 +413,11 @@ export default {
 .i_title {
   text-align: center;
   margin-bottom: 10px;
+}
+.no_cell_font{
+  font-size: 20px;
+  color: red;
+  text-align: center;
+  padding: 20px 0;
 }
 </style>

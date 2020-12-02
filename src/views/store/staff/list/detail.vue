@@ -170,7 +170,7 @@
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-button @click="delTask(scope.row.id)" type="danger"
+              <el-button size="mini" @click="delTask(scope.row.id)" type="danger"
                 >删除</el-button
               >
             </template>
@@ -369,8 +369,13 @@ export default {
     },
     //新增员工任务
     addTask() {
-      addEmployeeTask(this.formData).then((res) => {
+      let aData = JSON.parse(JSON.stringify(this.formData));
+      if (aData.period != 1){
+        aData.period_day = aData.period_day.join(',')
+      }
+      addEmployeeTask(aData).then((res) => {
         if (res) {
+          this.getTaskList();
           this.dialogVisible = false;
           this.$notify({
             title: "成功",

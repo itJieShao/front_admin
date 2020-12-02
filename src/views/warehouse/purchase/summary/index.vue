@@ -25,7 +25,7 @@
 
       <el-table-column width="200" align="center" label="进货门店">
         <template slot-scope="scope">
-          <span>{{ scope.row.vendor_name }}</span>
+          <span>{{ scope.row.vendor_num }}家</span>
         </template>
       </el-table-column>
 

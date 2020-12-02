@@ -114,38 +114,46 @@
             prop="product_name"
             label="单品名称"
             width="180"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="package_box_name"
             label="包装规格"
             width="180"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="warn_cost_price"
             label="成本预警价"
             width="160"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="last_purchase_price"
             label="上次进货价"
             width="160"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="material_species"
             label="材料"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="seasoning_species"
             label="调料"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="product_num"
             label="采购数量"
+            align="center"
           ></el-table-column>
           <el-table-column
-            prop="product_id"
+            prop="supplier_name"
             label="中央厨房"
             width="180"
+            align="center"
           ></el-table-column>
         </el-table>
       </el-tab-pane>
@@ -156,27 +164,32 @@
             prop="material_name"
             label="材料名称"
             width="180"
+            align="center"
           ></el-table-column>
           <el-table-column prop="unit_name" label="单位"></el-table-column>
           <el-table-column
             prop="supplier_name"
             label="供应商"
             width="200"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="material_num"
             label="采购数量"
             width="100"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="purchase_price_total"
             label="预估价格"
             width="100"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="last_purchase_price"
             label="上次进货价"
             width="120"
+            align="center"
           ></el-table-column>
           <el-table-column width="200" align="center" label="本次进货价">
             <template slot-scope="scope">
@@ -186,7 +199,7 @@
               ></el-input>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column align="center">
             <template slot-scope="scope">
               <el-button
                 type="primary"
@@ -201,32 +214,37 @@
       </el-tab-pane>
       <el-tab-pane label="采购调料列表">
         <el-table :data="detail.seasoning_data" stripe style="width: 100%">
-          <el-table-column prop="seasoning_id" label="调料ID"></el-table-column>
+          <el-table-column align="center" prop="seasoning_id" label="调料ID"></el-table-column>
           <el-table-column
             prop="seasoning_name"
             label="调料名称"
             width="180"
+            align="center"
           ></el-table-column>
           <el-table-column prop="unit_name" label="单位"></el-table-column>
           <el-table-column
             prop="supplier_name"
             label="供应商"
             width="200"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="seasoning_num"
             label="采购数量"
             width="100"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="purchase_price_total"
             label="预估价格"
             width="100"
+            align="center"
           ></el-table-column>
           <el-table-column
             prop="last_purchase_price"
             label="上次进货价"
             width="120"
+            align="center"
           ></el-table-column>
           <el-table-column width="200" align="center" label="本次进货价">
             <template slot-scope="scope">
@@ -236,7 +254,7 @@
               ></el-input>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column align="center">
             <template slot-scope="scope">
               <el-button
                 type="primary"

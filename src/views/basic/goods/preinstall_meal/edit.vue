@@ -46,9 +46,10 @@
             shadow="always"
             v-show="formData.product_data.length > 0"
           >
-            <div style="padding-right:50px;">
+            <div style="padding-right: 50px">
               <div class="item_title">
                 <p>单品</p>
+                <p>包装规格</p>
                 <p>数量</p>
               </div>
               <el-divider />
@@ -58,6 +59,7 @@
                 :key="index"
               >
                 <p>{{ item.product_name }}</p>
+                <p>{{ item.package_box_name }}</p>
                 <el-input-number
                   :min="1"
                   v-model="item.product_num"
@@ -219,6 +221,12 @@ export default {
             });
             this.detailImagesFile = imgsArr;
           }
+          if (res.product_data.length){
+            res.product_data.forEach(item => {
+              item.package_box_name = item.product_package_box_name;
+              delete item.product_package_box_name
+            })
+          }
         }
       );
     },
@@ -297,6 +305,7 @@ export default {
         checkedProductData.push({
           product_id: item.id,
           product_name: item.name,
+          package_box_name: item.package_box_name,
           product_num: 1,
         });
       });

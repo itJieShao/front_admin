@@ -125,6 +125,8 @@
             <el-table :data="detail.product_data">
               <el-table-column align="center" prop="product_name" label="单品">
               </el-table-column>
+              <el-table-column align="center" prop="product_package_box_name" label="包装规格">
+              </el-table-column>
               <el-table-column align="center" prop="product_num" label="数量">
               </el-table-column>
             </el-table>

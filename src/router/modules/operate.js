@@ -34,6 +34,12 @@ const operateRouter = {
             meta: { title: '问卷详情', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire' },
         },
         {
+            path: 'c_layout',
+            component: () => import('@/views/operate/c_layout'),
+            name: 'CLayout',
+            meta: { title: '用户C端页面布局', icon: 'el-icon-s-help', auth: "questionnaire_list" },
+        },
+        {
             path: 'data_report',
             component: () => import('@/views/operate/data_report'),
             name: 'DataReport',

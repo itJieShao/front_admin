@@ -136,28 +136,29 @@
     <el-card shadow="always">
       <p class="item_title">盘货套餐列表</p>
       <el-table :data="detail.package_data" stripe style="width: 100%">
-        <el-table-column prop="vendor_package_id" label="套餐ID" width="180">
+        <el-table-column align="center" prop="vendor_package_id" label="套餐ID">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="vendor_package_name"
           label="套餐名称"
-          width="180"
+          width="200"
         >
         </el-table-column>
-        <el-table-column prop="take_code" label="套餐号"> </el-table-column>
-        <el-table-column prop="qty" label="入库数量"> </el-table-column>
-        <el-table-column prop="sale_qty" label="销售数量"> </el-table-column>
-        <el-table-column prop="loss_qty" label="报损数量"> </el-table-column>
-        <el-table-column prop="stock_qty" label="应存库存"> </el-table-column>
-        <el-table-column prop="real_qty" label="实际库存"> </el-table-column>
-        <el-table-column prop="diff_qty" label="盘货差额"> </el-table-column>
-        <el-table-column v-if="diff_qty == 0" label="盘货差额"
+        <el-table-column align="center" prop="take_code" label="套餐号"> </el-table-column>
+        <el-table-column align="center" prop="qty" label="入库数量"> </el-table-column>
+        <el-table-column align="center" prop="sale_qty" label="销售数量"> </el-table-column>
+        <el-table-column align="center" prop="loss_qty" label="报损数量"> </el-table-column>
+        <el-table-column align="center" prop="stock_qty" label="应存库存"> </el-table-column>
+        <el-table-column align="center" prop="real_qty" label="实际库存"> </el-table-column>
+        <el-table-column align="center" prop="diff_qty" label="盘货差额"> </el-table-column>
+        <el-table-column align="center" v-if="diff_qty == 0" label="盘货差额"
           >库存一致</el-table-column
         >
-        <el-table-column v-else-if="diff_qty > 0" label="盘货差额"
+        <el-table-column align="center" v-else-if="diff_qty > 0" label="盘货差额"
           >库存增加</el-table-column
         >
-        <el-table-column v-else label="盘货差额">库存减少</el-table-column>
+        <el-table-column align="center" v-else label="盘货差额">库存减少</el-table-column>
       </el-table>
     </el-card>
   </div>

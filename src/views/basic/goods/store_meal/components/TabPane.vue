@@ -83,7 +83,7 @@
 
       <el-table-column width="100" align="center" label="销售原价">
         <template slot-scope="scope">
-          <span>{{ scope.row.sale_price }}</span>
+          <span>￥{{ scope.row.sale_price }}</span>
         </template>
       </el-table-column>
 
@@ -95,7 +95,7 @@
 
       <el-table-column width="100" align="center" label="折后价格">
         <template slot-scope="scope">
-          <span>{{ scope.row.discount_price }}</span>
+          <span>￥{{ scope.row.discount_price }}</span>
         </template>
       </el-table-column>
 

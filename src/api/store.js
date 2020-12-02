@@ -135,6 +135,15 @@ export function vendorDeviceList(data) {
     })
 }
 
+//门店设备列表
+export function cellTemperature(data) {
+    return request({
+        url: '/vendor/device/cell-temperature-list',
+        method: 'post',
+        data
+    })
+}
+
 //任务下拉框列表
 export function vendorTaskData(data) {
     return request({

@@ -136,7 +136,7 @@ export default {
   methods: {
     goDetail(inventory_id) {
       this.$router.push(
-        `/warehouse/qc_detail?inventory_id=${inventory_id}`
+        `/warehouse/inventory_detail?inventory_id=${inventory_id}`
       );
     },
     getList() {
