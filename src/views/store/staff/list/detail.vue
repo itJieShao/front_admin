@@ -98,8 +98,8 @@
               <div class="item_flex">
                 <p>状态</p>
                 <p>
-                  <el-tag :type="detail.status == 0 ? 'success' : 'danger'">{{
-                    detail.status == 0 ? "启用" : "禁用"
+                  <el-tag :type="detail.status ? 'success' : 'danger'">{{
+                    detail.status ? "启用" : "禁用"
                   }}</el-tag>
                 </p>
               </div>
@@ -113,8 +113,8 @@
                   <el-button
                     @click="updateStatus"
                     size="mini"
-                    :type="detail.status == 1 ? 'success' : 'danger'"
-                    >{{ detail.status == 1 ? "启用" : "禁用" }}</el-button
+                    :type="detail.status == 0 ? 'success' : 'danger'"
+                    >{{ detail.status == 0 ? "启用" : "禁用" }}</el-button
                   >
                 </p>
               </div>
@@ -170,7 +170,10 @@
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" @click="delTask(scope.row.id)" type="danger"
+              <el-button
+                size="mini"
+                @click="delTask(scope.row.id, scope.$index)"
+                type="danger"
                 >删除</el-button
               >
             </template>
@@ -189,6 +192,7 @@
       <el-form label-width="80px">
         <el-form-item label="任务标题">
           <el-select
+            @change="taskChange"
             style="width: 100%"
             v-model="formData.task_id"
             filterable
@@ -287,6 +291,7 @@ import {
   disableEmployee,
   vendorTaskData,
   addEmployeeTask,
+  delEmployeeTask,
 } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
@@ -312,6 +317,7 @@ export default {
         period: "",
         period_day: [],
       },
+      defaultData: {},
       periodList: [
         { type: 1, name: "天" },
         { type: 2, name: "周" },
@@ -330,11 +336,6 @@ export default {
     };
   },
   watch: {
-    "formData.task_id"(id) {
-      let item = this.vendorTaskList.find((item) => item.id == id);
-      this.formData.title = item.title;
-      this.formData.content = item.content;
-    },
     time(val) {
       this.formData.stipulate_start_time = val[0];
       this.formData.stipulate_end_time = val[1];
@@ -342,6 +343,7 @@ export default {
   },
   components: { Pagination },
   async created() {
+    this.defaultData = JSON.parse(JSON.stringify(this.formData));
     let { employee_id, station_id } = this.$route.query;
     this.station_id = station_id;
     this.formData.employee_id = employee_id;
@@ -361,6 +363,14 @@ export default {
     this.getTaskList();
   },
   methods: {
+    //任务标题切换
+    taskChange() {
+      let item = this.vendorTaskList.find(
+        (item) => item.id == this.formData.task_id
+      );
+      this.formData.title = item.title;
+      this.formData.content = item.content;
+    },
     //获取任务列表
     getVendorTaskData() {
       vendorTaskData().then((res) => {
@@ -370,13 +380,16 @@ export default {
     //新增员工任务
     addTask() {
       let aData = JSON.parse(JSON.stringify(this.formData));
-      if (aData.period != 1){
-        aData.period_day = aData.period_day.join(',')
+      if (aData.period != 1) {
+        aData.period_day = aData.period_day.join(",");
       }
       addEmployeeTask(aData).then((res) => {
         if (res) {
-          this.getTaskList();
+          this.getTaskList(); 
           this.dialogVisible = false;
+          this.time = "";
+          this.formData = JSON.parse(JSON.stringify(this.defaultData));
+          this.formData.employee_id = this.$route.query.employee_id;
           this.$notify({
             title: "成功",
             message: "提交成功",
@@ -387,7 +400,19 @@ export default {
       });
     },
     //删除员工任务
-    delTask(id) {},
+    delTask(id, index) {
+      delEmployeeTask({ employee_task_id: id }).then((res) => {
+        if (res) {
+          this.taskList.splice(index, 1);
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
     getDetail() {
       return vendorEmployeeDetail({
         employee_id: this.$route.query.employee_id,
@@ -430,7 +455,7 @@ export default {
 </script>
 
 <style>
-.item_flex p{
+.item_flex p {
   min-height: 30px;
   height: auto;
 }

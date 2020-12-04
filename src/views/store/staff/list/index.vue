@@ -101,10 +101,10 @@
       <el-table-column width="250" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            :type="scope.row.status == 0 ? 'danger' : 'success'"
+            :type="scope.row.status ? 'danger' : 'success'"
             size="mini"
             @click="updateStatus(scope.row.id, scope.row.status)"
-            >{{ scope.row.status == 0 ? "禁用" : "启用" }}</el-button
+            >{{ scope.row.status ? "禁用" : "启用" }}</el-button
           >
           <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
           <el-button size="mini" @click="goDetail(scope.row.id,scope.row.station_id)">详情</el-button>

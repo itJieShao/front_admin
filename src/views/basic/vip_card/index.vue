@@ -36,37 +36,48 @@
 
       <el-table-column align="center" label="类型">
         <template slot-scope="scope">
-          <span>{{ scope.row.type }}</span>
+          <span v-if="scope.row.type == 1">次数卡</span>
+          <span v-else-if="scope.row.type == 2">红包卡</span>
+          <span v-else>折扣卡</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="会员卡期">
         <template slot-scope="scope">
-          <span>{{ scope.row.card_typ }}</span>
+          <span v-if="scope.row.card_type == 1">月卡</span>
+          <span v-else-if="scope.row.card_type == 2">季卡</span>
+          <span v-else-if="scope.row.card_type == 3">半年卡</span>
+          <span v-else>年卡</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="发放周期">
         <template slot-scope="scope">
-          <span>{{ scope.row.issue_cycle }}</span>
+          <span v-if="scope.row.issue_cycle == 1">按月</span>
+          <span v-else-if="scope.row.issue_cycle == 2">按季</span>
+          <span v-else-if="scope.row.issue_cycle == 3">按半年</span>
+          <span v-else>按年</span>
         </template>
       </el-table-column>
 
       <el-table-column width="200" align="center" label="次数">
         <template slot-scope="scope">
-          <span>{{ scope.row.num }}</span>
+          <span v-if="scope.row.type == 1">{{ scope.row.num }}</span>
+          <span v-else>无</span>
         </template>
       </el-table-column>
 
       <el-table-column width="200" align="center" label="红包">
         <template slot-scope="scope">
-          <span>{{ scope.row.red_packet }}</span>
+          <span v-if="scope.row.type == 2">{{ scope.row.red_packet }}</span>
+          <span v-else>无</span>
         </template>
       </el-table-column>
 
       <el-table-column width="200" align="center" label="折扣">
         <template slot-scope="scope">
-          <span>{{ scope.row.discount }}</span>
+          <span v-if="scope.row.type == 3">{{ scope.row.discount }}</span>
+          <span v-else>无</span>
         </template>
       </el-table-column>
 
@@ -102,7 +113,7 @@
 
       <el-table-column width="200" align="center" label="创建人">
         <template slot-scope="scope">
-          <span>{{ scope.row.create_person }}</span>
+          <span>{{ scope.row.admin_name }}</span>
         </template>
       </el-table-column>
 

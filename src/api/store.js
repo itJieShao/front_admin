@@ -117,6 +117,15 @@ export function employeeTaskList(data) {
     })
 }
 
+//删除员工今日任务
+export function delEmployeeTask(data) {
+    return request({
+        url: '/vendor/vendor/delete-employee-task',
+        method: 'post',
+        data
+    })
+}
+
 //禁用（启用）员工
 export function disableEmployee(data) {
     return request({

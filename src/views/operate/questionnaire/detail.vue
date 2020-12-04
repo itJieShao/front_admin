@@ -237,6 +237,7 @@ export default {
       });
     },
     seeQuestionnaire(userItem) {  
+      console.log(userItem,this.detail.questionnaire_data)
       this.detail.questionnaire_data.forEach(item => {
         item.answer_data.forEach(it => {
           console.log(userItem,it)
