@@ -236,9 +236,10 @@ export default {
         }
       });
     },
-    seeQuestionnaire(userItem) {   
+    seeQuestionnaire(userItem) {  
       this.detail.questionnaire_data.forEach(item => {
         item.answer_data.forEach(it => {
+          console.log(userItem,it)
           it.active = userItem.answer_id.includes(it.id.toString())
         })
       })

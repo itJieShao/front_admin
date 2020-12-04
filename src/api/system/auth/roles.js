@@ -54,3 +54,12 @@ export function editRole(data) {
     })
 }
 
+//获取上级角色下拉框列表
+export function roleData(data) {
+    return request({
+        url: '/admin/admin/get-role-data',
+        method: 'post',
+        data
+    })
+}
+

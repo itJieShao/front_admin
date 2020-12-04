@@ -59,7 +59,7 @@
           placeholder="请选择品牌"
         >
           <el-option
-            v-for="item in brandList"
+            v-for="item in brandData"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -142,6 +142,9 @@ export default {
         warn_cost_price: "",
         cost_price: "",
         supplier_id: "",
+        brand_id: "",
+        spec: "",
+        type: "",
       },
       detailMainImgFile: [],
       dialogVisible: false,
@@ -150,9 +153,6 @@ export default {
       unitData: [], //单位下拉框
       brandData: [], //品牌下拉框
       supplierList: [], //供应商下拉框
-      brand_id:'',
-      spec:'',
-      type:'',
     };
   },
   created() {

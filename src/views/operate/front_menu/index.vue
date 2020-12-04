@@ -7,16 +7,14 @@
         :label="item.vendor_name"
         :name="item.vendor_id"
       >
-        <keep-alive>
-          <tab-pane
-            ref="table"
-            v-if="tabActive == item.vendor_id"
-            :vendor_id="item.vendor_id"
-            :vendor_ids="[item.vendor_id]"
-          />
-        </keep-alive>
+        <tab-pane
+          ref="table"
+          v-if="tabActive == item.vendor_id"
+          :vendor_id="item.vendor_id"
+          :vendor_ids="[item.vendor_id]"
+        />
       </el-tab-pane>
-    </el-tabs> 
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -28,7 +26,7 @@ export default {
     return {
       storeList: [],
       tabActive: "",
-    }
+    };
   },
   async created() {
     await this.getStoreList();

@@ -75,8 +75,27 @@
       :visible.sync="dialogFormVisible"
     >
       <el-form label-width="80px" v-loading="dialogLoading">
+        <el-form-item label="角色上级">
+          <el-select
+            placeholder="请选择角色的上一级"
+            filterable
+            style="width: 100%"
+            v-model="parent_id"
+          >
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="角色名称">
           <el-input v-model="name" placeholder="请输入角色名称"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-radio v-model="define" :label="1">限定指定门店</el-radio>
+          <el-radio v-model="define" :label="0">不限定门店</el-radio>
         </el-form-item>
         <el-form-item label="菜单权限">
           <el-tree
@@ -113,6 +132,7 @@ import {
   addRole,
   editRole,
   roleDetail,
+  roleData,
 } from "@/api/system/auth/roles";
 import Pagination from "@/components/Pagination";
 export default {
@@ -127,7 +147,9 @@ export default {
       loading: false,
       total: 0,
       role_id: "",
+      parent_id: "",
       name: "",
+      define: 1,
       roleMenuList: [], //菜单权限树形列表
       priceCheckList: [
         "last_purchase_price",
@@ -138,17 +160,21 @@ export default {
       defaultCheckedKeys: [], //默认勾选的节点的 key 的数组
       dialogFormVisible: false,
       dialogLoading: false,
+      roleList: [],
     };
   },
   components: { Pagination },
   created() {
     this.getList();
     this.getMenuList();
+    this.getRoleData();
   },
   watch: {
     dialogFormVisible(flag) {
       if (!flag) {
         this.role_id = "";
+        this.parent_id = "";
+        this.define = 1;
         this.name = "";
         this.priceCheckList = [
           "last_purchase_price",
@@ -158,8 +184,17 @@ export default {
         this.$refs.rolesTree.setCheckedKeys([]);
       }
     },
+    parent_id() {
+      this.getMenuList();
+    },
   },
   methods: {
+    //获取角色下拉框列表
+    getRoleData() {
+      roleData().then((res) => {
+        this.roleList = res;
+      });
+    },
     //编辑角色
     editRoles(role_id) {
       this.dialogLoading = true;
@@ -167,6 +202,8 @@ export default {
       this.role_id = role_id;
       roleDetail({ role_id }).then((res) => {
         this.name = res.name;
+        this.parent_id = res.parent_id;
+        this.define = res.define;
         this.defaultCheckedKeys = res.permission.split(",");
         res.base_cost_price == 0
           ? this.priceCheckList.push("base_cost_price")
@@ -219,7 +256,10 @@ export default {
       });
     },
     getMenuList() {
-      roleMenuList({ role_id: this.$store.state.user.role_id }).then((res) => {
+      roleMenuList({
+        role_id: this.role_id,
+        parent_role_id: this.parent_id,
+      }).then((res) => {
         this.roleMenuList = res;
       });
     },
@@ -228,6 +268,8 @@ export default {
       let priceCheckList = JSON.parse(JSON.stringify(this.priceCheckList));
       let aData = {
         role_id: this.role_id,
+        parent_id:this.parent_id,
+        define:this.define,
         name: this.name,
         last_purchase_price: priceCheckList.includes("last_purchase_price")
           ? 0

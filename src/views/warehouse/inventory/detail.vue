@@ -76,7 +76,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>套餐款数</p>
-            <p>{{ detail.qc_user_name }}</p>
+            <p>{{ detail.package_species }}</p>
           </div>
         </el-card>
       </el-col>
@@ -145,20 +145,27 @@
           width="200"
         >
         </el-table-column>
-        <el-table-column align="center" prop="take_code" label="套餐号"> </el-table-column>
-        <el-table-column align="center" prop="qty" label="入库数量"> </el-table-column>
-        <el-table-column align="center" prop="sale_qty" label="销售数量"> </el-table-column>
-        <el-table-column align="center" prop="loss_qty" label="报损数量"> </el-table-column>
-        <el-table-column align="center" prop="stock_qty" label="应存库存"> </el-table-column>
-        <el-table-column align="center" prop="real_qty" label="实际库存"> </el-table-column>
-        <el-table-column align="center" prop="diff_qty" label="盘货差额"> </el-table-column>
-        <el-table-column align="center" v-if="diff_qty == 0" label="盘货差额"
-          >库存一致</el-table-column
-        >
-        <el-table-column align="center" v-else-if="diff_qty > 0" label="盘货差额"
-          >库存增加</el-table-column
-        >
-        <el-table-column align="center" v-else label="盘货差额">库存减少</el-table-column>
+        <el-table-column align="center" prop="take_code" label="套餐号">
+        </el-table-column>
+        <el-table-column align="center" prop="qty" label="入库数量">
+        </el-table-column>
+        <el-table-column align="center" prop="sale_qty" label="销售数量">
+        </el-table-column>
+        <el-table-column align="center" prop="loss_qty" label="报损数量">
+        </el-table-column>
+        <el-table-column align="center" prop="stock_qty" label="应存库存">
+        </el-table-column>
+        <el-table-column align="center" prop="real_qty" label="实际库存">
+        </el-table-column>
+        <el-table-column align="center" prop="diff_qty" label="盘货差额">
+        </el-table-column>
+        <el-table-column align="center" label="盘货差额">
+          <template slot-scope="scope">
+            <span v-if="scope.row.diff_qty == 0">库存一致</span>
+            <span v-else-if="scope.row.diff_qty > 0">库存增加</span>
+            <span v-else>库存减少</span>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>

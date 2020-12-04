@@ -24,15 +24,15 @@
 
 <script>
 export default {
-    methods:{
-        jumpUrl(type){
-            switch (type){
-                case 3:
-                    this.$router.push('/operate/c_layout/store_notice')
-                    break;
-            }
-        }
-    }
+  methods: {
+    jumpUrl(type) {
+      switch (type) {
+        case 3:
+          this.$router.push("/operate/c_layout/store_notice");
+          break;
+      }
+    },
+  },
 };
 </script>
 
@@ -45,6 +45,6 @@ export default {
   padding: 20px 0;
   font-size: 20px;
   cursor: pointer;
-  border: 1px solid #999;
+  border: 1px solid #ddd;
 }
 </style>

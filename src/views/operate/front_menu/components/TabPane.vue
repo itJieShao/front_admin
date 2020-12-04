@@ -74,15 +74,27 @@
               v-if="it.checked"
             >
               <div class="goods_info">
-                <i class="el-icon-error" @click="delGoods(index,idx,idxc)"></i>
+                <i
+                  class="el-icon-error"
+                  @click="delGoods(index, idx, idxc)"
+                ></i>
                 <img class="goods_img" :src="itc.main_image" alt="" />
                 <div class="goods_sth">
                   <p class="goods_title">
                     {{ itc.name }}
                   </p>
                   <div class="goods_price">
-                    <p v-if="itc.discount_price" style="text-decoration:line-through;">￥{{itc.sale_price}}</p>
-                    <p style="color:red;">￥{{itc.discount_price?itc.discount_price:itc.sale_price}}</p>
+                    <p
+                      v-if="itc.discount_price"
+                      style="text-decoration: line-through"
+                    >
+                      ￥{{ itc.sale_price }}
+                    </p>
+                    <p style="color: red">
+                      ￥{{
+                        itc.discount_price ? itc.discount_price : itc.sale_price
+                      }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -113,7 +125,11 @@
       </div>
     </div>
     <el-dialog title="历史版本" :visible.sync="historyMenuListDialog">
-      <el-table empty-text="暂无历史版本" :data="historyMenuList" style="width: 100%">
+      <el-table
+        empty-text="暂无历史版本"
+        :data="historyMenuList"
+        style="width: 100%"
+      >
         <el-table-column prop="menu_type_name" align="center" label="菜单类型">
         </el-table-column>
         <el-table-column prop="created_at" align="center" label="创建时间">
@@ -279,7 +295,7 @@ export default {
       type_name: "",
       dialogTableVisible: false,
       listData: {
-        status:1,
+        status: 1,
         page: 1,
         vendor_ids: this.vendor_ids,
         page_size: 10,
@@ -296,10 +312,10 @@ export default {
     };
   },
   watch: {
-    "formData.time_type"(menu_type) {
+    "formData.time_type"() {
       this.getMenuDetail();
     },
-    "formData.menu_type"(menu_type) {
+    "formData.menu_type"() {
       this.getMenuDetail();
     },
   },
@@ -322,9 +338,9 @@ export default {
       menuDetail({ time_type, menu_type, vendor_id: this.vendor_id }).then(
         (res) => {
           if (res.length) {
-            res.forEach(item => {
-              item[0].checked = true
-            })
+            res.forEach((item) => {
+              item[0].checked = true;
+            });
             this.formData.menu_data = res;
           } else {
             this.formData.menu_data = [];
@@ -437,12 +453,13 @@ export default {
       this.dialogTableVisible = false;
     },
     //删除门店套餐
-    delGoods(index, idx, idxc){
-      this.formData.menu_data[index][idx].vendor_package_data.splice(idxc,1)
+    delGoods(index, idx, idxc) {
+      this.formData.menu_data[index][idx].vendor_package_data.splice(idxc, 1);
     },
     //门店套餐向上或向下调整位置
     changePackageIndex(type, index, idx, idxc) {
-      let vendor_package_data = this.formData.menu_data[index][idx].vendor_package_data;
+      let vendor_package_data = this.formData.menu_data[index][idx]
+        .vendor_package_data;
       if (type == 1) {
         vendor_package_data[idxc] = vendor_package_data.splice(
           idxc - 1,
@@ -462,27 +479,26 @@ export default {
       let aData = JSON.parse(JSON.stringify(this.formData));
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
-      console.log(aData.menu_data)
       aData.menu_data.forEach((item, index) => {
         menu_data.push([]);
         item.forEach((it, idx) => {
-          menu_data[index].push([]);
           let vendor_package_ids = [];
           it.vendor_package_data.forEach((itd) => {
             vendor_package_ids.push(itd.vendor_package_id);
           });
-          menu_data[index][idx].push({
+          menu_data[index].push({
             label: it.label,
             vendor_package_ids: vendor_package_ids.join(","),
           });
         });
       });
-      aData.menu_data = menu_data;
+      aData.menu_data = JSON.stringify(menu_data);
       saveMenu(aData).then((res) => {
         if (res) {
+          this.formData.vendor_menu_id = res.vendor_menu_id;
           this.$notify({
             title: "成功",
-            message: "操作成功",
+            message: "保存成功",
             type: "success",
             duration: 1000,
           });
@@ -585,7 +601,7 @@ img:not([src]) {
               display: flex;
               margin-top: 10px;
               font-size: 14px;
-              p{
+              p {
                 margin-right: 10px;
               }
             }

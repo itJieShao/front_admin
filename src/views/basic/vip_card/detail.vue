@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <h2>优惠红包详情</h2>
+    <h2>会员卡详情</h2>
     <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>优惠ID</p>
+            <p>会员卡ID</p>
             <p>{{ detail.id }}</p>
           </div>
         </el-card>

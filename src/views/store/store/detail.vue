@@ -352,56 +352,7 @@ export default {
       this.loading = true;
       vendorDeviceList(this.listData).then((res) => {
         this.total = res.count;
-        this.list = [
-          {
-            id: 7,
-            device_alias: "设备1",
-            device_no: "A0007",
-            device_imie: "s",
-            device_phone: "s",
-            iot_device_name: "yh_a001",
-            iot_device_secret: "meZmiCiqct6sZymJAne4GEWzojFS827o",
-            vendor_id: 7,
-            longitude: null,
-            latitude: null,
-            province_id: null,
-            city_id: null,
-            district_id: null,
-            address: null,
-            online: 1,
-            available: 1,
-            run_status: 0,
-            close_status: 0,
-            created_at: "2020-09-05 14:42:04",
-            updated_at: "2020-11-12 16:57:51",
-            deleted_at: null,
-            cell: [
-              {
-                cell_id: 33,
-                no: "A0007-1",
-                alias: "A1",
-                spec: "2层",
-                spec_nums: 40,
-                temperature_a: 57,
-                temperature_b: 73,
-                updated_at: "2020-11-12 16:57:51",
-                connect_status: 1,
-              },
-              {
-                cell_id: 34,
-                no: "A0007-2",
-                alias: "A2",
-                spec: "2层",
-                spec_nums: 40,
-                temperature_a: 85,
-                temperature_b: 95,
-                updated_at: "2020-11-12 16:57:51",
-                connect_status: 1,
-              },
-            ],
-          },
-        ];
-        //this.list = res.list;
+        this.list = res.list;
         this.loading = false;
       });
     },

@@ -40,6 +40,13 @@ const operateRouter = {
             meta: { title: '用户C端页面布局', icon: 'el-icon-s-help', auth: "questionnaire_list" },
         },
         {
+            path: 'store_notice',
+            component: () => import('@/views/operate/c_layout/store_notice'),
+            name: 'storeNotice',
+            hidden:true,
+            meta: { title: '门店优惠促销公告', activeMenu:'/operate/questionnaire' },
+        },
+        {
             path: 'data_report',
             component: () => import('@/views/operate/data_report'),
             name: 'DataReport',
