@@ -279,26 +279,50 @@
                 <vue-qr :text="item.device_no" :size="200"></vue-qr>
               </el-col>
             </el-row>
-            <h5 style="margin-top:40px;">单元格列表</h5>
+            <h5 style="margin-top: 40px">单元格列表</h5>
             <el-divider />
             <el-table :data="item.cell" style="width: 100%">
-              <el-table-column type="expand">
+              <!-- <el-table-column type="expand">
                 <template slot-scope="scope">
-                  <p v-if="scope.row.connect_status" class="no_cell_font">当前单元格无法联网，请检查设备！</p>
+                  <p v-if="scope.row.connect_status" class="no_cell_font">
+                    当前单元格无法联网，请检查设备！
+                  </p>
                 </template>
+              </el-table-column> -->
+              <el-table-column align="center" label="编号" prop="no">
               </el-table-column>
-              <el-table-column align="center" label="编号" prop="no"> </el-table-column>
-              <el-table-column align="center" label="单元格名称" prop="alias"> </el-table-column>
-              <el-table-column align="center" label="规格" prop="spec_type"> </el-table-column>
-              <el-table-column align="center" label="最大容量" prop="spec_num"> </el-table-column>
+              <el-table-column align="center" label="单元格名称" prop="alias">
+              </el-table-column>
+              <el-table-column align="center" label="规格" prop="spec_type">
+              </el-table-column>
+              <el-table-column align="center" label="最大容量" prop="spec_num">
+              </el-table-column>
               <!-- <el-table-column align="center" label="库存" prop=""> </el-table-column> -->
-              <el-table-column align="center" label="实时温度A" prop="temperature_a"> </el-table-column>
-              <el-table-column align="center" label="实时温度B" prop="temperature_b"> </el-table-column>
-              <el-table-column align="center" width="200" label="最近上报时间" prop="updated_at"> </el-table-column>
+              <el-table-column
+                align="center"
+                label="实时温度A"
+                prop="temperature_a"
+              >
+              </el-table-column>
+              <el-table-column
+                align="center"
+                label="实时温度B"
+                prop="temperature_b"
+              >
+              </el-table-column>
+              <el-table-column
+                align="center"
+                width="200"
+                label="最近上报时间"
+                prop="updated_at"
+              >
+              </el-table-column>
               <el-table-column align="center" label="连线状态">
                 <template slot-scope="scope">
-                  <el-tag :type="scope.row.connect_status?'success':'danger'"> 
-                      {{scope.row.connect_status?'在线':'离线'}}
+                  <el-tag
+                    :type="scope.row.connect_status ? 'success' : 'danger'"
+                  >
+                    {{ scope.row.connect_status ? "在线" : "离线" }}
                   </el-tag>
                 </template>
               </el-table-column>
@@ -354,82 +378,79 @@ export default {
       vendorDeviceList(this.listData).then((res) => {
         this.total = res.count;
         // this.list = [
-        //     {
-        //         "id": 7,
-        //         "device_alias": "设备1",
-        //         "device_no": "A0007",
-        //         "device_imie": "s",
-        //         "device_phone": "s",
-        //         "iot_device_name": "yh_a001",
-        //         "iot_device_secret": "meZmiCiqct6sZymJAne4GEWzojFS827o",
-        //         "vendor_id": 7,
-        //         "longitude": null,
-        //         "latitude": null,
-        //         "province_id": null,
-        //         "city_id": null,
-        //         "district_id": null,
-        //         "address": null,
-        //         "online": 1,
-        //         "available": 1,
-        //         "run_status": 0,
-        //         "close_status": 0,
-        //         "created_at": "2020-09-05 14:42:04",
-        //         "updated_at": "2020-11-12 16:57:51",
-        //         "deleted_at": null,
-        //         "cell": [
+        //   {
+        //     id: 7,
+        //     device_alias: "设备1",
+        //     device_no: "A0007",
+        //     device_imie: "s",
+        //     device_phone: "s",
+        //     iot_device_name: "yh_a001",
+        //     iot_device_secret: "meZmiCiqct6sZymJAne4GEWzojFS827o",
+        //     vendor_id: 7,
+        //     longitude: null,
+        //     latitude: null,
+        //     province_id: null,
+        //     city_id: null,
+        //     district_id: null,
+        //     address: null,
+        //     online: 1,
+        //     available: 1,
+        //     run_status: 0,
+        //     close_status: 0,
+        //     created_at: "2020-09-05 14:42:04",
+        //     updated_at: "2020-11-12 16:57:51",
+        //     deleted_at: null,
+        //     cell: [
+        //       {
+        //         cell_id: 33,
+        //         no: "A0007-1",
+        //         alias: "A1",
+        //         spec_type: "A盒",
+        //         spec_num: 40,
+        //         temperature: 57,
+        //         temperature_a: 57,
+        //         temperature_b: 73,
+        //         updated_at: "2020-11-12 16:57:51",
+        //         connect_status: 1,
+        //         cell_temperature_list: [
+        //           [
         //             {
-        //                 "cell_id":33,
-        //                 "no": "A0007-1",
-        //                 "alias": "A1",
-        //                 "spec_type": "A盒",
-        //                 "spec_num": 40,
-        //                 "temperature": 57,
-        //                 "temperature_a": 57,
-        //                 "temperature_b": 73,
-        //                 "updated_at": "2020-11-12 16:57:51",
-        //                 "connect_status": 1,
-        //                 "cell_temperature_list": [
-        //                     [
-        //                         {
-        //                         "temperature": 49,
-        //                         "created_at": "23:21"
-        //                         },
-        //                         {
-        //                         "temperature": 49,
-        //                         "created_at": "23:31"
-        //                         },
-        //                     ],
-        //                     [
-        //                         {
-        //                         "temperature": 49,
-        //                         "created_at": "23:21"
-        //                         },
-        //                         {
-        //                         "temperature": 49,
-        //                         "created_at": "23:31"
-        //                         },
-        //                     ]
-        //                 ]
+        //               temperature: 49,
+        //               created_at: "23:21",
         //             },
         //             {
-        //                 "cell_id":34,
-        //                 "no": "A0007-2",
-        //                 "alias": "A2",
-        //                 "spec_type": "B盒",
-        //                 "spec_num": 40,
-        //                 "temperature": 85,
-        //                 "temperature_a": 85,
-        //                 "temperature_b": 95,
-        //                 "updated_at": "2020-11-12 16:57:51",
-        //                 "connect_status": 1,
-        //                 "cell_temperature_list": [
-        //                      [],
-        //                      []
-        //                  ]
-        //             }
-        //         ]
-        //     }
-        // ]
+        //               temperature: 49,
+        //               created_at: "23:31",
+        //             },
+        //           ],
+        //           [
+        //             {
+        //               temperature: 49,
+        //               created_at: "23:21",
+        //             },
+        //             {
+        //               temperature: 49,
+        //               created_at: "23:31",
+        //             },
+        //           ],
+        //         ],
+        //       },
+        //       {
+        //         cell_id: 34,
+        //         no: "A0007-2",
+        //         alias: "A2",
+        //         spec_type: "B盒",
+        //         spec_num: 40,
+        //         temperature: 85,
+        //         temperature_a: 85,
+        //         temperature_b: 95,
+        //         updated_at: "2020-11-12 16:57:51",
+        //         connect_status: 1,
+        //         cell_temperature_list: [[], []],
+        //       },
+        //     ],
+        //   },
+        // ];
         this.list = res.list;
         this.loading = false;
       });
@@ -443,7 +464,7 @@ export default {
   text-align: center;
   margin-bottom: 10px;
 }
-.no_cell_font{
+.no_cell_font {
   font-size: 20px;
   color: red;
   text-align: center;

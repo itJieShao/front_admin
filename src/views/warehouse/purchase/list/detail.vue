@@ -55,11 +55,26 @@
     <el-card shadow="always">
       <p class="item_title">审核进度</p>
       <el-table :data="detail.audit_process_detail" stripe style="width: 100%">
-        <el-table-column align="center" prop="level" label="审核级别" width="180">
+        <el-table-column
+          align="center"
+          prop="level"
+          label="审核级别"
+          width="180"
+        >
         </el-table-column>
-        <el-table-column align="center" prop="audit_user_name" label="审核人" width="180">
+        <el-table-column
+          align="center"
+          prop="audit_user_name"
+          label="审核人"
+          width="180"
+        >
         </el-table-column>
-        <el-table-column align="center" prop="audit_at" label="审核时间" width="180">
+        <el-table-column
+          align="center"
+          prop="audit_at"
+          label="审核时间"
+          width="180"
+        >
         </el-table-column>
         <el-table-column align="center" label="审核状态" width="180">
           <template slot-scope="scope">
@@ -133,23 +148,109 @@
     </el-card>
     <el-divider />
     <el-card shadow="always">
-      <p class="item_title">采购单品列表</p>
-      <el-table :data="detail.product_data" stripe style="width: 100%">
-        <el-table-column align="center" prop="product_id" label="单品ID"> </el-table-column>
-        <el-table-column align="center" prop="product_name" label="单品名称" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="package_box_name" label="包装规格" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="warn_cost_price" label="成本预警价" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="last_purchase_price" label="上次进货价" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="purchase_price" label="本次进货价" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="material_species" label="材料"> </el-table-column>
-        <el-table-column align="center" prop="seasoning_species" label="调料"> </el-table-column>
-        <el-table-column align="center" prop="product_num" label="采购数量"> </el-table-column>
-      </el-table>
+      <el-tabs type="border-card">
+        <el-tab-pane label="采购套餐列表">
+          <el-table :data="detail.package_data" stripe style="width: 100%">
+            <el-table-column align="center" prop="vendor_package_id" label="套餐ID">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="套餐图片"
+              width="200"
+            >
+              <template slot-scope="scope">
+                <img style="width:150px;" :src="scope.row.main_image" alt="">
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="vendor_package_name"
+              label="套餐名称"
+              width="180"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="warn_cost_price"
+              label="成本预警价"
+              width="180"
+            >
+            </el-table-column>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="last_purchase_price"
+              label="上次进货价"
+              width="180"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="purchase_price"
+              label="本次进货价"
+              width="180"
+            >
+            </el-table-column>
+            <el-table-column align="center" prop="vendor_package_num" label="采购数量">
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="采购单品列表">
+          <el-table :data="detail.product_data" stripe style="width: 100%">
+            <el-table-column align="center" prop="product_id" label="单品ID">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="product_name"
+              label="单品名称"
+              width="180"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="package_box_name"
+              label="包装规格"
+              width="180"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="warn_cost_price"
+              label="成本预警价"
+              width="160"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="last_purchase_price"
+              label="上次进货价"
+              width="160"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="purchase_price"
+              label="本次进货价"
+              width="160"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="material_species"
+              label="材料"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="seasoning_species"
+              label="调料"
+            >
+            </el-table-column>
+            <el-table-column align="center" prop="product_num" label="采购数量">
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>

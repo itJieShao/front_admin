@@ -45,7 +45,7 @@
       <div class="menu" v-for="(item, index) in formData.menu_data">
         <div class="type_list">
           <div
-            @click="typeClick(it.label, index)"
+            @click="typeClick(it.label, index,idx)"
             class="type_item"
             :style="it.checked ? 'background-color: #fff' : ''"
             v-for="(it, idx) in item"
@@ -337,38 +337,46 @@ export default {
       let { time_type, menu_type } = this.formData;
       menuDetail({ time_type, menu_type, vendor_id: this.vendor_id }).then(
         (res) => {
-          if (res.length) {
-            res.forEach((item) => {
-              item[0].checked = true;
-            });
-            this.formData.menu_data = res;
-          } else {
-            this.formData.menu_data = [];
-            switch (menu_type) {
-              case 1:
+          this.formData.menu_data = [];
+          switch (menu_type) {
+            case 1:
+              this.formData.menu_data.push([]);
+              break;
+            case 2:
+              for (let i = 0; i < 7; i++) {
                 this.formData.menu_data.push([]);
-                break;
-              case 2:
-                for (let i = 0; i < 7; i++) {
-                  this.formData.menu_data.push([]);
-                }
-                break;
-              case 3:
-                for (let i = 0; i < 31; i++) {
-                  this.formData.menu_data.push([]);
-                }
-                break;
-            }
+              }
+              break;
+            case 3:
+              for (let i = 0; i < 31; i++) {
+                this.formData.menu_data.push([]);
+              }
+              break;
           }
+          if (res.vendor_menu_id) {
+            this.formData.vendor_menu_id = res.vendor_menu_id;
+            res.vendor_menu_data.forEach((item) => {
+              this.formData.menu_data[item.day] = item.list;
+            });
+            this.formData.menu_data.forEach((item) => {
+              if (item.length) {
+                item.checked = false;
+                item[0].checked = true;
+              }
+            });
+          }
+          console.log(this.formData.menu_data)
           this.pageLoading = false;
         }
       );
     },
     //切换分类
-    typeClick(label, index) {
-      this.formData.menu_data[index].forEach((item) => {
-        item.checked = item.label == label ? true : false;
+    typeClick(label, index,idx) {    
+      this.formData.menu_data[index].forEach((item,idx) => {
+        item.checked = false;
       });
+      this.formData.menu_data[index][idx].checked = true;
+      console.log(this.formData.menu_data)
     },
     //打开分类弹窗
     openTypeDialog(index, type, type_name, idx) {

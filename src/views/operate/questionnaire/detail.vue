@@ -219,7 +219,15 @@ export default {
         for (let i = 0; i < res.questionnaire_data.length; i += 3) {
           questionnaire_data.push(res.questionnaire_data.slice(i, i + 3));
         }
+        questionnaire_data.forEach((item,index) => {
+          item.forEach((it,idx) => {
+            if (!it.answer_data.length){
+              questionnaire_data[index].splice(idx,1)
+            }
+          })
+        })
         res.questionnaire_data_1 = questionnaire_data;
+        console.log(res.questionnaire_data_1)
         this.detail = res;
       });
     },
