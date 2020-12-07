@@ -133,13 +133,13 @@
     <el-divider></el-divider>
     <h3>用户填券结果分析</h3>
     <el-row
-      v-for="item in detail.questionnaire_data_1"
+      v-for="(item, index) in detail.questionnaire_data_1"
       :gutter="12"
       style="margin-top: 10px"
     >
-      <el-col :span="8" v-for="(it, index) in item">
+      <el-col :span="8" v-for="(it, idx) in item">
         <Echart
-          :id="'chart' + index"
+          :id="'chart' + index + idx"
           unit="人"
           :title="it.title"
           :pieData="it.answer_data"
@@ -178,10 +178,13 @@
           v-for="(item, index) in detail.questionnaire_data"
         >
           <p>{{ item.title }}</p>
-          <ul class="answer_content">
+          <div v-if="item.answer_type == 3">
+            <el-input disabled type="textarea" :value="item.answer" />
+          </div>
+          <ul class="answer_content" v-else>
             <li
               v-for="it in item.answer_data"
-              :class="it.active?'answer_active':''"
+              :class="it.active ? 'answer_active' : ''"
             >
               {{ it.name }}
             </li>
@@ -219,15 +222,14 @@ export default {
         for (let i = 0; i < res.questionnaire_data.length; i += 3) {
           questionnaire_data.push(res.questionnaire_data.slice(i, i + 3));
         }
-        questionnaire_data.forEach((item,index) => {
-          item.forEach((it,idx) => {
-            if (!it.answer_data.length){
-              questionnaire_data[index].splice(idx,1)
+        questionnaire_data.forEach((item, index) => {
+          item.forEach((it, idx) => {
+            if (!it.answer_data.length) {
+              questionnaire_data[index].splice(idx, 1);
             }
-          })
-        })
+          });
+        });
         res.questionnaire_data_1 = questionnaire_data;
-        console.log(res.questionnaire_data_1)
         this.detail = res;
       });
     },
@@ -244,14 +246,20 @@ export default {
         }
       });
     },
-    seeQuestionnaire(userItem) {  
-      console.log(userItem,this.detail.questionnaire_data)
-      this.detail.questionnaire_data.forEach(item => {
-        item.answer_data.forEach(it => {
-          console.log(userItem,it)
-          it.active = userItem.answer_id.includes(it.id.toString())
-        })
-      })
+    seeQuestionnaire(userItem) {
+      this.detail.questionnaire_data.forEach((item,index) => {
+        if (item.answer_type == 3) {
+          item.answer = userItem.questionnaire_data[index].answer;
+        } else {
+          item.answer_data.forEach((it) => {
+            userItem.questionnaire_data.forEach((itd) => {
+              if (itd.answer == it.id) {
+                it.active = true;
+              }
+            });
+          });
+        }
+      });
       this.userItem = userItem;
       this.dialogFlag = true;
     },
@@ -276,8 +284,8 @@ export default {
   border-radius: 20px;
   margin: 0 20px 20px 0;
 }
-.answer_active{
-  background-color:blue;
+.answer_active {
+  background-color: blue;
   color: #fff;
 }
 </style>

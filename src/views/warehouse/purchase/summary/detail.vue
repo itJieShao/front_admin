@@ -80,7 +80,7 @@
       </el-table-column>
       <el-table-column prop="audit_user_name" label="审核人" width="180">
       </el-table-column>
-      <el-table-column prop="audit_at" label="售卖时间" width="180">
+      <el-table-column prop="audit_at" label="审核时间" width="180">
       </el-table-column>
       <el-table-column label="审核状态" width="180">
         <template slot-scope="scope">

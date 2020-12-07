@@ -31,7 +31,7 @@
         <el-button icon="el-icon-check" @click="saveMenuClick" type="primary"
           >保存</el-button
         >
-        <el-button icon="el-icon-plus" @click="releaseMenuClick" type="success"
+        <el-button icon="el-icon-plus" @click="openReleaseMenu" type="success"
           >发布</el-button
         >
       </el-col>
@@ -45,7 +45,7 @@
       <div class="menu" v-for="(item, index) in formData.menu_data">
         <div class="type_list">
           <div
-            @click="typeClick(it.label, index,idx)"
+            @click="typeClick(it.label, index, idx)"
             class="type_item"
             :style="it.checked ? 'background-color: #fff' : ''"
             v-for="(it, idx) in item"
@@ -58,7 +58,7 @@
             <i @click="delType(index, idx)" class="el-icon-error"></i>
           </div>
           <el-button
-            @click="openTypeDialog(index)"
+            @click="openTypeDialog(index, 0)"
             class="add_type"
             icon="el-icon-plus"
             type="success"
@@ -130,11 +130,13 @@
         :data="historyMenuList"
         style="width: 100%"
       >
+        <el-table-column prop="release_name" align="center" label="发布名称">
+        </el-table-column>
         <el-table-column prop="menu_type_name" align="center" label="菜单类型">
         </el-table-column>
-        <el-table-column prop="created_at" align="center" label="创建时间">
+        <el-table-column prop="release_at" align="center" label="发布时间">
         </el-table-column>
-        <el-table-column prop="created_at" align="center">
+        <el-table-column align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="seeMenu(scope.row.vendor_menu_id)"
               >查看</el-button
@@ -214,6 +216,13 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">返回</el-button>
         <el-button type="primary" @click="addMenu">添加到菜单</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="发布版本" :visible.sync="releaseMenuDialog">
+      <el-input placeholder="请输入版本名称" v-model="release_name"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="releaseMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="releaseMenuClick">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -309,6 +318,8 @@ export default {
       vendorpackageChecked: [],
       historyMenuList: [],
       historyMenuListDialog: false,
+      releaseMenuDialog: false,
+      release_name: "",
     };
   },
   watch: {
@@ -335,58 +346,63 @@ export default {
     getMenuDetail() {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
-      menuDetail({ time_type, menu_type, vendor_id: this.vendor_id }).then(
-        (res) => {
-          this.formData.menu_data = [];
-          switch (menu_type) {
-            case 1:
+      menuDetail({
+        vendor_menu_id: this.formData.vendor_menu_id,
+        time_type,
+        menu_type,
+        vendor_id: this.vendor_id,
+      }).then((res) => {
+        this.formData.menu_data = [];
+        switch (menu_type) {
+          case 1:
+            this.formData.menu_data.push([]);
+            break;
+          case 2:
+            for (let i = 0; i < 7; i++) {
               this.formData.menu_data.push([]);
-              break;
-            case 2:
-              for (let i = 0; i < 7; i++) {
-                this.formData.menu_data.push([]);
-              }
-              break;
-            case 3:
-              for (let i = 0; i < 31; i++) {
-                this.formData.menu_data.push([]);
-              }
-              break;
-          }
-          if (res.vendor_menu_id) {
-            this.formData.vendor_menu_id = res.vendor_menu_id;
-            res.vendor_menu_data.forEach((item) => {
-              this.formData.menu_data[item.day] = item.list;
-            });
-            this.formData.menu_data.forEach((item) => {
-              if (item.length) {
-                item.checked = false;
-                item[0].checked = true;
-              }
-            });
-          }
-          console.log(this.formData.menu_data)
-          this.pageLoading = false;
+            }
+            break;
+          case 3:
+            for (let i = 0; i < 31; i++) {
+              this.formData.menu_data.push([]);
+            }
+            break;
         }
-      );
+        if (res.vendor_menu_id) {
+          this.formData.vendor_menu_id = res.vendor_menu_id;
+          res.vendor_menu_data.forEach((item) => {
+            this.$set(this.formData.menu_data, item.day, item.list);
+          });
+          this.formData.menu_data.forEach((item, index) => {
+            if (item.length) {
+              item.forEach((it) => {
+                this.$set(it, "checked", false);
+              });
+              this.$set(item[0], "checked", true);
+            }
+          });
+        } else {
+          this.formData.vendor_menu_id = "";
+        }
+        this.pageLoading = false;
+      });
     },
     //切换分类
-    typeClick(label, index,idx) {    
-      this.formData.menu_data[index].forEach((item,idx) => {
+    typeClick(label, index, idx) {
+      this.formData.menu_data[index].forEach((item, idx) => {
         item.checked = false;
       });
       this.formData.menu_data[index][idx].checked = true;
-      console.log(this.formData.menu_data)
     },
     //打开分类弹窗
     openTypeDialog(index, type, type_name, idx) {
       if (type) {
-        this.typeEdit = type;
         this.type_name = type_name;
         this.menu_data_c_index = idx;
       } else {
         this.type_name = "";
       }
+      this.typeEdit = type;
       this.dialogTypeVisible = true;
       this.menu_data_index = index;
     },
@@ -452,13 +468,20 @@ export default {
     },
     //添加门店套餐到菜单
     addMenu() {
+      let obj = {};
       let arr = this.formData.menu_data[this.menu_index][
         this.vendor_package_index
       ].vendor_package_data.concat(this.vendorpackageChecked);
       this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package_data = Array.from(new Set(arr));
+      ].vendor_package_data = arr.reduce((cur, next) => {
+        obj[next.vendor_package_id]
+          ? ""
+          : (obj[next.vendor_package_id] = true && cur.push(next));
+        return cur;
+      }, []);
       this.dialogTableVisible = false;
+      this.$refs.multipleTable.clearSelection();
     },
     //删除门店套餐
     delGoods(index, idx, idxc) {
@@ -513,10 +536,41 @@ export default {
         }
       });
     },
+    //打开发布弹窗
+    openReleaseMenu() {
+      if (!this.formData.vendor_menu_id) {
+        return this.$message({
+          message: "请先保存菜单再进行发布",
+          type: "error",
+          duration: 1500,
+        });
+      }
+      this.releaseMenuDialog = true;
+    },
     //发布
-    releaseMenuClick() {},
+    releaseMenuClick() {
+      releaseMenu({
+        vendor_menu_id: this.formData.vendor_menu_id,
+        release_name: this.release_name,
+      }).then((res) => {
+        if (res) {
+          this.getHistoryMenu();
+          this.releaseMenuDialog = false;  
+          this.$notify({
+            title: "成功",
+            message: "发布成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
     //查看历史版本
-    seeMenu() {},
+    seeMenu(vendor_menu_id) {
+      this.formData.vendor_menu_id = vendor_menu_id;
+      this.getMenuDetail();
+      this.historyMenuListDialog = false;
+    },
   },
 };
 </script>
