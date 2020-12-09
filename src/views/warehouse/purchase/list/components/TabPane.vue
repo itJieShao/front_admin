@@ -1,5 +1,10 @@
 <template>
-  <el-table v-loading="loading" :data="list" style="width: 100%">
+  <el-table
+    v-loading="loading"
+    :data="list"
+    style="width: 100%"
+    :row-class-name="tableRowClassName"
+  >
     <el-table-column align="center" label="套餐ID">
       <template slot-scope="scope">
         <span>{{ scope.row.vendor_package_id }}</span>
@@ -34,7 +39,11 @@
     </el-table-column>
     <el-table-column width="200" align="center" label="采购数量">
       <template slot-scope="scope">
-        <el-input-number v-model="scope.row.num" @change="changeNum(scope.row.vendor_package_id,scope.row.num)" :min="0"></el-input-number>
+        <el-input-number
+          v-model="scope.row.num"
+          @change="changeNum(scope.row.vendor_package_id, scope.row.num)"
+          :min="0"
+        ></el-input-number>
       </template>
     </el-table-column>
   </el-table>
@@ -42,12 +51,22 @@
 
 <script>
 export default {
-  props: ['list','loading'],
+  props: ["list", "loading"],
   methods: {
-    changeNum(id,num){
-      this.$emit('addPurchaseData',{vendor_package_id:id,num})
+    changeNum(id, num) {
+      this.$emit("addPurchaseData", { vendor_package_id: id, num });
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if(row.in_menu){
+        return 'success-row'
+      }
     },
   },
 };
 </script>
+<style>
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+</style>
 

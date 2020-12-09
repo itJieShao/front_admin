@@ -1,6 +1,10 @@
 <template>
   <div class="app-container">
-    <div class="loading" :style="loading?'z-index: 1;':'z-index: -1;'" v-loading="loading"></div>
+    <div
+      class="loading"
+      :style="loading ? 'z-index: 1;' : 'z-index: -1;'"
+      v-loading="loading"
+    ></div>
     <h2>经营报表</h2>
     <el-card shadow="always">
       <el-tag
@@ -719,7 +723,7 @@ h4 {
 p {
   font-size: 14px;
 }
-.loading{
+.loading {
   position: absolute;
   width: 100vw;
   height: 100vh;

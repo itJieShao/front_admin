@@ -404,6 +404,22 @@ export function memberCardList(data) {
       data
   })
 }
+//会员卡详情
+export function memberCardDetail(data) {
+  return request({
+      url: '/customer/customer/get-member-card-data',
+      method: 'post',
+      data
+  })
+}
+//
+export function memberCardGetList(data) {
+  return request({
+      url: '/customer/customer/get-member-card-get-list',
+      method: 'post',
+      data
+  })
+}
 //禁用(启用)会员卡
 export function updateMemberCard(data) {
   return request({

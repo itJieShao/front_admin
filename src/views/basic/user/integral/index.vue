@@ -12,6 +12,9 @@
           >搜索</el-button
         >
       </el-col>
+      <el-col :span="4" style="display: flex; justify-content: flex-end">
+        <el-button @click="integralRuleDialog = true">积分规则</el-button>
+      </el-col>
     </el-row>
     <el-table
       v-loading="loading"
@@ -79,6 +82,26 @@
       :limit.sync="listData.page_size"
       @pagination="getList"
     />
+    <el-dialog title="积分获取规则" :visible.sync="integralRuleDialog">
+      <el-form label-width="100px">
+        <el-form-item label="满足金额">
+          <el-input
+            placeholder="请输入最低计算金额"
+            v-model="release_name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="获取积分值">
+          <el-input
+            placeholder="请输入获取积分值"
+            v-model="release_name"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="integralRuleDialog = false">取 消</el-button>
+        <el-button type="primary" @click="releaseMenuClick">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -98,6 +121,7 @@ export default {
       },
       loading: false,
       total: 0,
+      integralRuleDialog: false,
     };
   },
   created() {

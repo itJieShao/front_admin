@@ -32,7 +32,7 @@
         </el-form-item>
       </el-form>
       <div v-show="vendor_id && saled_at && list.length">
-        <p>门店套餐列表</p>
+        <h4>门店套餐列表</h4>
         <el-tabs v-model="active" style="margin-top: 15px" type="border-card">
           <el-tab-pane
             v-for="item in list"

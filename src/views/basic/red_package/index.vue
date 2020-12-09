@@ -191,6 +191,7 @@
               type="date"
               placeholder="请选择有效期"
               v-model="item.valid_at"
+              :picker-options="expireTimeOption"
             >
             </el-date-picker>
           </el-form-item>
@@ -219,6 +220,7 @@
             type="date"
             placeholder="请选择有效期"
             v-model="formData.valid_at"
+            :picker-options="expireTimeOption"
           >
           </el-date-picker>
         </el-form-item>
@@ -272,6 +274,7 @@
             type="date"
             placeholder="请选择有效期"
             v-model="formData.valid_at"
+            :picker-options="expireTimeOption"
           >
           </el-date-picker>
         </el-form-item>
@@ -321,6 +324,11 @@ export default {
       defaultFormData:{}, //formData默认数据，为了能在添加优惠红包后清空表单数据
       dialogTitle: "",
       dialogFormVisible: false,
+      expireTimeOption: {
+        disabledDate(date) {
+          return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        },
+      },
     };
   },
   components: { Pagination },

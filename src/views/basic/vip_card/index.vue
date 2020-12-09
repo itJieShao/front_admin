@@ -249,7 +249,6 @@
 import { memberCardList, updateMemberCard, addMemberCard } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
-  name: "preinstall_meal",
   components: { Pagination },
   data() {
     return {

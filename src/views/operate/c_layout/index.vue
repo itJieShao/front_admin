@@ -2,21 +2,31 @@
   <div class="app-container">
     <el-row :gutter="20">
       <el-col :span="6">
-        <el-card shadow="hover" @click="jumpUrl(1)"> 首页banner图 </el-card>
+        <div @click="jumpUrl(1)">
+          <el-card shadow="hover"> 首页banner图 </el-card>
+        </div>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="hover" @click="jumpUrl(2)"> 个人中心banner图 </el-card>
+        <div @click="jumpUrl(2)">
+          <el-card shadow="hover"> 个人中心banner图 </el-card>
+        </div>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="hover" @click="jumpUrl(3)"> 门店优惠促销公告 </el-card>
+        <div @click="jumpUrl(3)">
+          <el-card shadow="hover"> 门店优惠促销公告 </el-card>
+        </div>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="hover" @click="jumpUrl(4)"> 联系客服 </el-card>
+        <div @click="jumpUrl(4)">
+          <el-card shadow="hover"> 联系客服 </el-card>
+        </div>
       </el-col>
     </el-row>
     <el-row :gutter="20">
       <el-col :span="6">
-        <el-card shadow="hover" @click="jumpUrl(5)"> 关于我们 </el-card>
+        <div @click="jumpUrl(5)">
+          <el-card shadow="hover"> 关于我们 </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -29,6 +39,9 @@ export default {
       switch (type) {
         case 3:
           this.$router.push("/operate/c_layout/store_notice");
+          break;
+        case 5:
+          this.$router.push("/operate/c_layout/about");
           break;
       }
     },

@@ -76,20 +76,20 @@
     </el-row>
     <el-divider />
     <el-table :data="detail.audit_process_detail" stripe style="width: 100%">
-      <el-table-column prop="level" label="审核级别" width="180">
+      <el-table-column align="center" prop="level" label="审核级别" width="180">
       </el-table-column>
-      <el-table-column prop="audit_user_name" label="审核人" width="180">
+      <el-table-column align="center" prop="audit_user_name" label="审核人" width="180">
       </el-table-column>
-      <el-table-column prop="audit_at" label="审核时间" width="180">
+      <el-table-column align="center" prop="audit_at" label="审核时间" width="180">
       </el-table-column>
-      <el-table-column label="审核状态" width="180">
+      <el-table-column align="center" label="审核状态" width="180">
         <template slot-scope="scope">
           <p v-if="scope.row.audit_status == -1">审核不通过</p>
           <p v-else-if="scope.row.audit_status == 0">等待审核</p>
           <p v-else>审核通过</p>
         </template>
       </el-table-column>
-      <el-table-column>
+      <el-table-column align="center">
         <template
           slot-scope="scope"
           v-if="
@@ -109,7 +109,7 @@
     <el-tabs style="margin-top: 15px" type="border-card">
       <el-tab-pane label="采购单品列表">
         <el-table :data="detail.product_data" stripe style="width: 100%">
-          <el-table-column prop="product_id" label="单品ID"></el-table-column>
+          <el-table-column align="center" prop="product_id" label="单品ID"></el-table-column>
           <el-table-column
             prop="product_name"
             label="单品名称"
@@ -159,14 +159,14 @@
       </el-tab-pane>
       <el-tab-pane label="采购材料列表">
         <el-table :data="detail.material_data" stripe style="width: 100%">
-          <el-table-column prop="material_id" label="材料ID"></el-table-column>
+          <el-table-column align="center" prop="material_id" label="材料ID"></el-table-column>
           <el-table-column
             prop="material_name"
             label="材料名称"
             width="180"
             align="center"
           ></el-table-column>
-          <el-table-column prop="unit_name" label="单位"></el-table-column>
+          <el-table-column align="center" prop="unit_name" label="单位"></el-table-column>
           <el-table-column
             prop="supplier_name"
             label="供应商"
@@ -221,7 +221,7 @@
             width="180"
             align="center"
           ></el-table-column>
-          <el-table-column prop="unit_name" label="单位"></el-table-column>
+          <el-table-column align="center" prop="unit_name" label="单位"></el-table-column>
           <el-table-column
             prop="supplier_name"
             label="供应商"

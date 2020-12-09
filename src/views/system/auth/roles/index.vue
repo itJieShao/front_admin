@@ -202,7 +202,7 @@ export default {
       this.role_id = role_id;
       roleDetail({ role_id }).then((res) => {
         this.name = res.name;
-        this.parent_id = res.parent_id;
+        this.parent_id = res.parent_id || "";
         this.define = res.define;
         this.defaultCheckedKeys = res.permission.split(",");
         res.base_cost_price == 0
