@@ -163,13 +163,6 @@
         <el-table-column prop="time" label="领取时间" width="180">
         </el-table-column>
       </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        :page.sync="listData.page"
-        :limit.sync="listData.page_size"
-        @pagination="getCartList"
-      />
     </el-card>
   </div>
 </template>
@@ -180,21 +173,14 @@ import {
   updateMemberCard,
   memberCardGetList,
 } from "@/api/basic";
-import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
       detail: {},
       list:[],
-      listData: {
-        page: 1,
-        page_size: 10,
-      },
-      total: 0,
       loading:false,
     };
   },
-  components: { Pagination },
   created() {
     this.getDetail();
     this.getCartList();
@@ -224,9 +210,8 @@ export default {
     },
     getCartList() {
       this.loading = true;
-      memberCardGetList(this.listData).then((res) => {
+      memberCardGetList().then((res) => {
         this.list = res;
-        this.total = res.count;
         this.loading = false;
       });
     },

@@ -25,7 +25,7 @@
         <el-form-item label="重量">
           <el-input v-model="formData.weight"></el-input>
         </el-form-item>
-        <el-form-item label="标签" style="margin-top: 35px">
+        <el-form-item label="标签">
           <el-select
             style="width: 100%"
             v-model="formData.product_category_id"
@@ -41,7 +41,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="包装规格" style="margin-top: 35px">
+        <el-form-item label="包装规格">
           <el-select
             style="width: 100%"
             v-model="formData.product_package_box_id"
@@ -57,7 +57,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="味型" style="margin-top: 35px">
+        <el-form-item label="味型">
           <el-select
             style="width: 100%"
             v-model="formData.taste_id"
@@ -83,7 +83,7 @@
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="供应商" style="margin-top: 35px">
+        <el-form-item label="供应商">
           <el-select
             style="width: 100%"
             v-model="formData.supplier_id"
@@ -92,6 +92,55 @@
           >
             <el-option
               v-for="item in supplierList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-divider />
+        <el-form-item label="加热速率">
+          <el-select
+            style="width: 100%"
+            v-model="formData.heating_rate_id"
+            filterable
+            placeholder="请选择加热速率要求"
+          >
+            <el-option
+              v-for="item in heatingRateList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="敏感度">
+          <el-select
+            style="width: 100%"
+            v-model="formData.temperature_curve_sensitive"
+            filterable
+            placeholder="请选择单品敏感度"
+          >
+            <el-option
+              v-for="item in temperatureCurveSensitive"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="单元格位置">
+          <el-select
+            style="width: 100%"
+            v-model="formData.cell_location"
+            filterable
+            placeholder="请选择单品对柜机单元格放置要求"
+          >
+            <el-option
+              v-for="item in cellLocationList"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -288,7 +337,7 @@
                       v-model="time"
                     ></el-input>
                   </div>
-                  <div style="margin-left:20px;">
+                  <div style="margin-left: 20px">
                     <el-input
                       placeholder="请输入温度"
                       v-model="temperature"
@@ -321,7 +370,7 @@ import {
   supplierList,
   materialData,
   seasoningData,
-  packageBox
+  packageBox,
 } from "@/api/basic";
 import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
@@ -343,6 +392,9 @@ export default {
         material: [],
         seasoning: [],
         temperature_corve: [],
+        heating_rate_id:"",
+        temperature_curve_sensitive:"",
+        cell_location:"",
       }, //表单提交数据
       checkedProductData: [],
       productListData: {
@@ -369,6 +421,19 @@ export default {
       time: "",
       temperature: "",
       detailMainImgFile: [],
+      heatingRateList:[],
+      temperatureCurveSensitive: [
+        { name: "最不敏感", id: 1 },
+        { name: "不敏感", id: 2 },
+        { name: "一般", id: 3 },
+        { name: "比较敏感", id: 4 },
+        { name: "最敏感", id: 5 },
+      ],
+      cellLocationList:[
+        { name: "上层", id: 1 },
+        { name: "中层", id: 2 },
+        { name: "下层", id: 3 },
+      ],
     };
   },
   components: { Pagination },
@@ -395,6 +460,7 @@ export default {
     this.getTasteList();
     this.getMaterialData();
     this.getSeasoningData();
+    this.getHeatingRateList();
   },
   methods: {
     //新增材料
@@ -463,12 +529,12 @@ export default {
         }
         this.$set(this.formData, "material", res.material_data);
         this.$set(this.formData, "seasoning", res.seasoning_data);
-        this.$set(this.formData, "temperature_corve", res.temperature_curve)
+        this.$set(this.formData, "temperature_corve", res.temperature_curve);
       });
     },
     //预设单品标签列表
     getLabelList() {
-      categoryData({type:2}).then((res) => {
+      categoryData({ type: 2 }).then((res) => {
         this.labelList = res;
       });
     },
@@ -480,7 +546,7 @@ export default {
     },
     //味型列表
     getTasteList() {
-      categoryData({type:5}).then((res) => {
+      categoryData({ type: 5 }).then((res) => {
         this.tasteList = res;
       });
     },
@@ -498,8 +564,14 @@ export default {
     },
     //调料列表
     getSeasoningData() {
-      seasoningData({type:4}).then((res) => {
+      seasoningData({ type: 4 }).then((res) => {
         this.seasoningData = res;
+      });
+    },
+    //加热速率列表
+    getHeatingRateList(){
+      categoryData({ type: 9 }).then((res) => {
+        this.heatingRateList = res;
       });
     },
     //提交

@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import { customerDetail, customerCouponList, userUpdateStatus } from "@/api/basic";
+import { integralList, customerDetail, customerCouponList, userUpdateStatus } from "@/api/basic";
 export default {
   data() {
     return {
@@ -204,6 +204,7 @@ export default {
   created() {
     this.customer_id = this.$route.query.customer_id;
     this.getDetail();
+    this.getIntegralList();
     this.getCouponList();
   },
   methods: {
@@ -227,6 +228,9 @@ export default {
       customerDetail({ customer_id: this.customer_id }).then((res) => {
         this.detail = res;
       });
+    },
+    getIntegralList(){
+      
     },
     getCouponList() {
       customerCouponList({ customer_id: this.customer_id }).then((res) => {

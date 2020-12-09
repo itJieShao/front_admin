@@ -54,7 +54,11 @@ export default {
           {
               key:"8",
               name:'品牌'
-          }
+          },
+          {
+              key:"9",
+              name:'加热速率'
+          },
       ]
     };
   },
