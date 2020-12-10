@@ -54,7 +54,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>次数</p>
-            <p>{{ detail.type == 1 ? detail.favourable_price : "无" }}</p>
+            <p>{{ detail.type == 1 ? detail.num : "无" }}</p>
           </div>
         </el-card>
       </el-col>
@@ -73,14 +73,6 @@
           <div class="item_flex">
             <p>折扣</p>
             <p>{{ detail.type == 3 ? detail.discount : "无" }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>优惠次数</p>
-            <p>{{ detail.discounts_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -108,8 +100,6 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-row style="margin-top: 15px" :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -118,11 +108,21 @@
           </div>
         </el-card>
       </el-col>
+    </el-row>
+    <el-row style="margin-top: 15px" :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>创建时间</p>
             <p>{{ detail.time }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4" v-if="detail.type != 1">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠次数</p>
+            <p>{{ detail.discounts_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -177,8 +177,8 @@ export default {
   data() {
     return {
       detail: {},
-      list:[],
-      loading:false,
+      list: [],
+      loading: false,
     };
   },
   created() {
