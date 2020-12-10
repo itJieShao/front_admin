@@ -34,7 +34,11 @@
 
       <el-table-column width="180" align="center" label="套餐图片">
         <template slot-scope="scope">
-          <img style="max-width:100px;max-height:100px;" :src="scope.row.main_image" alt="" />
+          <img
+            style="max-width: 100px; max-height: 100px"
+            :src="scope.row.main_image"
+            alt=""
+          />
         </template>
       </el-table-column>
 
@@ -68,15 +72,28 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120" class-name="status-col" align="center" label="状态">
+      <el-table-column
+        width="120"
+        class-name="status-col"
+        align="center"
+        label="状态"
+      >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status" type="success">启用</el-tag>
           <el-tag v-else type="danger">禁用</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" width="200" align="center" label="操作">
+      <el-table-column fixed="right" width="240" align="center" label="操作">
         <template slot-scope="scope">
+          <el-button
+            :type="scope.row.status ? 'danger' : 'success'"
+            size="mini"
+            @click="
+              updateStatus(scope.row.package_id, scope.row.status, scope.$index)
+            "
+            >{{ scope.row.status ? "禁用" : "启用" }}</el-button
+          >
           <el-button size="mini" @click="goEdit(scope.row.package_id)"
             >编辑</el-button
           >
@@ -97,7 +114,7 @@
 </template>
 
 <script>
-import { packageList } from "@/api/basic";
+import { packageList,packageUpdateStatus } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   name: "preinstall_meal",
@@ -128,7 +145,9 @@ export default {
       );
     },
     goDetail(package_id) {
-      this.$router.push(`/basic/goods/preinstall_meal_detail?package_id=${package_id}`);
+      this.$router.push(
+        `/basic/goods/preinstall_meal_detail?package_id=${package_id}`
+      );
     },
     getList() {
       this.loading = true;
@@ -136,6 +155,22 @@ export default {
         this.list = res.list;
         this.total = res.count;
         this.loading = false;
+      });
+    },
+    updateStatus(package_id, status, index) {
+      packageUpdateStatus({
+        package_id,
+        status: status ? 0 : 1,
+      }).then((res) => {
+        if (res) {
+          this.list[index].status = status ? 0 : 1;
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
       });
     },
   },

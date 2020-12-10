@@ -34,7 +34,11 @@
 
       <el-table-column width="180" align="center" label="单品图片">
         <template slot-scope="scope">
-          <img style="width:100px;height:100px;" :src="scope.row.image" alt="" />
+          <img
+            style="width: 100px; height: 100px"
+            :src="scope.row.image"
+            alt=""
+          />
         </template>
       </el-table-column>
 
@@ -110,10 +114,30 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" fixed="right" align="center" label="操作">
+      <el-table-column
+        width="120"
+        class-name="status-col"
+        align="center"
+        label="状态"
+      >
         <template slot-scope="scope">
+          <el-tag v-if="scope.row.status" type="success">启用</el-tag>
+          <el-tag v-else type="danger">禁用</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="240" fixed="right" align="center" label="操作">
+        <template slot-scope="scope">
+          <el-button
+            :type="scope.row.status ? 'danger' : 'success'"
+            size="mini"
+            @click="updateStatus(scope.row.id, scope.row.status, scope.$index)"
+            >{{ scope.row.status ? "禁用" : "启用" }}</el-button
+          >
           <el-button size="mini" @click="goEdit(scope.row.id)">编辑</el-button>
-          <el-button size="mini" @click="goDetail(scope.row.id)">详情</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -128,7 +152,7 @@
 </template>
 
 <script>
-import { productList } from "@/api/basic";
+import { productList, productUpdateStatus } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -165,6 +189,22 @@ export default {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
+      });
+    },
+    updateStatus(product_id, status, index) {
+      productUpdateStatus({
+        product_id,
+        status: status ? 0 : 1,
+      }).then((res) => {
+        if (res) {
+          this.list[index].status = status ? 0 : 1;
+          this.$notify({
+            title: "成功",
+            message: "操作成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
       });
     },
   },

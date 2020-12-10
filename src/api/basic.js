@@ -37,6 +37,15 @@ export function packageList(data) {
   })
 }
 
+//禁用/启用预设套餐
+export function packageUpdateStatus(data) {
+  return request({
+    url: '/product/package/update-status',
+    method: 'post',
+    data
+  })
+}
+
 //添加/编辑预设套餐
 export function updatePackage(data) {
   return request({
@@ -95,6 +104,15 @@ export function selectCouponList(data) {
 export function productList(data) {
   return request({
     url: '/product/product/list',
+    method: 'post',
+    data
+  })
+}
+
+//禁用/启用预设单品
+export function productUpdateStatus(data) {
+  return request({
+    url: '/product/product/update-status',
     method: 'post',
     data
   })
@@ -412,7 +430,7 @@ export function memberCardDetail(data) {
       data
   })
 }
-//
+
 export function memberCardGetList(data) {
   return request({
       url: '/customer/customer/get-member-card-get-list',

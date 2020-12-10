@@ -112,7 +112,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="12" style="margin-top: 15px">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-card shadow="always">
               <div class="item_flex">
                 <p>最近下单时间</p>
@@ -175,30 +175,57 @@
     </el-row>
     <el-divider />
     <el-card shadow="always">
-      <el-table :data="couponList" stripe style="width: 100%">
-        <el-table-column prop="id" label="优惠券/红包ID" width="180">
+      <h4>用户积分列表</h4>
+      <el-table max-height="300" :data="integralList" stripe style="width: 100%">
+        <el-table-column prop="id" align="center" label="积分ID" width="180">
         </el-table-column>
-        <el-table-column prop="type_name" label="优惠券/红包" width="180">
+        <el-table-column prop="customer_id" align="center" label="用户ID" width="180">
         </el-table-column>
-        <el-table-column prop="name" label="名称"> </el-table-column>
-        <el-table-column prop="favourable_price" label="金额">
+        <el-table-column align="center" label="增加/减去">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.integral_change.substring(0,1) == '+'" effect="dark" type="success">增加</el-tag>
+            <el-tag v-else effect="dark" type="danger">减少</el-tag>
+          </template>
         </el-table-column>
-        <el-table-column prop="condition_price" label="门槛金额">
+        <el-table-column prop="integral_change" align="center" label="积分数">
         </el-table-column>
-        <el-table-column prop="created_at" label="领取时间"> </el-table-column>
+        <el-table-column prop="using_path" align="center" label="使用路径">
+        </el-table-column>
+        <el-table-column prop="time" align="center" label="下单时间"> </el-table-column>
+      </el-table>
+    </el-card>
+    <el-card shadow="always" style="margin-top:15px;">
+      <h4>用户券包列表</h4>
+      <el-table max-height="300" :data="couponList" stripe style="width: 100%">
+        <el-table-column prop="id" align="center" label="优惠券/红包ID" width="180">
+        </el-table-column>
+        <el-table-column prop="type_name" align="center" label="优惠券/红包" width="180">
+        </el-table-column>
+        <el-table-column prop="name" align="center" label="名称"> </el-table-column>
+        <el-table-column prop="favourable_price" align="center" label="金额">
+        </el-table-column>
+        <el-table-column prop="condition_price" align="center" label="门槛金额">
+        </el-table-column>
+        <el-table-column prop="created_at" align="center" label="领取时间"> </el-table-column>
       </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
-import { integralList, customerDetail, customerCouponList, userUpdateStatus } from "@/api/basic";
+import {
+  integralList,
+  customerDetail,
+  customerCouponList,
+  userUpdateStatus,
+} from "@/api/basic";
 export default {
   data() {
     return {
       customer_id: "",
       detail: {},
       couponList: [],
+      integralList:[],
     };
   },
   created() {
@@ -229,12 +256,16 @@ export default {
         this.detail = res;
       });
     },
-    getIntegralList(){
-      
+    getIntegralList() {
+      integralList({ condition: this.customer_id, page_size: 99999 }).then(
+        (res) => {
+          this.integralList = res.list;
+        }
+      );
     },
     getCouponList() {
       customerCouponList({ customer_id: this.customer_id }).then((res) => {
-        this.couponList = res;
+        this.couponList = res.list;
       });
     },
   },
