@@ -64,7 +64,7 @@
                   :min="1"
                   v-model="item.product_num"
                 ></el-input-number>
-                <i @click="deleteProduct(index)" class="el-icon-delete"></i>
+                <i @click="deleteProduct(index)" class="el-icon-delete del_btn"></i>
               </div>
             </div>
           </el-card>
@@ -352,7 +352,7 @@ p {
 .el-input-number {
   flex: 1;
 }
-.el-icon-delete {
+.del_btn {
   right: -45px;
   position: absolute;
   cursor: pointer;

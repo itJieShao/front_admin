@@ -39,7 +39,7 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
-Vue.prototype.$upLoadImgApi = "/api/vendor/vendor/upload_image";
+Vue.prototype.$upLoadImgApi = "/vendor/vendor/upload_image";
 
 new Vue({
   el: '#app',

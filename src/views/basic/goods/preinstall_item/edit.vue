@@ -197,7 +197,7 @@
                     <p>{{ item.num }}</p>
                     <i
                       @click="deleteMaterial(item.material_id)"
-                      class="el-icon-delete"
+                      class="el-icon-delete del_btn"
                     ></i>
                   </div>
                 </div>
@@ -263,7 +263,7 @@
                     <p>{{ item.num }}</p>
                     <i
                       @click="deleteSeasoning(item.seasoning_id)"
-                      class="el-icon-delete"
+                      class="el-icon-delete del_btn"
                     ></i>
                   </div>
                 </div>
@@ -326,7 +326,7 @@
                     <p>{{ item.temperature }}</p>
                     <i
                       @click="deleteTemperatureCorve(index)"
-                      class="el-icon-delete"
+                      class="el-icon-delete del_btn"
                     ></i>
                   </div>
                 </div>
@@ -632,7 +632,7 @@ p {
 .el-input-number {
   flex: 1;
 }
-.el-icon-delete {
+.del_btn {
   margin-left: 20px;
   cursor: pointer;
 }
