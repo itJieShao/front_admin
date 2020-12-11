@@ -120,7 +120,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
-            <p>{{ detail.business_time_start }}</p>
+            <p>{{ detail.business_days_name.join('、') }}</p>
           </div>
         </el-card>
       </el-col>
@@ -460,6 +460,10 @@ export default {
 </script>
 
 <style scoped>
+.item_flex p {
+  min-height: 30px;
+  height: auto;
+}
 .i_title {
   text-align: center;
   margin-bottom: 10px;
