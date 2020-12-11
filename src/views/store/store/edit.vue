@@ -145,7 +145,7 @@
             ></el-time-picker>
           </el-form-item>
         </div>
-        <div class="flex_two">
+        <!-- <div class="flex_two">
           <el-form-item label="上班考勤时间">
             <el-time-picker
               format="HH:mm"
@@ -160,7 +160,7 @@
               v-model="formData.attendance_time_end"
             ></el-time-picker>
           </el-form-item>
-        </div>
+        </div> -->
         <el-row style="margin-bottom: 30px" :gutter="20">
           <el-col :span="5">
             <el-form-item label="用餐时段"></el-form-item>

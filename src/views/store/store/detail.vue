@@ -119,14 +119,6 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>营业天数</p>
-            <p>{{ detail.business_days_name.join('、') }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          <div class="item_flex">
             <p>营业时间</p>
             <p>
               {{ detail.business_time_start }}至{{ detail.business_time_end }}
@@ -134,7 +126,15 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="12">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>营业天数</p>
+            <p>{{ detail.business_days_name.join('、') }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <!-- <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>上班考勤时间</p>
@@ -149,7 +149,7 @@
             <p>{{ detail.attendance_time_end }}</p>
           </div>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
     <el-divider />
     <el-row :gutter="12">
