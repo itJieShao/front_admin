@@ -291,7 +291,7 @@ export default {
     examine_click(status){
       audit({audit_process_id:this.detail.audit_process_id,status}).then(res => {
         if (res){
-          this.detail.can_audit = false;
+          this.getDetail();
           this.$notify({
             title: "成功",
             message: "操作成功",
