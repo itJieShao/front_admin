@@ -200,7 +200,7 @@ export default {
       this.dialogFormVisible = true;
       this.formData.user_id = user_id;
       userDetail({ user_id }).then((res) => {
-        this.formData = res[0];
+        this.formData = res;
         this.formData.user_id = user_id;
         this.dialogLoading = false;
       });
