@@ -8,9 +8,9 @@
         <el-form-item label="门店套餐标题">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
-        <el-form-item label="系统套餐" v-if="!formData.vendor_package_id">
+        <el-form-item label="预设套餐" v-if="!formData.vendor_package_id">
           <el-button type="success" @click="dialogTableVisible = true"
-            >选择系统套餐</el-button
+            >选择预设套餐</el-button
           >
         </el-form-item>
         <div v-show="formData.package_id">
@@ -130,7 +130,7 @@
     <el-dialog
       width="60%"
       center
-      title="系统套餐列表"
+      title="预设套餐列表"
       :visible.sync="dialogTableVisible"
     >
       <el-table :data="packageList">
@@ -158,7 +158,7 @@
         ></el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="checkedPackage(scope.row)"
+            <el-button type="success" size="mini" @click="checkedPackage(scope.row)"
               >选择该套餐</el-button
             >
           </template>
@@ -203,7 +203,7 @@ export default {
         export: "",
         name: "",
         page: 1,
-        page_size: 5,
+        page_size: 10,
       },
       storeList: [],
       labelList: [],
@@ -275,7 +275,7 @@ export default {
         this.labelList = res;
       });
     },
-    //系统套餐列表
+    //预设套餐列表
     getpackageList() {
       packageList(this.packageListData).then((res) => {
         this.packageList = res.list;

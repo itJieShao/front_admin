@@ -460,10 +460,6 @@ export default {
 </script>
 
 <style scoped>
-.item_flex p {
-  min-height: 30px;
-  height: auto;
-}
 .i_title {
   text-align: center;
   margin-bottom: 10px;

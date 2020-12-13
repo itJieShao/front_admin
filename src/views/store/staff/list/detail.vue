@@ -455,10 +455,6 @@ export default {
 </script>
 
 <style>
-.item_flex p {
-  min-height: 30px;
-  height: auto;
-}
 .task_top {
   display: flex;
   justify-content: space-between;

@@ -42,85 +42,99 @@
       </el-col>
     </el-row>
     <div class="menu_box" v-loading="pageLoading">
-      <div class="menu" v-for="(item, index) in formData.menu_data">
-        <div class="type_list">
-          <div
-            @click="typeClick(it.label, index, idx)"
-            class="type_item"
-            :style="it.checked ? 'background-color: #fff' : ''"
-            v-for="(it, idx) in item"
-          >
-            <p>{{ it.label }}</p>
-            <i
-              @click="openTypeDialog(index, 1, it.label, idx)"
-              class="el-icon-edit"
-            ></i>
-            <i @click="delType(index, idx)" class="el-icon-error"></i>
-          </div>
-          <el-button
-            @click="openTypeDialog(index, 0)"
-            class="add_type"
-            icon="el-icon-plus"
-            type="success"
-            size="mini"
-            >添加分类</el-button
-          >
-        </div>
-        <div class="goods_list">
-          <template v-for="(it, idx) in item">
+      <div class="menu_box_content" v-for="(item, index) in formData.menu_data">
+        <p class="day_tip" v-if="formData.menu_type == 1">{{ day_tip }}</p>
+        <p class="day_tip" v-else-if="formData.menu_type == 2">
+          {{ day_tip + upNumCase(index + 1) }}
+        </p>
+        <p class="day_tip" v-else>{{ index + 1 + day_tip }}</p>
+        <div class="menu">
+          <div class="type_list">
             <div
-              class="goods_item"
-              v-for="(itc, idxc) in it.vendor_package_data"
-              v-if="it.checked"
+              @click="typeClick(index, idx)"
+              class="type_item"
+              :style="it.checked ? 'background-color: #fff' : ''"
+              v-for="(it, idx) in item"
             >
-              <div class="goods_info">
+              <img style="width: 50%" :src="it.label_image" alt="" />
+              <div>
+                <p>{{ it.label }}</p>
                 <i
-                  class="el-icon-error"
-                  @click="delGoods(index, idx, idxc)"
+                  @click="
+                    openTypeDialog(index, 1, it.label, it.label_image, idx)
+                  "
+                  class="el-icon-edit"
                 ></i>
-                <img class="goods_img" :src="itc.main_image" alt="" />
-                <div class="goods_sth">
-                  <p class="goods_title">
-                    {{ itc.name }}
-                  </p>
-                  <div class="goods_price">
-                    <p
-                      v-if="itc.discount_price"
-                      style="text-decoration: line-through"
-                    >
-                      ￥{{ itc.sale_price }}
-                    </p>
-                    <p style="color: red">
-                      ￥{{
-                        itc.discount_price ? itc.discount_price : itc.sale_price
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="opt_goods">
-                <i
-                  class="el-icon-top"
-                  @click="changePackageIndex(1, index, idx, idxc)"
-                  v-show="idxc != 0"
-                ></i>
-                <i
-                  class="el-icon-bottom"
-                  @click="changePackageIndex(2, index, idx, idxc)"
-                  v-show="idxc != it.vendor_package_data.length - 1"
-                ></i>
+                <i @click="delType(index, idx)" class="el-icon-error"></i>
               </div>
             </div>
-          </template>
-          <el-button
-            v-show="formData.menu_data[index].length"
-            @click="openPackageList(index)"
-            class="add_goods"
-            icon="el-icon-plus"
-            type="success"
-            size="mini"
-            >添加</el-button
-          >
+            <el-button
+              @click="openTypeDialog(index, 0)"
+              class="add_type"
+              icon="el-icon-plus"
+              type="success"
+              size="mini"
+              >添加分类</el-button
+            >
+          </div>
+          <div class="goods_list">
+            <template v-for="(it, idx) in item">
+              <div
+                class="goods_item"
+                v-for="(itc, idxc) in it.vendor_package_data"
+                v-if="it.checked"
+              >
+                <div class="goods_info">
+                  <i
+                    class="el-icon-error"
+                    @click="delGoods(index, idx, idxc)"
+                  ></i>
+                  <img class="goods_img" :src="itc.main_image" alt="" />
+                  <div class="goods_sth">
+                    <p class="goods_title">
+                      {{ itc.name }}
+                    </p>
+                    <div class="goods_price">
+                      <p
+                        v-if="itc.discount_price"
+                        style="text-decoration: line-through"
+                      >
+                        ￥{{ itc.sale_price }}
+                      </p>
+                      <p style="color: red">
+                        ￥{{
+                          itc.discount_price
+                            ? itc.discount_price
+                            : itc.sale_price
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="opt_goods">
+                  <i
+                    class="el-icon-top"
+                    @click="changePackageIndex(1, index, idx, idxc)"
+                    v-show="idxc != 0"
+                  ></i>
+                  <i
+                    class="el-icon-bottom"
+                    @click="changePackageIndex(2, index, idx, idxc)"
+                    v-show="idxc != it.vendor_package_data.length - 1"
+                  ></i>
+                </div>
+              </div>
+            </template>
+            <el-button
+              v-show="formData.menu_data[index].length"
+              @click="openPackageList(index)"
+              class="add_goods"
+              icon="el-icon-plus"
+              type="success"
+              size="mini"
+              >添加</el-button
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -149,7 +163,29 @@
       :title="typeEdit ? '编辑分类' : '新增分类'"
       :visible.sync="dialogTypeVisible"
     >
-      <el-input placeholder="请输入菜单分类名称" v-model="type_name"></el-input>
+      <el-form label-width="80px">
+        <el-form-item label="分类图片">
+          <el-upload
+            :file-list="label_image_file"
+            :class="{ main_img_hide: label_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadImg"
+            :on-preview="handlePreview"
+            :on-remove="handleImgRemove"
+            :data="{ token: $store.state.user.token }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="分类名称">
+          <el-input
+            placeholder="请输入菜单分类名称"
+            v-model="type_name"
+          ></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTypeVisible = false">取 消</el-button>
         <el-button type="primary" @click="editType">确 定</el-button>
@@ -224,6 +260,9 @@
         <el-button @click="releaseMenuDialog = false">取 消</el-button>
         <el-button type="primary" @click="releaseMenuClick">确 定</el-button>
       </span>
+    </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
   </div>
 </template>
@@ -320,7 +359,28 @@ export default {
       historyMenuListDialog: false,
       releaseMenuDialog: false,
       release_name: "",
+      label_image: "",
+      label_image_file:[],
+      dialogImageUrl: "",
+      dialogVisible: false,
     };
+  },
+  computed: {
+    day_tip() {
+      let day_tip = "";
+      switch (this.formData.menu_type) {
+        case 1:
+          day_tip = "每天";
+          break;
+        case 2:
+          day_tip = "周";
+          break;
+        case 3:
+          day_tip = "号";
+          break;
+      }
+      return day_tip;
+    },
   },
   watch: {
     "formData.time_type"() {
@@ -329,6 +389,13 @@ export default {
     "formData.menu_type"() {
       this.getMenuDetail();
     },
+    dialogTypeVisible(flag){
+      if (!flag){
+        this.type_name = "";
+        this.label_image = "";
+        this.label_image_file = [];
+      }
+    }
   },
   created() {
     this.getVendorPackageList();
@@ -336,6 +403,33 @@ export default {
     this.getHistoryMenu();
   },
   methods: {
+    upNumCase(num) {
+      let day_num = "";
+      switch (num) {
+        case 1:
+          day_num = "一";
+          break;
+        case 2:
+          day_num = "二";
+          break;
+        case 3:
+          day_num = "三";
+          break;
+        case 4:
+          day_num = "四";
+          break;
+        case 5:
+          day_num = "五";
+          break;
+        case 6:
+          day_num = "六";
+          break;
+        case 7:
+          day_num = "日";
+          break;
+      }
+      return day_num;
+    },
     //获取历史版本菜单
     getHistoryMenu() {
       historyMenu({ vendor_id: this.vendor_id }).then((res) => {
@@ -388,23 +482,38 @@ export default {
       });
     },
     //切换分类
-    typeClick(label, index, idx) {
+    typeClick(index, idx) {
       this.formData.menu_data[index].forEach((item, idx) => {
         item.checked = false;
       });
       this.formData.menu_data[index][idx].checked = true;
     },
     //打开分类弹窗
-    openTypeDialog(index, type, type_name, idx) {
+    openTypeDialog(index, type, type_name, label_image, idx) {
       if (type) {
         this.type_name = type_name;
+        this.label_image = label_image;
+        this.label_image_file = [{ name: "labelImageFile", url: label_image }];
         this.menu_data_c_index = idx;
-      } else {
-        this.type_name = "";
       }
       this.typeEdit = type;
       this.dialogTypeVisible = true;
       this.menu_data_index = index;
+    },
+    //上传分类图片
+    upLoadImg(res, file) {
+      if (res.status) {
+        this.label_image = res.data.image_url;
+      }
+    },
+    //查看分类图片
+    handlePreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    //删除分类图片
+    handleImgRemove(file, fileList) {
+      this.label_image = "";
     },
     //添加/编辑分类
     editType() {
@@ -415,8 +524,15 @@ export default {
           duration: 1000,
         });
       }
+      if (!this.label_image) {
+        return this.$message({
+          message: "请选择分类图片",
+          type: "error",
+          duration: 1000,
+        });
+      }
       if (
-        this.formData.menu_data[this.menu_data_index].find(
+        !this.typeEdit && this.formData.menu_data[this.menu_data_index].find(
           (item) => this.type_name == item.label
         )
       ) {
@@ -430,9 +546,13 @@ export default {
         this.formData.menu_data[this.menu_data_index][
           this.menu_data_c_index
         ].label = this.type_name;
+        this.formData.menu_data[this.menu_data_index][
+          this.menu_data_c_index
+        ].label_image = this.label_image;
       } else {
         this.formData.menu_data[this.menu_data_index].push({
           label: this.type_name,
+          label_image: this.label_image,
           vendor_package_data: [],
           checked: !this.formData.menu_data[this.menu_data_index].length
             ? true
@@ -519,6 +639,7 @@ export default {
           });
           menu_data[index].push({
             label: it.label,
+            label_image: it.label_image,
             vendor_package_ids: vendor_package_ids.join(","),
           });
         });
@@ -555,7 +676,7 @@ export default {
       }).then((res) => {
         if (res) {
           this.getHistoryMenu();
-          this.releaseMenuDialog = false;  
+          this.releaseMenuDialog = false;
           this.$notify({
             title: "成功",
             message: "发布成功",
@@ -574,7 +695,10 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.main_img_hide .el-upload--picture-card {
+  display: none;
+}
 img[src=""],
 img:not([src]) {
   opacity: 1;
@@ -583,106 +707,122 @@ img:not([src]) {
   min-height: 200px;
   display: flex;
   flex-wrap: wrap;
-  .menu {
+  .menu_box_content {
     display: flex;
-    border: 1px solid #ddd;
-    width: 380px;
-    margin: 0 15px 15px 0;
-    .type_list {
-      width: 40%;
-      height: 600px;
-      overflow-y: auto;
-      background-color: #eee;
-      .type_item {
-        cursor: pointer;
-        padding: 15px 0;
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        color: #666;
-        border-bottom: 1px solid #ddd;
-        p {
-          width: 100%;
-          text-align: center;
-          padding: 0 10px;
-        }
-        i {
-          cursor: pointer;
-          font-size: 16px;
-          margin-right: 13px;
-        }
-        .el-icon-edit {
-          color: blue;
-        }
-        .el-icon-error {
-          color: red;
-        }
-      }
-      .add_type {
-        display: flex;
-        justify-content: center;
-        margin: 10px auto;
-      }
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    .day_tip {
+      margin: 0 20px 10px 0;
+      font-size: 14px;
+      color: #666;
     }
-    .goods_list {
-      width: 60%;
-      height: 600px;
-      overflow-y: auto;
-      .goods_item {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        i {
+    .menu {
+      display: flex;
+      border: 1px solid #ddd;
+      width: 380px;
+      margin: 0 15px 15px 0;
+      .type_list {
+        width: 40%;
+        height: 600px;
+        overflow-y: auto;
+        background-color: #eee;
+        .type_item {
           cursor: pointer;
-        }
-        .goods_info {
-          width: 150px;
-          position: relative;
+          padding: 15px 0;
           display: flex;
           flex-direction: column;
+          align-items: center;
+          font-size: 14px;
+          color: #666;
+          border-bottom: 1px solid #ddd;
+          div {
+            display: flex;
+            margin-top: 10px;
+          }
+          p {
+            width: 100%;
+            text-align: center;
+            padding: 0 10px;
+          }
+          i {
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 13px;
+          }
+          .el-icon-edit {
+            color: blue;
+          }
           .el-icon-error {
-            font-size: 20px;
-            position: absolute;
-            right: -10px;
-            top: -10px;
             color: red;
           }
-          .goods_img {
-            width: 150px;
-            height: 150px;
+        }
+        .add_type {
+          display: flex;
+          justify-content: center;
+          margin: 10px auto;
+        }
+      }
+      .goods_list {
+        width: 60%;
+        height: 600px;
+        overflow-y: auto;
+        .goods_item {
+          margin-top: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          i {
+            cursor: pointer;
           }
-          .goods_sth {
-            padding: 10px;
-            background-color: #eee;
-            .goods_title {
-              font-size: 14px;
-              color: #666;
+          .goods_info {
+            width: 150px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            .el-icon-error {
+              font-size: 20px;
+              position: absolute;
+              right: -10px;
+              top: -10px;
+              color: red;
             }
-            .goods_price {
-              display: flex;
-              margin-top: 10px;
-              font-size: 14px;
-              p {
-                margin-right: 10px;
+            .goods_img {
+              width: 150px;
+              height: 150px;
+            }
+            .goods_sth {
+              padding: 10px;
+              background-color: #eee;
+              .goods_title {
+                font-size: 14px;
+                color: #666;
+              }
+              .goods_price {
+                display: flex;
+                margin-top: 10px;
+                font-size: 14px;
+                p {
+                  margin-right: 10px;
+                }
               }
             }
           }
-        }
-        .opt_goods {
-          margin-left: 15px;
-          display: flex;
-          flex-direction: column;
-          i {
-            font-size: 20px;
-            margin-bottom: 15px;
+          .opt_goods {
+            margin-left: 15px;
+            display: flex;
+            flex-direction: column;
+            i {
+              font-size: 20px;
+              margin-bottom: 15px;
+            }
           }
         }
-      }
-      .add_goods {
-        display: flex;
-        justify-content: center;
-        margin: 20px auto;
+        .add_goods {
+          display: flex;
+          justify-content: center;
+          margin: 20px auto;
+        }
       }
     }
   }

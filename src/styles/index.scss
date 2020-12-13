@@ -85,14 +85,15 @@ img:not([src]) {
   word-wrap: break-word;
   word-break: break-all;
   p {
-    height: 30px;
+    min-height: 30px;
+    height: auto;
     line-height: 30px;
   }
   p:last-child {
     width: 100%;
     text-align: center;
-    padding-top: 8px;
-    margin-top: 8px;
+    padding-top: 10px;
+    margin-top: 10px;
     border-top: 1px solid #ddd;
     color: #999;
   }
