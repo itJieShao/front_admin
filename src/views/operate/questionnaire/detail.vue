@@ -172,38 +172,59 @@
         <el-col :span="8">填券时间：{{ userItem.created_at }}</el-col>
       </el-row>
       <el-divider></el-divider>
-      <p style="margin-bottom: 15px">用户最近一周订单</p>
-      <div style="margin:0 20px;">
+      <p
+        style="
+          margin-bottom: 15px;
+          color: #606266;
+          font-size: 14px;
+          font-weight: 700;
+        "
+      >
+        用户最近一周订单
+      </p>
+      <div style="margin: 0 20px">
         <el-row
-          v-for="(item, index) in 2"
+          v-for="(item, index) in questionnaireData"
           :key="index"
           :gutter="12"
           style="margin-bottom: 20px"
         >
-          <p style="margin-bottom: 15px">订单ID：123</p>
-          <el-col :span="12" v-for="(it, idx) in 2" :key="idx">
-            <el-card shadow="always">
-              <div class="goods_item">
-                <div class="goods_top">
-                  <img :src="it.image" alt="" />
-                  <div class="goods_info">
-                    <div class="goods_sth">
-                      <p>{{ it.vendor_package_id }}</p>
-                      <p>￥{{ it.sale_price }}</p>
+          <p style="margin-bottom: 15px">订单ID：{{ item.order_no }}</p>
+          <el-row
+            v-for="(it, idx) in item.order_detail"
+            :key="idx"
+            :gutter="12"
+            style="margin-bottom: 20px"
+          >
+            <el-col
+              :span="12"
+              v-for="(itd, idxc) in it"
+              :key="idxc"
+            >
+              <el-card shadow="always">
+                <div class="goods_item">
+                  <div class="goods_top">
+                    <img :src="itd.main_image" alt="" />
+                    <div class="goods_info">
+                      <!-- <div class="goods_sth">
+                        <p>{{ it.vendor_package_id }}</p>
+                        <p>￥{{ itd.sale_price }}</p>
+                      </div> -->
+                      <p class="goods_title">{{ itd.vendor_package_name }}</p>
+                      <p style="margin-top: 10px">
+                        套餐组合：{{ itd.product_name }}
+                      </p>
                     </div>
-                    <p class="goods_title">{{ it.vendor_package_name }}</p>
-                    <p style="margin-top: 10px">
-                      套餐组合：{{ it.product_name }}
-                    </p>
+                  </div>
+                  <div class="goods_bot">
+                    <p>￥{{ itd.sale_price }}</p>
+                    <p>X{{ itd.vendor_package_num }}</p>
                   </div>
                 </div>
-                <div class="goods_bot">
-                  <p>实付：￥{{ it.discount_price }}</p>
-                  <p>X{{ it.vendor_package_num }}</p>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
+              </el-card>
+            </el-col>
+          </el-row>
+          <el-divider></el-divider>
         </el-row>
       </div>
       <el-divider></el-divider>
@@ -234,6 +255,7 @@
 import {
   questionnaireDetail,
   questionnaireDisable,
+  getOrderData,
 } from "@/api/operate/questionnaire";
 import Echart from "@/components/Echart";
 export default {
@@ -242,6 +264,7 @@ export default {
       detail: {},
       dialogFlag: false,
       userItem: {},
+      questionnaireData: [],
     };
   },
   components: {
@@ -282,6 +305,16 @@ export default {
       });
     },
     seeQuestionnaire(userItem) {
+      getOrderData({ customer_id: userItem.customer_id }).then((res) => {
+        res.forEach((item) => {
+          let order_detail = [];
+          for (let i = 0; i < item.order_detail.length; i += 2) {
+            order_detail.push(item.order_detail.slice(i, i + 2));
+          }
+          item.order_detail = order_detail;
+        });
+        this.questionnaireData = res;
+      });
       this.detail.questionnaire_data.forEach((item, index) => {
         if (item.answer_type == 3) {
           item.answer = userItem.questionnaire_data[index].answer;
