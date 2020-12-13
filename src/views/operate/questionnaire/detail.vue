@@ -172,6 +172,41 @@
         <el-col :span="8">填券时间：{{ userItem.created_at }}</el-col>
       </el-row>
       <el-divider></el-divider>
+      <p style="margin-bottom: 15px">用户最近一周订单</p>
+      <div style="margin:0 20px;">
+        <el-row
+          v-for="(item, index) in 2"
+          :key="index"
+          :gutter="12"
+          style="margin-bottom: 20px"
+        >
+          <p style="margin-bottom: 15px">订单ID：123</p>
+          <el-col :span="12" v-for="(it, idx) in 2" :key="idx">
+            <el-card shadow="always">
+              <div class="goods_item">
+                <div class="goods_top">
+                  <img :src="it.image" alt="" />
+                  <div class="goods_info">
+                    <div class="goods_sth">
+                      <p>{{ it.vendor_package_id }}</p>
+                      <p>￥{{ it.sale_price }}</p>
+                    </div>
+                    <p class="goods_title">{{ it.vendor_package_name }}</p>
+                    <p style="margin-top: 10px">
+                      套餐组合：{{ it.product_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="goods_bot">
+                  <p>实付：￥{{ it.discount_price }}</p>
+                  <p>X{{ it.vendor_package_num }}</p>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
+      <el-divider></el-divider>
       <el-form>
         <el-form-item
           :label="'第' + (index + 1) + '题'"
@@ -247,7 +282,7 @@ export default {
       });
     },
     seeQuestionnaire(userItem) {
-      this.detail.questionnaire_data.forEach((item,index) => {
+      this.detail.questionnaire_data.forEach((item, index) => {
         if (item.answer_type == 3) {
           item.answer = userItem.questionnaire_data[index].answer;
         } else {
@@ -266,7 +301,37 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.goods_item {
+  cursor: pointer;
+  .goods_top {
+    display: flex;
+    img {
+      display: block;
+      width: 100px;
+      height: 100px;
+      border: 1px solid #ddd;
+    }
+    .goods_info {
+      width: calc(100% - 115px);
+      margin-left: 15px;
+      .goods_sth {
+        display: flex;
+        justify-content: space-between;
+      }
+      .goods_title {
+        margin-top: 20px;
+      }
+    }
+  }
+  .goods_bot {
+    border-top: 1px solid #ddd;
+    margin-top: 15px;
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
 .answer_content {
   margin: 0;
   display: flex;
@@ -285,7 +350,7 @@ export default {
   margin: 0 20px 20px 0;
 }
 .answer_active {
-  background-color: blue;
+  background-color: #67c23a;
   color: #fff;
 }
 </style>

@@ -152,7 +152,7 @@
         </el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="seeMenu(scope.row.vendor_menu_id)"
+            <el-button size="mini" @click="seeMenu(scope.row)"
               >查看</el-button
             >
           </template>
@@ -441,7 +441,7 @@ export default {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
       menuDetail({
-        vendor_menu_id: this.formData.vendor_menu_id,
+        //vendor_menu_id: this.formData.vendor_menu_id,
         time_type,
         menu_type,
         vendor_id: this.vendor_id,
@@ -687,8 +687,11 @@ export default {
       });
     },
     //查看历史版本
-    seeMenu(vendor_menu_id) {
-      this.formData.vendor_menu_id = vendor_menu_id;
+    seeMenu(item) {
+      this.formData.vendor_menu_id = item.vendor_menu_id;
+      this.formData.vendor_id = item.vendor_id;
+      this.formData.menu_type = item.menu_type;
+      this.formData.time_type = item.time_type;
       this.getMenuDetail();
       this.historyMenuListDialog = false;
     },

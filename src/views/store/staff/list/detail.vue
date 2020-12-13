@@ -120,6 +120,11 @@
               </div>
             </el-card>
           </el-col>
+          <el-col :span="4">
+            <el-card shadow="always" style="width:200px;height:200px;">
+              <vue-qr :text="detail.qr_code" :size="150"></vue-qr>
+            </el-card>
+          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -294,6 +299,7 @@ import {
   delEmployeeTask,
 } from "@/api/store";
 import Pagination from "@/components/Pagination";
+import vueQr from "vue-qr";
 export default {
   data() {
     return {
@@ -335,13 +341,16 @@ export default {
       vendorTaskList: [],
     };
   },
+  components: {
+    Pagination,
+    vueQr,
+  },
   watch: {
     time(val) {
       this.formData.stipulate_start_time = val[0];
       this.formData.stipulate_end_time = val[1];
     },
   },
-  components: { Pagination },
   async created() {
     this.defaultData = JSON.parse(JSON.stringify(this.formData));
     let { employee_id, station_id } = this.$route.query;
@@ -385,7 +394,7 @@ export default {
       }
       addEmployeeTask(aData).then((res) => {
         if (res) {
-          this.getTaskList(); 
+          this.getTaskList();
           this.dialogVisible = false;
           this.time = "";
           this.formData = JSON.parse(JSON.stringify(this.defaultData));
