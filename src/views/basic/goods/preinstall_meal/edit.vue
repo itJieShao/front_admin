@@ -2,11 +2,11 @@
   <div class="app-container">
     <h2>{{ $route.query.package_id ? "编辑预设套餐" : "新增预设套餐" }}</h2>
     <el-card shadow="always">
-      <el-form label-width="100px">
-        <el-form-item label="套餐标题">
+      <el-form label-width="100px" :rules="rules">
+        <el-form-item label="套餐标题" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
-        <el-form-item label="套餐主图">
+        <el-form-item label="套餐主图" prop="main_image">
           <el-upload
             :file-list="detailMainImgFile"
             :class="{ main_img_hide: formData.main_image }"
@@ -21,7 +21,7 @@
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="套餐轮播图">
+        <el-form-item label="套餐轮播图" prop="images">
           <el-upload
             :file-list="detailImagesFile"
             multiple
@@ -36,7 +36,7 @@
         </el-form-item>
         <el-divider />
         <div style="display: flex">
-          <el-form-item label="套餐单品">
+          <el-form-item label="套餐单品" prop="product_data">
             <el-button type="success" @click="dialogTableVisible = true"
               >添加套餐单品</el-button
             >
@@ -64,7 +64,10 @@
                   :min="1"
                   v-model="item.product_num"
                 ></el-input-number>
-                <i @click="deleteProduct(index)" class="el-icon-delete del_btn"></i>
+                <i
+                  @click="deleteProduct(index)"
+                  class="el-icon-delete del_btn"
+                ></i>
               </div>
             </div>
           </el-card>
@@ -85,7 +88,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="建议销售价">
+        <el-form-item label="建议销售价" prop="sale_price">
           <el-input v-model="formData.sale_price">
             <template slot="append">元</template>
           </el-input>
@@ -168,6 +171,15 @@ import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
+      rules: {
+        name: [{ required: true, message: "请输入套餐名称", trigger: "blur" }],
+        main_image: [{ required: true }],
+        images: [{ required: true }],
+        product_data: [{ required: true }],
+        sale_price: [
+          { required: true, message: "请输入建议销售价", trigger: "blur" },
+        ],
+      },
       formData: {
         name: "",
         main_image: "",
@@ -221,11 +233,11 @@ export default {
             });
             this.detailImagesFile = imgsArr;
           }
-          if (res.product_data.length){
-            res.product_data.forEach(item => {
+          if (res.product_data.length) {
+            res.product_data.forEach((item) => {
               item.package_box_name = item.product_package_box_name;
-              delete item.product_package_box_name
-            })
+              delete item.product_package_box_name;
+            });
           }
         }
       );

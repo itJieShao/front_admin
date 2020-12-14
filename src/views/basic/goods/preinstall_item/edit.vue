@@ -223,10 +223,7 @@
                     </p>
                   </div>
                   <div>
-                    <el-input-number
-                      :min="1"
-                      v-model="materialNum"
-                    ></el-input-number>
+                    <el-input type="number" v-model="materialNum"></el-input>
                   </div>
                 </div>
               </div>
@@ -289,10 +286,7 @@
                     </p>
                   </div>
                   <div>
-                    <el-input-number
-                      :min="1"
-                      v-model="seasoningNum"
-                    ></el-input-number>
+                    <el-input type="number" v-model="seasoningNum"></el-input>
                   </div>
                 </div>
               </div>
@@ -392,9 +386,9 @@ export default {
         material: [],
         seasoning: [],
         temperature_corve: [],
-        heating_rate_id:"",
-        temperature_curve_sensitive:"",
-        cell_location:"",
+        heating_rate_id: "",
+        temperature_curve_sensitive: "",
+        cell_location: "",
       }, //表单提交数据
       checkedProductData: [],
       productListData: {
@@ -414,14 +408,14 @@ export default {
       supplierList: [],
       materialData: [],
       materialId: "",
-      materialNum: "1",
+      materialNum: "",
       seasoningData: [],
       seasoningId: "",
-      seasoningNum: "1",
+      seasoningNum: "",
       time: "",
       temperature: "",
       detailMainImgFile: [],
-      heatingRateList:[],
+      heatingRateList: [],
       temperatureCurveSensitive: [
         { name: "最不敏感", id: 1 },
         { name: "不敏感", id: 2 },
@@ -429,7 +423,7 @@ export default {
         { name: "比较敏感", id: 4 },
         { name: "最敏感", id: 5 },
       ],
-      cellLocationList:[
+      cellLocationList: [
         { name: "上层", id: 1 },
         { name: "中层", id: 2 },
         { name: "下层", id: 3 },
@@ -468,13 +462,16 @@ export default {
       if (!this.materialId) {
         return this.$message.error("请选择要新增的材料");
       }
+      if (!this.materialNum) {
+        return this.$message.error("请填写数量");
+      }
       this.formData.material.push({
         material_name: this.checkedMaterial.name,
         unit_name: this.checkedMaterial.unit_name,
         material_id: this.materialId,
         num: this.materialNum,
       });
-      this.materialId = "";
+      this.materialId = this.materialNum = "";
     },
     //删除材料
     deleteMaterial(id) {
@@ -488,13 +485,16 @@ export default {
       if (!this.seasoningId) {
         return this.$message.error("请选择要新增的调料");
       }
+      if (!this.seasoningNum) {
+        return this.$message.error("请填写数量");
+      }
       this.formData.seasoning.push({
         seasoning_name: this.checkedSeasoning.name,
         unit_name: this.checkedSeasoning.unit_name,
         seasoning_id: this.seasoningId,
         num: this.seasoningNum,
       });
-      this.seasoningId = "";
+      this.seasoningId = this.seasoningNum = "";
     },
     //删除调料
     deleteSeasoning(id) {
@@ -569,7 +569,7 @@ export default {
       });
     },
     //加热速率列表
-    getHeatingRateList(){
+    getHeatingRateList() {
       categoryData({ type: 9 }).then((res) => {
         this.heatingRateList = res;
       });

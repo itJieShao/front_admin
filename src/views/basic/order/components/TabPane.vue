@@ -10,7 +10,7 @@
     >
       <el-table-column width="100" align="center" label="订单ID">
         <template slot-scope="scope">
-          <div style="display: flex; align-items: center">
+          <div class="y_item">
             <span v-if="scope.row.book_at" class="y_tip">预</span>
             <span>{{ scope.row.id }}</span>
           </div>  
@@ -171,6 +171,11 @@ export default {
 };
 </script>
 <style scoped>
+.y_item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .y_tip {
   border-radius: 50%;
   width: 30px;
