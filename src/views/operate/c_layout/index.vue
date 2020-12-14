@@ -37,7 +37,16 @@ export default {
   methods: {
     jumpUrl(type) {
       switch (type) {
+        case 1:
+          this.$router.push("/operate/c_layout/index_bar");
+          break;
+        case 2:
+          this.$router.push("/operate/c_layout/store_notice");
+          break;
         case 3:
+          this.$router.push("/operate/c_layout/store_notice");
+          break;
+        case 4:
           this.$router.push("/operate/c_layout/store_notice");
           break;
         case 5:

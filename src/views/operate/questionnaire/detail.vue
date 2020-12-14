@@ -164,6 +164,13 @@
           </template>
         </el-table-column>
       </el-table>
+      <pagination
+        v-show="total > 0"
+        :total="total"
+        :page.sync="listData.page"
+        :limit.sync="listData.page_size"
+        @pagination="getDetail"
+      />
     </el-card>
     <el-dialog :visible.sync="dialogFlag">
       <el-row :gutter="20" style="margin-bottom: 20px">
@@ -196,11 +203,7 @@
             :gutter="12"
             style="margin-bottom: 20px"
           >
-            <el-col
-              :span="12"
-              v-for="(itd, idxc) in it"
-              :key="idxc"
-            >
+            <el-col :span="12" v-for="(itd, idxc) in it" :key="idxc">
               <el-card shadow="always">
                 <div class="goods_item">
                   <div class="goods_top">
@@ -257,6 +260,7 @@ import {
   questionnaireDisable,
   getOrderData,
 } from "@/api/operate/questionnaire";
+import Pagination from "@/components/Pagination";
 import Echart from "@/components/Echart";
 export default {
   data() {
@@ -265,17 +269,27 @@ export default {
       dialogFlag: false,
       userItem: {},
       questionnaireData: [],
+      listData: {
+        id: "",
+        page: 1,
+        page_size: 10,
+      },
+      loading: false,
+      total: 0,
     };
   },
   components: {
     Echart,
+    Pagination,
   },
   created() {
+    this.listData.id = this.$route.query.id;
     this.getDetail();
   },
   methods: {
     getDetail() {
-      questionnaireDetail({ id: this.$route.query.id }).then((res) => {
+      questionnaireDetail(this.listData).then((res) => {
+        this.total = res.customer_count;
         let questionnaire_data = [];
         for (let i = 0; i < res.questionnaire_data.length; i += 3) {
           questionnaire_data.push(res.questionnaire_data.slice(i, i + 3));
