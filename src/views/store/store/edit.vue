@@ -415,6 +415,7 @@ export default {
         }
         if (res.image) {
           this.formData.images = res.image;
+          delete this.formData.image;
           this.detailMainImgFile = [
             { name: "detailMainImgFile", url: res.image },
           ];
@@ -439,6 +440,7 @@ export default {
           });
           this.detailFoodImagesFile = food_permit_image;
         }
+        console.log(this.formData)
         this.getCityList();
         this.getDistrictList();
       });

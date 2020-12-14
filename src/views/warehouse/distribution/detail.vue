@@ -152,9 +152,9 @@
         </el-table-column>
         <el-table-column align="center" prop="product_num" label="烹饪盘单品数量">
         </el-table-column>
-        <el-table-column align="center" prop="device_cell_no" label="分配设备">
+        <el-table-column align="center" prop="device_no" label="分配设备">
         </el-table-column>
-        <el-table-column align="center" prop="address" label="分配单元格"> </el-table-column>
+        <el-table-column align="center" prop="device_cell_no" label="分配单元格"> </el-table-column>
         <el-table-column align="center" prop="check_status" label="取货状态">
         </el-table-column>
         <el-table-column align="center" prop="distribution_status" label="入柜状态">
