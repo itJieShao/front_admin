@@ -8,9 +8,12 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="订单ID">
+      <el-table-column width="100" align="center" label="订单ID">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <div style="display: flex; align-items: center">
+            <span v-if="scope.row.book_at" class="y_tip">预</span>
+            <span>{{ scope.row.id }}</span>
+          </div>  
         </template>
       </el-table-column>
 
@@ -23,6 +26,12 @@
       <el-table-column align="center" label="用户">
         <template slot-scope="scope">
           <span>{{ scope.row.customer_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140" align="center" label="手机号码">
+        <template slot-scope="scope">
+          <span>{{ scope.row.customer_mobile }}</span>
         </template>
       </el-table-column>
 
@@ -161,4 +170,17 @@ export default {
   },
 };
 </script>
-
+<style scoped>
+.y_tip {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background-color: sandybrown;
+  color: #fff;
+  margin-right: 10px;
+}
+</style>

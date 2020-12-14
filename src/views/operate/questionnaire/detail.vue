@@ -151,7 +151,7 @@
     </el-row>
     <el-divider></el-divider>
     <el-card shadow="always">
-      <el-table :data="detail.customer_data" stripe style="width: 100%">
+      <el-table v-loading="loading" :data="detail.customer_data" stripe style="width: 100%">
         <el-table-column prop="customer_name" label="用户昵称">
         </el-table-column>
         <el-table-column prop="phone" label="手机号码"> </el-table-column>
@@ -288,7 +288,9 @@ export default {
   },
   methods: {
     getDetail() {
+      this.loading = true;
       questionnaireDetail(this.listData).then((res) => {
+        this.loading = false;
         this.total = res.customer_count;
         let questionnaire_data = [];
         for (let i = 0; i < res.questionnaire_data.length; i += 3) {

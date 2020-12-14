@@ -186,7 +186,7 @@
                     <p>{{ item.time }}</p>
                   </div>
                   <i
-                    @click="deleteTime(item.key)"
+                    @click="deleteTime(item.id)"
                     class="el-icon-delete delete-btn"
                   ></i>
                 </div>
@@ -200,9 +200,9 @@
                       <el-option
                         v-if="item.select"
                         v-for="item in timeList"
-                        :key="item.key"
+                        :key="item.id"
                         :label="item.name"
-                        :value="item.key"
+                        :value="item.id"
                       >
                       </el-option>
                     </el-select>
@@ -272,7 +272,7 @@
 
 <script>
 import { BaiduMap, BmView, BmMarker, BmLocalSearch } from "vue-baidu-map";
-import { vendorAdd, vendorEdit, vendorDetail } from "@/api/store";
+import { vendorAdd, vendorEdit, vendorDetail,getTimeTypeData } from "@/api/store";
 import { provinceList, cityList, districtList, adminList } from "@/api/common";
 export default {
   components: {
@@ -327,19 +327,7 @@ export default {
         { val: "5", name: "星期五" },
         { val: "6", name: "星期六" },
       ],
-      timeList: [
-        { key: "breakfast_finish_time", time: "", name: "早餐", select: true },
-        {
-          key: "breakfast_tea_finish_time",
-          time: "",
-          name: "早茶",
-          select: true,
-        },
-        { key: "lunch_finish_time", time: "", name: "午餐", select: true },
-        { key: "tea_finish_time", time: "", name: "下午茶", select: true },
-        { key: "dinner_finish_time", time: "", name: "晚餐", select: true },
-        { key: "night_finish_time", time: "", name: "夜宵", select: true },
-      ],
+      timeList: [],
       timeKey: "",
       timeVal: "",
       center: { lng: 0, lat: 0 }, //编辑回显地图参数
@@ -350,11 +338,21 @@ export default {
     await this.getProvinceList();
     if (this.$route.query.vendor_id) {
       this.formData.vendor_id = this.$route.query.vendor_id;
+      await this.getTimeTypeData();
       this.getVendorDetail();
+    }else{
+       this.getTimeTypeData();
     }
     this.getAdminList();
   },
   methods: {
+    //获取门店用餐时段列表
+    getTimeTypeData(){
+      return getTimeTypeData().then(res => {
+        res.forEach(item => item.select = true);
+        this.timeList = res
+      })
+    },
     handler({ BMap, map }) {
       setTimeout(() => {
         this.center.lng = this.formData.longitude;
@@ -396,20 +394,14 @@ export default {
         this.formData.district_code = res.district_id;
         this.formData.province_id = res.province_parent_id;
         this.formData.city_id = res.city_parent_id;
-        let time_list = {
-          breakfast_finish_time: res.breakfast_finish_time,
-          breakfast_tea_finish_time: res.breakfast_tea_finish_time,
-          lunch_finish_time: res.lunch_finish_time,
-          tea_finish_time: res.tea_finish_time,
-          dinner_finish_time: res.dinner_finish_time,
-          night_finish_time: res.night_finish_time,
-        };
-        for (let i in time_list) {
-          if (time_list[i]) {
-            this.timeList.find((item) => item.key == i).select = false;
-            this.timeList.find((item) => item.key == i).time = time_list[i];
-          }
-        }
+        res.cook_finish_time.forEach(item => {
+          this.timeList.forEach(it => {
+            if (item.time_type_id == it.id){
+              it.select = false;
+              it.time = item.time;
+            }
+          })
+        })
         if (res.business_days.length > 0) {
           let business_days = [];
           this.dayList.forEach((item) => {
@@ -539,18 +531,17 @@ export default {
     //新增用餐时段
     addTimeList() {
       if (this.timeKey && this.timeVal) {
-        let timeItem = this.timeList.find((item) => this.timeKey == item.key);
+        let timeItem = this.timeList.find((item) => this.timeKey == item.id);
         timeItem.select = false;
         timeItem.time = this.timeVal;
         this.timeKey = this.timeVal = "";
       }
     },
     //删除用餐时段
-    deleteTime(key) {
-      let timeItem = this.timeList.find((item) => key == item.key);
+    deleteTime(id) {
+      let timeItem = this.timeList.find((item) => id == item.id);
       timeItem.select = true;
       timeItem.time = "";
-      console.log(this.timeList);
     },
     onSubmit() {
       let aData = JSON.parse(JSON.stringify(this.formData)),
@@ -563,13 +554,12 @@ export default {
         });
       });
       aData.business_days = business_days.join(",");
+      aData.cook_finish_time = [];
       this.timeList.forEach((item) => {
-        aData[item.key] = "";
-        if (!item.select) {
-          aData[item.key] = item.time;
+        if (!item.select){
+          aData.cook_finish_time.push({time_type_id:item.id,time:item.time})
         }
       });
-      console.log(aData);
       let saveApi = aData.vendor_id ? vendorEdit : vendorAdd;
       saveApi(aData).then((res) => {
         if (res) {
