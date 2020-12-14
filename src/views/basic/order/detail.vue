@@ -52,13 +52,10 @@
         <el-card shadow="always"> 订单类型：{{ detail.book_at?"预约订单":"当天订单" }} </el-card>
       </el-col>
       <el-col :span="6" v-if="detail.book_at">
-        <el-card shadow="always"> 预约时间：{{ detail.book_at }} </el-card>
+        <el-card shadow="always"> 预约日期：{{ detail.book_at }} </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="always"> 手机号码：{{ detail.customer_mobile }} </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always"> 订单状态：{{ detail.order_status_name }} </el-card>
       </el-col>
     </el-row>
     <el-row
