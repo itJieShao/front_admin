@@ -223,7 +223,7 @@
                     </p>
                   </div>
                   <div>
-                    <el-input type="number" v-model="materialNum"></el-input>
+                      <el-input type="number" v-model="materialNum"></el-input>
                   </div>
                 </div>
               </div>
