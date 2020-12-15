@@ -2,7 +2,7 @@
   <div class="app-container">
     <h2>{{ $route.query.id ? "编辑预设单品" : "新增预设单品" }}</h2>
     <el-card shadow="always">
-      <el-form label-width="100px">
+      <el-form label-width="100px" :model="formData" :rules="rules">
         <el-form-item label="单品标题">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>

@@ -2,7 +2,7 @@
   <div class="app-container">
     <h2>{{ $route.query.package_id ? "编辑预设套餐" : "新增预设套餐" }}</h2>
     <el-card shadow="always">
-      <el-form label-width="100px">
+      <el-form label-width="100px" :model="formData" :rules="rules">
         <el-form-item label="套餐标题" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
@@ -171,15 +171,15 @@ import Pagination from "@/components/Pagination";
 export default {
   data() {
     return {
-      // rules: {
-      //   name: [{ required: true, message: "请输入套餐名称", trigger: "blur" }],
-      //   main_image: [{ required: true }],
-      //   images: [{ required: true }],
-      //   product_data: [{ required: true }],
-      //   sale_price: [
-      //     { required: true, message: "请输入建议销售价", trigger: "blur" },
-      //   ],
-      // },
+      rules: {
+        name: [{ required: true, message: "请输入套餐标题", trigger: "blur" }],
+        main_image: [{ required: true }],
+        images: [{ required: true }],
+        product_data: [{ required: true }],
+        sale_price: [
+          { required: true, message: "请输入建议销售价", trigger: "blur" },
+        ],
+      },
       formData: {
         name: "",
         main_image: "",
