@@ -1,5 +1,11 @@
 <template>
   <div>
+    <!-- <el-col
+      :span="24"
+      style="margin-bottom: 20px; display: flex; justify-content: flex-end"
+    >
+      <el-button type="success" @click="orderDialog = true">筛选</el-button>
+    </el-col> -->
     <el-table
       v-loading="loading"
       :data="list"
@@ -131,6 +137,26 @@
       :limit.sync="listData.page_size"
       @pagination="getList"
     />
+    <el-dialog title="订单筛选" :visible.sync="orderDialog" center>
+      <el-form label-width="80px">
+        <el-form-item label="订单状态">
+          <el-checkbox-group v-model="listData.order_status">
+            <el-checkbox
+              v-for="item in orderStatusList"
+              :key="item.type"
+              :label="item.type"
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="clearMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="clearBtn(clearIndex)"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -153,9 +179,19 @@ export default {
         page_size: 10,
         vendor_ids: this.vendor_ids,
         export: "",
+        order_status: [],
       },
+      orderStatusList: [
+        { name: "未付款", type: 0 },
+        { name: "待取餐", type: 1 },
+        { name: "已完成", type: 2 },
+        { name: "申请退款", type: 3 },
+        { name: "驳回退款", type: 4 },
+        { name: "退款成功", type: 5 },
+      ],
       loading: false,
       total: 0,
+      orderDialog:false
     };
   },
   created() {
