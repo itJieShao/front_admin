@@ -13,7 +13,7 @@
           <div class="y_item">
             <span v-if="scope.row.book_at" class="y_tip">预</span>
             <span>{{ scope.row.id }}</span>
-          </div>  
+          </div>
         </template>
       </el-table-column>
 
@@ -57,7 +57,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="单价">
+      <el-table-column width="100" align="center" label="单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.sale_price }}
@@ -65,19 +65,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="应付总价">
+      <el-table-column width="100" align="center" label="应付总价">
         <template slot-scope="scope">
           <span>{{ scope.row.total_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="优惠">
+      <el-table-column width="100" align="center" label="优惠">
         <template slot-scope="scope">
           <span>{{ scope.row.favourable_price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="实付单价">
+      <el-table-column width="100" align="center" label="实付单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.discount_price }}
@@ -85,9 +85,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="实付总价">
+      <el-table-column width="100" align="center" label="实付总价">
         <template slot-scope="scope">
           <span>{{ scope.row.real_price }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="160" align="center" label="预约日期">
+        <template slot-scope="scope">
+          <span>{{ scope.row.book_at ? scope.row.book_at : "无" }}</span>
         </template>
       </el-table-column>
 
@@ -171,7 +177,7 @@ export default {
 };
 </script>
 <style scoped>
-.y_item{
+.y_item {
   display: flex;
   align-items: center;
   justify-content: center;

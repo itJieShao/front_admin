@@ -437,7 +437,7 @@ export default {
   methods: {
     //复制菜单
     copyMenu(index) {
-      this.copyMenuItem = this.formData.menu_data[index];
+      this.copyMenuItem = JSON.parse(JSON.stringify(this.formData.menu_data[index]));
       this.$notify({
         title: "成功",
         message: "复制成功",
@@ -460,6 +460,7 @@ export default {
     },
     //清空菜单
     clearMenu(index) {
+      if(!this.formData.menu_data[index].length) return
       this.clearMenuDialog = true;
       this.clearIndex = index;
     },
