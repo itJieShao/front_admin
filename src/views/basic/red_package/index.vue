@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="4">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchList" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -43,6 +43,7 @@
       fit
       highlight-current-row
       style="width: 100%"
+      ref="multipleTable"
     >
       <!-- <el-table-column type="selection" fixed="left" align="center" width="55">
       </el-table-column> -->
@@ -120,7 +121,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="250" fixed="right" align="center" label="操作">
+      <el-table-column width="300" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status == 1"
@@ -135,6 +136,13 @@
           >
           <el-button size="mini" @click="goDetail(scope.row.coupon_id)"
             >详情</el-button
+          >
+          <el-button
+            v-if="scope.row.status == 1"
+            type="success"
+            size="mini"
+            @click="openSendCouponDialog(scope.row.coupon_id)"
+            >发券</el-button
           >
         </template>
       </el-table-column>
@@ -187,8 +195,9 @@
           <el-form-item label="有效期">
             <el-date-picker
               style="width: 100%"
-              value-format="yyyy-MM-dd"
-              type="date"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
               placeholder="请选择有效期"
               v-model="item.valid_at"
               :picker-options="expireTimeOption"
@@ -216,8 +225,9 @@
         <el-form-item label="有效期">
           <el-date-picker
             style="width: 100%"
-            value-format="yyyy-MM-dd"
-            type="date"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
             placeholder="请选择有效期"
             v-model="formData.valid_at"
             :picker-options="expireTimeOption"
@@ -270,8 +280,9 @@
         <el-form-item label="有效期">
           <el-date-picker
             style="width: 100%"
-            value-format="yyyy-MM-dd"
-            type="date"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
             placeholder="请选择有效期"
             v-model="formData.valid_at"
             :picker-options="expireTimeOption"
@@ -284,6 +295,219 @@
         <el-button type="primary" @click="addCoupon">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+      <el-form label-width="100px" v-if="formData.type == 2">
+        <el-form-item label="门店">
+          <el-select
+            style="width: 100%"
+            v-model="formData.vendor_id"
+            filterable
+            placeholder="请选择使用满减优惠的门店"
+          >
+            <el-option
+              v-for="item in storeList"
+              :key="item.vendor_id"
+              :label="item.vendor_name"
+              :value="item.vendor_id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <template v-for="item in formData.full_reduction_data">
+          <el-divider />
+          <el-form-item label="名称">
+            <el-input
+              placeholder="请输入满减优惠的名称"
+              v-model="item.name"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="满足金额">
+            <el-input
+              placeholder="请输入满足使用条件的金额"
+              v-model="item.condition_price"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="优惠金额">
+            <el-input
+              placeholder="请输入优惠的金额"
+              v-model="item.favourable_price"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="有效期">
+            <el-date-picker
+              style="width: 100%"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="请选择有效期"
+              v-model="item.valid_at"
+              :picker-options="expireTimeOption"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </template>
+        <el-button size="mini" type="success" @click="addItem"
+          >继续添加</el-button
+        >
+      </el-form>
+      <el-form label-width="100px" v-else-if="formData.type == 1">
+        <el-form-item label="名称">
+          <el-input
+            placeholder="请输入折扣名称"
+            v-model="formData.name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="折扣率">
+          <el-input
+            placeholder="请输入0-1的折扣率"
+            v-model="formData.discount"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="有效期">
+          <el-date-picker
+            style="width: 100%"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
+            placeholder="请选择有效期"
+            v-model="formData.valid_at"
+            :picker-options="expireTimeOption"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <el-form label-width="100px" v-else>
+        <el-form-item label="名称">
+          <el-input
+            placeholder="请输入优惠券/红包的名称"
+            v-model="formData.name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select
+            style="width: 100%"
+            v-model="formData.type"
+            filterable
+            placeholder="请选择优惠券或者红包"
+          >
+            <el-option label="红包" value="3"></el-option>
+            <el-option label="优惠券" value="4"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="满足金额" v-if="formData.type == 4">
+          <el-input
+            placeholder="请输入满足使用条件的金额"
+            v-model="formData.condition_price"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="金额">
+          <el-input
+            placeholder="请输入优惠券/红包的金额"
+            v-model="formData.favourable_price"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="数量">
+          <el-input
+            placeholder="请输入优惠券/红包的数量"
+            v-model="formData.num"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="限领数量">
+          <el-input
+            placeholder="请输入每个人领取的数量"
+            v-model="formData.receive_num_limit"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="有效期">
+          <el-date-picker
+            style="width: 100%"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
+            placeholder="请选择有效期"
+            v-model="formData.valid_at"
+            :picker-options="expireTimeOption"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCoupon">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog width="65%" title="发券" :visible.sync="sendCouponDialog">
+      <el-row :gutter="20" style="margin-bottom: 20px">
+        <el-col :span="10">
+          <el-input
+            v-model="listData1.condition"
+            placeholder="请输入搜索内容"
+          ></el-input>
+        </el-col>
+        <el-col :span="10">
+          <el-button @click="searchUser" type="primary" icon="el-icon-search"
+            >搜索</el-button
+          >
+        </el-col>
+        <el-col :span="4" style="display: flex; justify-content: flex-end">
+          <el-button type="success" icon="el-icon-plus" @click="sendCoupon"
+            >确定发券</el-button
+          >
+        </el-col>
+      </el-row>
+      <el-table
+        v-loading="userLoading"
+        :data="userList"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column fixed align="center" type="selection" width="55">
+        </el-table-column>
+        <el-table-column align="center" label="用户ID">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="200" align="center" label="用户头像">
+          <template slot-scope="scope">
+            <img
+              style="width: 150px; height: 150px"
+              :src="scope.row.headImg"
+              alt=""
+            />
+          </template>
+        </el-table-column>
+
+        <el-table-column width="200" align="center" label="昵称">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="200" align="center" label="微信号">
+          <template slot-scope="scope">
+            <span>{{ scope.row.WeChatNum }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="180" align="center" label="手机号码">
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination
+        v-show="userTotal > 0"
+        :total="userTotal"
+        :page.sync="listData1.page"
+        :limit.sync="listData1.page_size"
+        @pagination="getUserList"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -293,6 +517,8 @@ import {
   couponList,
   disableCoupon,
   addCoupon,
+  userList,
+  sendCoupon,
 } from "@/api/basic";
 import Pagination from "@/components/Pagination";
 export default {
@@ -304,6 +530,12 @@ export default {
         page: 1,
         page_size: 10,
         name: "",
+      },
+      listData1: {
+        page: 1,
+        page_size: 10,
+        condition: "",
+        type: 1,
       },
       loading: true,
       total: 0,
@@ -321,7 +553,7 @@ export default {
           { name: "", condition_price: "", favourable_price: "", valid_at: "" },
         ],
       },
-      defaultFormData:{}, //formData默认数据，为了能在添加优惠红包后清空表单数据
+      defaultFormData: {}, //formData默认数据，为了能在添加优惠红包后清空表单数据
       dialogTitle: "",
       dialogFormVisible: false,
       expireTimeOption: {
@@ -329,6 +561,12 @@ export default {
           return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
         },
       },
+      sendCouponDialog: false,
+      userList: [],
+      userTotal: 0,
+      userLoading: false,
+      customer_id: "",
+      coupon_ids: "",
     };
   },
   components: { Pagination },
@@ -336,8 +574,54 @@ export default {
     this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
     this.getList();
     this.getStoreList();
+    this.getUserList();
   },
   methods: {
+    //搜索列表
+    searchList() {
+      this.listData.page = 1;
+      this.getList();
+    },
+    //搜索用户
+    searchUser() {
+      this.listData1.page = 1;
+      this.getUserList();
+    },
+    openSendCouponDialog(coupon_id) {
+      this.coupon_ids = coupon_id;
+      this.sendCouponDialog = true;
+    },
+    handleSelectionChange(val) {
+      let resArr = [];
+      val.forEach((item) => resArr.push(item.id));
+      this.customer_id = resArr.join(",");
+    },
+    //确定发券
+    sendCoupon() {
+      sendCoupon({
+        coupon_ids: this.coupon_ids,
+        customer_id: this.customer_id,
+      }).then((res) => {
+        if (res) {
+          this.sendCouponDialog = false;
+          this.$refs.multipleTable.clearSelection();
+          this.$notify({
+            title: "成功",
+            message: "发送成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
+    getUserList() {
+      this.userLoading = true;
+      userList(this.listData1).then((res) => {
+        this.userList = res.list;
+        this.userTotal = res.count;
+        this.userLoading = false;
+      });
+    },
     openCouponDialog(type) {
       this.formData.type = type || "";
       if (type == 1) {

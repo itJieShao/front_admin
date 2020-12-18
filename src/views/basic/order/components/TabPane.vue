@@ -1,11 +1,13 @@
 <template>
   <div>
-    <!-- <el-col
-      :span="24"
-      style="margin-bottom: 20px; display: flex; justify-content: flex-end"
-    >
-      <el-button type="success" @click="orderDialog = true">筛选</el-button>
-    </el-col> -->
+    <el-row>
+      <el-col
+        :span="24"
+        style="margin-bottom: 20px; display: flex; justify-content: flex-end"
+      >
+        <el-button type="success" @click="orderDialog = true">筛选</el-button>
+      </el-col>
+    </el-row>
     <el-table
       v-loading="loading"
       :data="list"
@@ -137,7 +139,7 @@
       :limit.sync="listData.page_size"
       @pagination="getList"
     />
-    <el-dialog title="订单筛选" :visible.sync="orderDialog" center>
+    <el-dialog title="订单筛选" :visible.sync="orderDialog">
       <el-form label-width="80px">
         <el-form-item label="订单状态">
           <el-checkbox-group v-model="listData.order_status">
@@ -149,9 +151,67 @@
             >
           </el-checkbox-group>
         </el-form-item>
+        <el-form-item label="取餐时间">
+          <el-date-picker v-model="listData.take_at_start" type="date" placeholder="开始日期">
+          </el-date-picker>
+          <el-date-picker
+            style="margin-left: 30px"
+            v-model="listData.take_at_end"
+            type="date"
+            placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <!-- <el-form-item label="用餐时段">
+          <el-checkbox-group v-model="listData.order_status">
+            <el-checkbox
+              v-for="item in orderStatusList"
+              :key="item.type"
+              :label="item.type"
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item> -->
+        <el-form-item label="下单时间">
+          <el-date-picker
+            v-model="listData.created_at_start"
+            type="datetime"
+            placeholder="开始时间"
+            format="yyyy-MM-dd HH:mm"
+          >
+          </el-date-picker>
+          <el-date-picker
+            style="margin-left: 30px"
+            v-model="listData.created_at_end"
+            type="datetime"
+            placeholder="结束时间"
+            format="yyyy-MM-dd HH:mm"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="优惠">
+          <el-radio v-model="listData.has_favourable" :label="1">有</el-radio>
+          <el-radio v-model="listData.has_favourable" :label="2">无</el-radio>
+          <el-form-item v-show="listData.has_favourable == 1">
+            <el-checkbox-group v-model="listData.order_status">
+              <el-checkbox
+                v-for="item in discounts"
+                :key="item.type"
+                :label="item.type"
+                >{{ item.name }}</el-checkbox
+              >
+              <el-form-item label-width="100px" label="折扣金额区间">
+                <div style="display: flex">
+                  <el-input v-model="listData.discount_price_start" style="margin-right: 15px"></el-input> 至
+                  <el-input v-model="listData.discount_price_end" style="margin: 0 15px"></el-input> 元
+                </div>
+              </el-form-item>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="clearMenuDialog = false">取 消</el-button>
+        <el-button type="danger">清 空</el-button>
         <el-button type="primary" @click="clearBtn(clearIndex)"
           >确 定</el-button
         >
@@ -180,6 +240,14 @@ export default {
         vendor_ids: this.vendor_ids,
         export: "",
         order_status: [],
+        has_favourable:2,
+        discounts:[],
+        discount_price_start:"",
+        discount_price_end:"",
+        take_at_start:"",
+        take_at_end:"",
+        created_at_start:"",
+        created_at_end:"",
       },
       orderStatusList: [
         { name: "未付款", type: 0 },
@@ -189,9 +257,15 @@ export default {
         { name: "驳回退款", type: 4 },
         { name: "退款成功", type: 5 },
       ],
+      discountsList: [
+        { name: "折扣", type: 1 },
+        { name: "满减", type: 2 },
+        { name: "优惠卷", type: 3 },
+        { name: "红包", type: 4 },
+      ],
       loading: false,
       total: 0,
-      orderDialog:false
+      orderDialog: false,
     };
   },
   created() {
