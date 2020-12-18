@@ -601,6 +601,7 @@ export default {
       sendCoupon({
         coupon_ids: this.coupon_ids,
         customer_id: this.customer_id,
+        receive_type: 2,
       }).then((res) => {
         if (res) {
           this.sendCouponDialog = false;
