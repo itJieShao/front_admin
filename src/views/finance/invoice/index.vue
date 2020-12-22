@@ -82,7 +82,7 @@
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status" type="success" effect="dark">
+          <el-tag v-if="scope.row.status == 2" type="success" effect="dark">
             已开票
           </el-tag>
           <el-tag v-else type="danger" effect="dark"> 未开票 </el-tag>
