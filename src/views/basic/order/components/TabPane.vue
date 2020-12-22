@@ -206,6 +206,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="优惠">
+          <el-radio v-model="listData.has_favourable" :label="">全部</el-radio>
           <el-radio v-model="listData.has_favourable" :label="1">有</el-radio>
           <el-radio v-model="listData.has_favourable" :label="2">无</el-radio>
           <el-form-item v-show="listData.has_favourable == 1">
