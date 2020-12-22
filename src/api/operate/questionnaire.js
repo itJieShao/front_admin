@@ -53,3 +53,12 @@ export function questionnaireDisable(data) {
         data
     })
 }
+
+//最近一周客户订单数据
+export function getOrderData(data) {
+    return request({
+        url: '/order/questionnaire/get-order-data',
+        method: 'post',
+        data
+    })
+}

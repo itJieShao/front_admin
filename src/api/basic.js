@@ -411,6 +411,14 @@ export function couponDetail(data) {
     data
   })
 }
+//发券
+export function sendCoupon(data) {
+  return request({
+    url: '/order/coupon/receive',
+    method: 'post',
+    data
+  })
+}
 //优惠红包管理模块 --- end
 
 //会员卡管理模块 --- start

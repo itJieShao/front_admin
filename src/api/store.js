@@ -170,3 +170,12 @@ export function addEmployeeTask(data) {
         data
     })
 }
+
+//获取时段列表
+export function getTimeTypeData(data) {
+    return request({
+        url: '/vendor/time-type/get-data',
+        method: 'post',
+        data
+    })
+}

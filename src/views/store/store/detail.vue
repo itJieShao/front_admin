@@ -130,7 +130,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
-            <p>{{ detail.business_days_name.join('、') }}</p>
+            <p>{{ detail.business_days_name.join("、") }}</p>
           </div>
         </el-card>
       </el-col>
@@ -153,195 +153,161 @@
     </el-row>
     <el-divider />
     <el-row :gutter="12">
-      <el-col :span="4" v-if="detail.breakfast_finish_time">
+      <el-col :span="4" v-for="item in detail.cook_finish_time">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>早餐</p>
-            <p>{{ detail.breakfast_finish_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4" v-if="detail.breakfast_tea_finish_time">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>早茶</p>
-            <p>{{ detail.breakfast_tea_finish_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4" v-if="detail.lunch_finish_time">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>午餐</p>
-            <p>{{ detail.lunch_finish_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4" v-if="detail.tea_finish_time">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>下午茶</p>
-            <p>{{ detail.tea_finish_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4" v-if="detail.dinner_finish_time">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>晚餐</p>
-            <p>{{ detail.dinner_finish_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4" v-if="detail.night_finish_time">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>夜宵</p>
-            <p>{{ detail.night_finish_time }}</p>
+            <p>{{ item.name }}</p>
+            <p>{{ item.time }}</p>
           </div>
         </el-card>
       </el-col>
     </el-row>
-    <el-divider />
-    <el-card shadow="always" v-if="list.length">
-      <div>
-        <h4>设备列表</h4>
-        <el-tabs
-          type="border-card"
-          style="margin-top: 20px"
-          v-loading="loading"
-        >
-          <el-tab-pane v-for="item in list" :label="item.device_alias">
-            <el-row :gutter="12">
-              <el-col :span="20">
-                <el-row :gutter="12">
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>设备ID</p>
-                        <p>{{ item.device_no }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>设备名称</p>
-                        <p>{{ item.device_alias }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>设备IMIE</p>
-                        <p>{{ item.device_imie }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>设备电话号码</p>
-                        <p>{{ item.device_phone }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>阿里云设备名称</p>
-                        <p>{{ item.iot_device_name }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="12" style="margin-top: 15px">
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>启动状态</p>
-                        <p>{{ item.online ? "在线" : "离线" }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-card shadow="always">
-                      <div class="item_flex">
-                        <p>关门状态</p>
-                        <p>{{ item.close_status ? "关门" : "未关门" }}</p>
-                      </div>
-                    </el-card>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="4">
-                <vue-qr :text="item.device_no" :size="200"></vue-qr>
-              </el-col>
-            </el-row>
-            <h5 style="margin-top: 40px">单元格列表</h5>
-            <el-divider />
-            <el-table :data="item.cell" style="width: 100%">
-              <!-- <el-table-column type="expand">
+    <template v-if="list.length">
+      <el-divider />
+      <el-card shadow="always">
+        <div>
+          <h4>设备列表</h4>
+          <el-tabs
+            type="border-card"
+            style="margin-top: 20px"
+            v-loading="loading"
+          >
+            <el-tab-pane v-for="item in list" :label="item.device_alias">
+              <el-row :gutter="12">
+                <el-col :span="20">
+                  <el-row :gutter="12">
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>设备ID</p>
+                          <p>{{ item.device_no }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>设备名称</p>
+                          <p>{{ item.device_alias }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>设备IMIE</p>
+                          <p>{{ item.device_imie }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>设备电话号码</p>
+                          <p>{{ item.device_phone }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>阿里云设备名称</p>
+                          <p>{{ item.iot_device_name }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="12" style="margin-top: 15px">
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>启动状态</p>
+                          <p>{{ item.online ? "在线" : "离线" }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-card shadow="always">
+                        <div class="item_flex">
+                          <p>关门状态</p>
+                          <p>{{ item.close_status ? "关门" : "未关门" }}</p>
+                        </div>
+                      </el-card>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="4">
+                  <vue-qr :text="item.device_no" :size="200"></vue-qr>
+                </el-col>
+              </el-row>
+              <h5 style="margin-top: 40px">单元格列表</h5>
+              <el-divider />
+              <el-table :data="item.cell" style="width: 100%">
+                <!-- <el-table-column type="expand">
                 <template slot-scope="scope">
                   <p v-if="scope.row.connect_status" class="no_cell_font">
                     当前单元格无法联网，请检查设备！
                   </p>
                 </template>
               </el-table-column> -->
-              <el-table-column align="center" label="编号" prop="no">
-              </el-table-column>
-              <el-table-column align="center" label="单元格名称" prop="alias">
-              </el-table-column>
-              <el-table-column align="center" label="规格" prop="spec_type">
-              </el-table-column>
-              <el-table-column align="center" label="最大容量" prop="spec_num">
-              </el-table-column>
-              <!-- <el-table-column align="center" label="库存" prop=""> </el-table-column> -->
-              <el-table-column
-                align="center"
-                label="实时温度A"
-                prop="temperature_a"
-              >
-              </el-table-column>
-              <el-table-column
-                align="center"
-                label="实时温度B"
-                prop="temperature_b"
-              >
-              </el-table-column>
-              <el-table-column
-                align="center"
-                width="200"
-                label="最近上报时间"
-                prop="updated_at"
-              >
-              </el-table-column>
-              <el-table-column align="center" label="连线状态">
-                <template slot-scope="scope">
-                  <el-tag
-                    :type="scope.row.connect_status ? 'success' : 'danger'"
-                  >
-                    {{ scope.row.connect_status ? "在线" : "离线" }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column width="200" align="center" label="二维码">
-                <template slot-scope="scope">
-                  <vue-qr :text="scope.row.no" :size="150"></vue-qr>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </el-card>
+                <el-table-column align="center" label="编号" prop="no">
+                </el-table-column>
+                <el-table-column align="center" label="单元格名称" prop="alias">
+                </el-table-column>
+                <el-table-column align="center" label="规格" prop="spec_type">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  label="最大容量"
+                  prop="spec_num"
+                >
+                </el-table-column>
+                <!-- <el-table-column align="center" label="库存" prop=""> </el-table-column> -->
+                <el-table-column
+                  align="center"
+                  label="实时温度A"
+                  prop="temperature_a"
+                >
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  label="实时温度B"
+                  prop="temperature_b"
+                >
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  width="200"
+                  label="最近上报时间"
+                  prop="updated_at"
+                >
+                </el-table-column>
+                <el-table-column align="center" label="连线状态">
+                  <template slot-scope="scope">
+                    <el-tag
+                      :type="scope.row.connect_status ? 'success' : 'danger'"
+                    >
+                      {{ scope.row.connect_status ? "在线" : "离线" }}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column width="200" align="center" label="二维码">
+                  <template slot-scope="scope">
+                    <vue-qr :text="scope.row.no" :size="150"></vue-qr>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </el-card>
+    </template>
     <!-- <echart /> -->
   </div>
 </template>
 
 <script>
-import { vendorDetail, vendorDeviceList } from "@/api/store";
+import { vendorDetail, vendorDeviceList, getTimeTypeData } from "@/api/store";
 import vueQr from "vue-qr";
 import Echart from "@/components/Echart";
 export default {
@@ -352,6 +318,7 @@ export default {
   data() {
     return {
       detail: {},
+      timeList: [],
       listData: {
         vendor_id: "",
         page: 1,
@@ -362,14 +329,29 @@ export default {
       total: 0,
     };
   },
-  created() {
-    this.listData.vendor_id = this.$route.query.vendor_id;
-    this.getDetail();
+  async created() {
     this.getVendorDeviceList();
+    this.listData.vendor_id = this.$route.query.vendor_id;
+    await this.getTimeTypeData();
+    this.getDetail();
   },
   methods: {
+    //获取门店用餐时段列表
+    getTimeTypeData() {
+      return getTimeTypeData().then((res) => {
+        res.forEach((item) => (item.select = true));
+        this.timeList = res;
+      });
+    },
     getDetail() {
       vendorDetail({ vendor_id: this.$route.query.vendor_id }).then((res) => {
+        res.cook_finish_time.forEach((item) => {
+          this.timeList.forEach((it) => {
+            if (item.time_type_id == it.id) {
+              item.name = it.name;
+            }
+          });
+        });
         this.detail = res;
       });
     },

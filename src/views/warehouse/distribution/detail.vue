@@ -144,20 +144,20 @@
     <el-card shadow="always">
       <p class="item_title">烹饪盘列表</p>
       <el-table :data="detail.product_data" stripe style="width: 100%">
-        <el-table-column prop="plate_name" label="烹饪盘ID" width="180">
+        <el-table-column align="center" prop="plate_name" label="烹饪盘ID">
         </el-table-column>
-        <el-table-column prop="plate_name" label="单品名称" width="180">
+        <el-table-column align="center" prop="product_name" label="单品名称">
         </el-table-column>
-        <el-table-column prop="package_box_name" label="包装规格">
+        <el-table-column align="center" prop="package_box_name" label="包装规格">
         </el-table-column>
-        <el-table-column prop="product_num" label="烹饪盘单品数量">
+        <el-table-column align="center" prop="product_num" label="烹饪盘单品数量">
         </el-table-column>
-        <el-table-column prop="device_cell_no" label="分配设备">
+        <el-table-column align="center" prop="device_no" label="分配设备">
         </el-table-column>
-        <el-table-column prop="address" label="分配单元格"> </el-table-column>
-        <el-table-column prop="check_status" label="取货状态">
+        <el-table-column align="center" prop="device_cell_no" label="分配单元格"> </el-table-column>
+        <el-table-column align="center" prop="check_status" label="取货状态">
         </el-table-column>
-        <el-table-column prop="distribution_status" label="入柜状态">
+        <el-table-column align="center" prop="distribution_status" label="入柜状态">
         </el-table-column>
       </el-table>
     </el-card>

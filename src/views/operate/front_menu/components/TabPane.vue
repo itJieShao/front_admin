@@ -136,6 +136,17 @@
             >
           </div>
         </div>
+        <div style="display: flex; margin-right: 15px">
+          <el-button @click="copyMenu(index)" type="success" size="mini"
+            >拷贝</el-button
+          >
+          <el-button @click="pasteMenu(index)" type="primary" size="mini"
+            >粘贴</el-button
+          >
+          <el-button @click="clearMenu(index)" type="danger" size="mini"
+            >清空</el-button
+          >
+        </div>
       </div>
     </div>
     <el-dialog title="历史版本" :visible.sync="historyMenuListDialog">
@@ -152,9 +163,7 @@
         </el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="seeMenu(scope.row)"
-              >查看</el-button
-            >
+            <el-button size="mini" @click="seeMenu(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -264,6 +273,24 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
+    <el-dialog title="提示" :visible.sync="pasteMenuDialog" width="30%" center>
+      <span>是否确定覆盖当前小程序菜单？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="pasteMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="pasteBtn(pasteIndex)"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog title="提示" :visible.sync="clearMenuDialog" width="30%" center>
+      <span>是否确定清空当前小程序菜单？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="clearMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="clearBtn(clearIndex)"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -360,9 +387,14 @@ export default {
       releaseMenuDialog: false,
       release_name: "",
       label_image: "",
-      label_image_file:[],
+      label_image_file: [],
       dialogImageUrl: "",
       dialogVisible: false,
+      copyMenuItem: [], //拷贝的菜单数据
+      pasteMenuDialog: false,
+      pasteIndex: 0, //拷贝菜单下标
+      clearMenuDialog: false,
+      clearIndex: 0, //清除菜单下标
     };
   },
   computed: {
@@ -389,13 +421,13 @@ export default {
     "formData.menu_type"() {
       this.getMenuDetail();
     },
-    dialogTypeVisible(flag){
-      if (!flag){
+    dialogTypeVisible(flag) {
+      if (!flag) {
         this.type_name = "";
         this.label_image = "";
         this.label_image_file = [];
       }
-    }
+    },
   },
   created() {
     this.getVendorPackageList();
@@ -403,6 +435,39 @@ export default {
     this.getHistoryMenu();
   },
   methods: {
+    //复制菜单
+    copyMenu(index) {
+      this.copyMenuItem = JSON.parse(JSON.stringify(this.formData.menu_data[index]));
+      this.$notify({
+        title: "成功",
+        message: "复制成功",
+        type: "success",
+        duration: 1000,
+      });
+    },
+    //粘贴菜单
+    pasteMenu(index) {
+      if (this.formData.menu_data[index].length) {
+        this.pasteMenuDialog = true;
+        this.pasteIndex = index;
+      } else {
+        this.pasteBtn(index);
+      }
+    },
+    pasteBtn(index) {
+      this.$set(this.formData.menu_data, index, this.copyMenuItem);
+      this.pasteMenuDialog = false;
+    },
+    //清空菜单
+    clearMenu(index) {
+      if(!this.formData.menu_data[index].length) return
+      this.clearMenuDialog = true;
+      this.clearIndex = index;
+    },
+    clearBtn() {
+      this.formData.menu_data[this.clearIndex] = [];
+      this.clearMenuDialog = false;
+    },
     upNumCase(num) {
       let day_num = "";
       switch (num) {
@@ -532,7 +597,8 @@ export default {
         });
       }
       if (
-        !this.typeEdit && this.formData.menu_data[this.menu_data_index].find(
+        !this.typeEdit &&
+        this.formData.menu_data[this.menu_data_index].find(
           (item) => this.type_name == item.label
         )
       ) {
@@ -716,7 +782,7 @@ img:not([src]) {
     align-items: flex-end;
     justify-content: flex-end;
     .day_tip {
-      margin: 0 20px 10px 0;
+      margin: 15px 20px 10px 0;
       font-size: 14px;
       color: #666;
     }

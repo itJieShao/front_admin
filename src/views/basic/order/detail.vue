@@ -1,6 +1,9 @@
 <template>
   <div class="app-container" v-if="JSON.stringify(detail) != '{}'">
-    <h2>订单详情</h2>
+    <div style="display: flex; align-items: center">
+      <h2>订单详情</h2>
+      <span class="y_tip" v-if="detail.book_at">预</span>
+    </div>
     <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always"> 订单ID：{{ detail.id }} </el-card>
@@ -42,6 +45,17 @@
       </el-col>
       <el-col :span="8">
         <el-card shadow="always"> 下单时间：{{ detail.created_at }} </el-card>
+      </el-col>
+    </el-row>
+    <el-row style="margin-top: 15px" :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always"> 订单类型：{{ detail.book_at?"预约订单":"当天订单" }} </el-card>
+      </el-col>
+      <el-col :span="6" v-if="detail.book_at">
+        <el-card shadow="always"> 预约日期：{{ detail.book_at }} </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card shadow="always"> 手机号码：{{ detail.customer_mobile }} </el-card>
       </el-col>
     </el-row>
     <el-row
@@ -212,6 +226,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.y_tip {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background-color: sandybrown;
+  color: #fff;
+  margin-left: 10px;
+}
 p {
   margin: 0;
 }
