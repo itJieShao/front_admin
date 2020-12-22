@@ -217,7 +217,7 @@
                 :label="item.type"
                 >{{ item.name }}</el-checkbox
               >
-              <el-form-item label-width="100px" label="折扣金额区间">
+              <!-- <el-form-item label-width="100px" label="优惠金额区间">
                 <div style="display: flex">
                   <el-input
                     v-model="listData.discount_price_start"
@@ -230,7 +230,7 @@
                   ></el-input>
                   元
                 </div>
-              </el-form-item>
+              </el-form-item> -->
             </el-checkbox-group>
           </el-form-item>
         </el-form-item>
