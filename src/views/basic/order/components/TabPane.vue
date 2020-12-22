@@ -278,6 +278,7 @@ export default {
       orderStatusList: [
         { name: "未付款", type: 0 },
         { name: "待取餐", type: 1 },
+        { name: "部分取餐", type: 2 },
         { name: "已完成", type: 3 },
         { name: "申请退款", type: 4 },
         { name: "驳回退款", type: 6 },
