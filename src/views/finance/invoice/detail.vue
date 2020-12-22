@@ -216,7 +216,7 @@
       :limit="1"
       style="margin: 15px 0"
       class="upload-demo"
-      action="/invoice/invoice/upload-invoice-file"
+      action="/api/invoice/invoice/upload-invoice-file"
       multiple
     >
       <el-button size="small" type="success">添加电子发票文件</el-button>

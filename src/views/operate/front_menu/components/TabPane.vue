@@ -2,21 +2,6 @@
   <div>
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="4">
-        <el-select
-          style="width: 100%"
-          v-model="formData.time_type"
-          placeholder="请选择就餐时段"
-        >
-          <el-option
-            v-for="item in timeList"
-            :key="item.type"
-            :label="item.name"
-            :value="item.type"
-          >
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4">
         <el-select style="width: 100%" v-model="formData.menu_type">
           <el-option
             v-for="item in MenuType"
@@ -35,7 +20,7 @@
           >发布</el-button
         >
       </el-col>
-      <el-col :span="12" style="display: flex; justify-content: flex-end">
+      <el-col :span="16" style="display: flex; justify-content: flex-end">
         <el-button @click="historyMenuListDialog = true" type="warning"
           >历史版本</el-button
         >
@@ -89,6 +74,7 @@
                     class="el-icon-error"
                     @click="delGoods(index, idx, idxc)"
                   ></i>
+                  <p class="time_type_font">{{itc.time_type_id | time_type_name(timeList)}}</p>
                   <img class="goods_img" :src="itc.main_image" alt="" />
                   <div class="goods_sth">
                     <p class="goods_title">
@@ -221,43 +207,58 @@
           >
         </el-col>
       </el-row>
-      <el-table
-        ref="multipleTable"
-        :data="packageList"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
+      <el-tabs
+        v-model="timeTabActive"
+        style="margin-top: 15px"
+        type="border-card"
       >
-        <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column label="套餐ID" align="center">
-          <template slot-scope="scope">{{
-            scope.row.vendor_package_id
-          }}</template>
-        </el-table-column>
-        <el-table-column width="200" label="套餐图片" align="center">
-          <template slot-scope="scope">
-            <img style="width: 150px" :src="scope.row.main_image" alt="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="套餐名称" align="center">
-          <template slot-scope="scope">{{ scope.row.name }}</template>
-        </el-table-column>
-        <el-table-column label="标签" align="center">
-          <template slot-scope="scope">{{
-            scope.row.package_label_name
-          }}</template>
-        </el-table-column>
-        <el-table-column label="进货价" align="center">
-          <template slot-scope="scope">{{ scope.row.purchase_price }}</template>
-        </el-table-column>
-      </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        :page.sync="listData.page"
-        :limit.sync="listData.page_size"
-        @pagination="getVendorPackageList"
-      />
+        <el-tab-pane
+          v-for="item in timeList"
+          :key="item.id"
+          :label="item.name"
+          :name="item.id"
+        >
+          <el-table
+            ref="multipleTable"
+            :data="packageList"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="55"> </el-table-column>
+            <el-table-column label="套餐ID" align="center">
+              <template slot-scope="scope">{{
+                scope.row.vendor_package_id
+              }}</template>
+            </el-table-column>
+            <el-table-column width="200" label="套餐图片" align="center">
+              <template slot-scope="scope">
+                <img style="width: 150px" :src="scope.row.main_image" alt="" />
+              </template>
+            </el-table-column>
+            <el-table-column label="套餐名称" align="center">
+              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+            <el-table-column label="标签" align="center">
+              <template slot-scope="scope">{{
+                scope.row.package_label_name
+              }}</template>
+            </el-table-column>
+            <el-table-column label="进货价" align="center">
+              <template slot-scope="scope">{{
+                scope.row.purchase_price
+              }}</template>
+            </el-table-column>
+          </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="listData.page"
+            :limit.sync="listData.page_size"
+            @pagination="getVendorPackageList"
+          />
+        </el-tab-pane>
+      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">返回</el-button>
         <el-button type="primary" @click="addMenu">添加到菜单</el-button>
@@ -295,6 +296,7 @@
 </template>
 <script>
 import { vendorPackageList } from "@/api/basic";
+import { getTimeTypeData } from "@/api/store";
 import {
   menuDetail,
   saveMenu,
@@ -317,32 +319,8 @@ export default {
   data() {
     return {
       pageLoading: false,
-      timeList: [
-        {
-          type: 1,
-          name: "早餐",
-        },
-        {
-          type: 2,
-          name: "早茶",
-        },
-        {
-          type: 3,
-          name: "午餐",
-        },
-        {
-          type: 4,
-          name: "下午茶",
-        },
-        {
-          type: 5,
-          name: "晚餐",
-        },
-        {
-          type: 6,
-          name: "宵夜",
-        },
-      ],
+      timeList: [],
+      timeTabActive: "",
       MenuType: [
         {
           type: 1,
@@ -429,15 +407,30 @@ export default {
       }
     },
   },
+  filters:{
+    time_type_name(id,timeList){
+      return timeList.find(item => item.id == id).name;
+    }
+  },
   created() {
     this.getVendorPackageList();
     this.getMenuDetail();
     this.getHistoryMenu();
+    this.getTimeTypeData();
   },
   methods: {
+    //获取门店用餐时段列表
+    getTimeTypeData() {
+      getTimeTypeData().then((res) => {
+        this.timeTabActive = res[0].id;
+        this.timeList = res;
+      });
+    },
     //复制菜单
     copyMenu(index) {
-      this.copyMenuItem = JSON.parse(JSON.stringify(this.formData.menu_data[index]));
+      this.copyMenuItem = JSON.parse(
+        JSON.stringify(this.formData.menu_data[index])
+      );
       this.$notify({
         title: "成功",
         message: "复制成功",
@@ -460,7 +453,7 @@ export default {
     },
     //清空菜单
     clearMenu(index) {
-      if(!this.formData.menu_data[index].length) return
+      if (!this.formData.menu_data[index].length) return;
       this.clearMenuDialog = true;
       this.clearIndex = index;
     },
@@ -650,24 +643,34 @@ export default {
     },
     //选择门店套餐
     handleSelectionChange(val) {
+      val.forEach((item) => {
+        item.time_type_id = this.timeTabActive; 
+      });
       this.vendorpackageChecked = val;
     },
     //添加门店套餐到菜单
     addMenu() {
       let obj = {};
+      let cache = [];
       let arr = this.formData.menu_data[this.menu_index][
         this.vendor_package_index
       ].vendor_package_data.concat(this.vendorpackageChecked);
+      for (const t of arr) {
+        if (
+          cache.find(
+            (c) =>
+              c.time_type_id === t.time_type_id && c.vendor_package_id === t.vendor_package_id
+          )
+        ) {
+          continue;
+        }
+        cache.push(t);
+      }
       this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package_data = arr.reduce((cur, next) => {
-        obj[next.vendor_package_id]
-          ? ""
-          : (obj[next.vendor_package_id] = true && cur.push(next));
-        return cur;
-      }, []);
+      ].vendor_package_data = JSON.parse(JSON.stringify(cache));
       this.dialogTableVisible = false;
-      this.$refs.multipleTable.clearSelection();
+      //this.$refs.multipleTable.clearSelection();
     },
     //删除门店套餐
     delGoods(index, idx, idxc) {
@@ -699,14 +702,14 @@ export default {
       aData.menu_data.forEach((item, index) => {
         menu_data.push([]);
         item.forEach((it, idx) => {
-          let vendor_package_ids = [];
+          let vendor_package_data = [];
           it.vendor_package_data.forEach((itd) => {
-            vendor_package_ids.push(itd.vendor_package_id);
+            vendor_package_data.push({time_type_id:itd.time_type_id,vendor_package_id:itd.vendor_package_id});
           });
           menu_data[index].push({
             label: it.label,
             label_image: it.label_image,
-            vendor_package_ids: vendor_package_ids.join(","),
+            vendor_package_data
           });
         });
       });
@@ -777,6 +780,7 @@ img:not([src]) {
   display: flex;
   flex-wrap: wrap;
   .menu_box_content {
+    margin: 0 15px 15px 0;  
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -855,6 +859,16 @@ img:not([src]) {
               right: -10px;
               top: -10px;
               color: red;
+            }
+            .time_type_font{
+              position: absolute;
+              top: 0;
+              left: 0;
+              background-color: #fff;
+              font-size: 14px;
+              color: #666;
+              padding: 5px 15px;
+              border: 1px solid #ddd;
             }
             .goods_img {
               width: 150px;
