@@ -144,7 +144,7 @@
             <p>开票状态</p>
             <p style="height: 40px">
               <el-tag
-                v-if="detail.status == 1"
+                v-if="detail.status == 2"
                 style="margin-top: 5px"
                 type="success"
                 effect="dark"
@@ -161,12 +161,13 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>发票号码</p>
-            <p style="height: 40px">
+            <p style="height: 40px" v-if="detail.status != 2">
               <el-input
                 v-model="detail.invoice_no"
                 placeholder="请输入发票号码"
               ></el-input>
             </p>
+            <p v-else>{{ detail.invoice_no }}</p>
           </div>
         </el-card>
       </el-col>
@@ -174,12 +175,13 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>发票代码</p>
-            <p style="height: 40px">
+            <p style="height: 40px" v-if="detail.status != 2">
               <el-input
                 v-model="detail.invoice_code"
                 placeholder="请输入发票代码"
               ></el-input>
             </p>
+            <p v-else>{{ detail.invoice_code }}</p>
           </div>
         </el-card>
       </el-col>
@@ -210,9 +212,11 @@
       </el-col> -->
     </el-row>
     <el-upload
+      v-if="detail.status != 2"
       :file-list="uploadfile"
       :on-success="upLoadInvoice"
       :on-remove="removeInvoice"
+      :on-preview="openFile"
       :limit="1"
       style="margin: 15px 0"
       class="upload-demo"
@@ -221,7 +225,17 @@
     >
       <el-button size="small" type="success">添加电子发票文件</el-button>
     </el-upload>
-    <el-row type="flex" class="row-bg" justify="end">
+    <el-row :gutter="12" style="margin-top:15px;" v-else>
+      <el-col :span="24">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>开票文件</p>
+            <p @click="openFile" style="cursor:pointer;">{{ detail.uploadfile }}</p>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row v-if="detail.status != 2" type="flex" class="row-bg" justify="end">
       <el-button type="primary" @click="onSubmit">提交</el-button>
     </el-row>
   </div>
@@ -233,19 +247,22 @@ export default {
   data() {
     return {
       detail: {},
-      uploadfile:[],
+      uploadfile: [],
     };
   },
   created() {
     this.getDetail();
   },
   methods: {
+    openFile() {
+      window.open(this.detail.uploadfile);
+    },
     getDetail() {
       invoiceDetail({
         invoice_id: this.$route.query.invoice_id,
       }).then((res) => {
-        if (res.uploadfile){
-          this.uploadfile = [{name:res.uploadfile,url:res.uploadfile}]
+        if (res.uploadfile) {
+          this.uploadfile = [{ name: res.uploadfile, url: res.uploadfile }];
         }
         this.detail = res;
       });
@@ -262,7 +279,12 @@ export default {
       this.detail.uploadfile = "";
     },
     onSubmit() {
-      let { id:invoice_id, uploadfile, invoice_no, invoice_code } = this.detail;
+      let {
+        id: invoice_id,
+        uploadfile,
+        invoice_no,
+        invoice_code,
+      } = this.detail;
       let aData = {
         invoice_id,
         uploadfile,
