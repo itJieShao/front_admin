@@ -14,7 +14,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>订单ID</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.order_ids }}</p>
           </div>
         </el-card>
       </el-col>
@@ -22,7 +22,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>申请时间</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.created_at }}</p>
           </div>
         </el-card>
       </el-col>
@@ -30,7 +30,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>用户ID</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.customer_id }}</p>
           </div>
         </el-card>
       </el-col>
@@ -38,7 +38,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>用户昵称</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.customer_name }}</p>
           </div>
         </el-card>
       </el-col>
@@ -216,7 +216,7 @@
       :limit="1"
       style="margin: 15px 0"
       class="upload-demo"
-      action="/invoice/invoice/upload-invoice-file"
+      action="/api/invoice/invoice/upload-invoice-file"
       multiple
     >
       <el-button size="small" type="success">添加电子发票文件</el-button>
