@@ -36,14 +36,14 @@
         <el-tabs v-model="active" style="margin-top: 15px" type="border-card">
           <el-tab-pane
             v-for="item in list"
-            :key="item.time_type"
+            :key="item.time_type_id"
             :label="item.time"
-            :name="item.time_type"
+            :name="item.time_type_id"
           >
             <keep-alive>
               <tab-pane
                 @addPurchaseData="addPurchaseData"
-                v-if="active == item.time_type"
+                v-if="active == item.time_type_id"
                 :list="item.vendor_package_data"
                 :loading="loading"
               />
@@ -125,14 +125,14 @@ export default {
         }
         let purchase_data = {};
         res.forEach((item) => {
-          item.time_type = item.time_type.toString();
-          purchase_data[item.time_type] = [];
+          item.time_type_id = item.time_type_id.toString();
+          purchase_data[item.time_type_id] = [];
           item.vendor_package_data.forEach((it) => {
             it.num = 0;
           });
         });
         this.purchase_data = purchase_data;
-        this.active = res[0].time_type;
+        this.active = res[0].time_type_id;
         this.loading = false;
         this.list = res;
       });

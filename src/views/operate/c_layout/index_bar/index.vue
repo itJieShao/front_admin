@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { indexBarList } from "@/api/operate/c_layout/index_bar";
+import { bannerList } from "@/api/operate/c_layout/banner";
 export default {
   data() {
     return {
@@ -98,7 +98,7 @@ export default {
     },
     getList() {
       this.loading = true;
-      indexBarList().then((res) => {
+      bannerList({type:1}).then((res) => {
         this.list = res;
         this.loading = false;
       });
