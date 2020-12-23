@@ -126,7 +126,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-if="detail.business_days_name">
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
@@ -153,11 +153,34 @@
     </el-row>
     <el-divider />
     <el-row :gutter="12">
-      <el-col :span="4" v-for="item in detail.cook_finish_time">
+      <el-col :span="24">
         <el-card shadow="always">
-          <div class="item_flex">
-            <p>{{ item.name }}</p>
-            <p>{{ item.time }}</p>
+          <div>
+            <div class="item_title">
+              <p>用餐时段</p>
+              <p>结束烹饪时间</p>
+              <p>开始营业时间</p>
+              <p>结束营业时间</p>
+            </div>
+            <el-divider />
+            <div
+              class="item_content"
+              v-for="item in detail.cook_finish_time"
+              :key="item.time_type_id"
+            >
+              <div class="item_sth">
+                <p>{{ item.time_type_name }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.time }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.business_start }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.business_end }}</p>
+              </div>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -345,13 +368,15 @@ export default {
     },
     getDetail() {
       vendorDetail({ vendor_id: this.$route.query.vendor_id }).then((res) => {
-        res.cook_finish_time.forEach((item) => {
-          this.timeList.forEach((it) => {
-            if (item.time_type_id == it.id) {
-              item.name = it.name;
-            }
+        if (res.cook_finish_time && res.cook_finish_time.length) {
+          res.cook_finish_time.forEach((item) => {
+            this.timeList.forEach((it) => {
+              if (item.time_type_id == it.id) {
+                item.name = it.name;
+              }
+            });
           });
-        });
+        }
         this.detail = res;
       });
     },
@@ -441,7 +466,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .i_title {
   text-align: center;
   margin-bottom: 10px;
@@ -451,5 +476,24 @@ export default {
   color: red;
   text-align: center;
   padding: 20px 0;
+}
+.item_title,
+.item_content {
+  width: 100%;
+  display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  align-items: center;
+  p {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+  }
+  .item_sth {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 </style>

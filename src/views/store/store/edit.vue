@@ -162,63 +162,77 @@
           </el-form-item>
         </div> -->
         <el-row style="margin-bottom: 30px" :gutter="20">
-          <el-col :span="5">
-            <el-form-item label="用餐时段"></el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-card shadow="always">
-              <div>
-                <div class="item_title">
-                  <p>用餐时段</p>
-                  <p>结束烹饪时间</p>
+          <el-col :span="24">
+            <el-form-item label="用餐时段">
+              <el-card shadow="always">
+                <div>
+                  <div class="item_title">
+                    <p>用餐时段</p>
+                    <p>结束烹饪时间</p>
+                    <p>开始营业时间</p>
+                    <p>结束营业时间</p>
+                  </div>
+                  <el-divider />
+                  <!-- <div
+                    class="item_content"
+                    v-for="(item, index) in timeList"
+                    :key="index"
+                    v-if="!item.select"
+                  >
+                    <div>
+                      <p>{{ item.name }}</p>
+                    </div>
+                    <div>
+                      <p>{{ item.time }}</p>
+                    </div>
+                    <div>
+                      <p>{{ item.business_start }}</p>
+                    </div>
+                    <div>
+                      <p>{{ item.business_end }}</p>
+                    </div>
+                    <i
+                      @click="deleteTime(item.id)"
+                      class="el-icon-delete delete-btn"
+                    ></i>
+                  </div> -->
+                  <div
+                    class="item_content"
+                    v-for="item in timeList"
+                    :key="item.id"
+                  >
+                    <div class="item_sth">
+                      <p>{{ item.name }}</p>
+                    </div>
+                    <div class="item_sth">
+                      <el-time-picker
+                        style="margin-left: 20px"
+                        format="HH:mm"
+                        value-format="HH:mm"
+                        v-model="item.time"
+                      ></el-time-picker>
+                    </div>
+                    <div class="item_sth">
+                      <el-time-picker
+                        style="margin-left: 20px"
+                        format="HH:mm"
+                        value-format="HH:mm"
+                        v-model="item.business_start"
+                      ></el-time-picker>
+                    </div>
+                    <div class="item_sth">
+                      <el-time-picker
+                        style="margin-left: 20px"
+                        format="HH:mm"
+                        value-format="HH:mm"
+                        v-model="item.business_end"
+                      ></el-time-picker>
+                    </div>
+                  </div>
                 </div>
-                <el-divider />
-                <div
-                  class="item_content"
-                  v-for="(item, index) in timeList"
-                  :key="index"
-                  v-if="!item.select"
-                >
-                  <div>
-                    <p>{{ item.name }}</p>
-                  </div>
-                  <div>
-                    <p>{{ item.time }}</p>
-                  </div>
-                  <i
-                    @click="deleteTime(item.id)"
-                    class="el-icon-delete delete-btn"
-                  ></i>
-                </div>
-                <div class="item_content">
-                  <div class="item_flex">
-                    <el-select
-                      v-model="timeKey"
-                      filterable
-                      placeholder="请选择用餐时段"
-                    >
-                      <el-option
-                        v-if="item.select"
-                        v-for="item in timeList"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                      >
-                      </el-option>
-                    </el-select>
-                  </div>
-                  <div class="item_flex">
-                    <el-time-picker
-                      style="margin-left: 20px"
-                      format="HH:mm"
-                      value-format="HH:mm"
-                      v-model="timeVal"
-                    ></el-time-picker>
-                  </div>
-                </div>
-              </div>
-              <el-button type="success" @click="addTimeList">新增</el-button>
-            </el-card>
+                <!-- <el-button type="success" @click="addTimeList">新增</el-button> -->
+              </el-card>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="统一社会信用代码">
@@ -272,7 +286,12 @@
 
 <script>
 import { BaiduMap, BmView, BmMarker, BmLocalSearch } from "vue-baidu-map";
-import { vendorAdd, vendorEdit, vendorDetail,getTimeTypeData } from "@/api/store";
+import {
+  vendorAdd,
+  vendorEdit,
+  vendorDetail,
+  getTimeTypeData,
+} from "@/api/store";
 import { provinceList, cityList, districtList, adminList } from "@/api/common";
 export default {
   components: {
@@ -328,8 +347,10 @@ export default {
         { val: "6", name: "星期六" },
       ],
       timeList: [],
-      timeKey: "",
-      timeVal: "",
+      // timeKey: "",
+      // timeVal: "",
+      // business_start: "",
+      // business_end: "",
       center: { lng: 0, lat: 0 }, //编辑回显地图参数
       zoom: 0, //编辑回显地图参数
     };
@@ -340,18 +361,18 @@ export default {
       this.formData.vendor_id = this.$route.query.vendor_id;
       await this.getTimeTypeData();
       this.getVendorDetail();
-    }else{
-       this.getTimeTypeData();
+    } else {
+      this.getTimeTypeData();
     }
     this.getAdminList();
   },
   methods: {
     //获取门店用餐时段列表
-    getTimeTypeData(){
-      return getTimeTypeData().then(res => {
-        res.forEach(item => item.select = true);
-        this.timeList = res
-      })
+    getTimeTypeData() {
+      return getTimeTypeData().then((res) => {
+        // res.forEach((item) => (item.select = true));
+        this.timeList = res;
+      });
     },
     handler({ BMap, map }) {
       setTimeout(() => {
@@ -394,14 +415,18 @@ export default {
         this.formData.district_code = res.district_id;
         this.formData.province_id = res.province_parent_id;
         this.formData.city_id = res.city_parent_id;
-        res.cook_finish_time.forEach(item => {
-          this.timeList.forEach(it => {
-            if (item.time_type_id == it.id){
-              it.select = false;
-              it.time = item.time;
-            }
-          })
-        })
+        if (res.cook_finish_time && res.cook_finish_time.length) {
+          res.cook_finish_time.forEach((item) => {
+            this.timeList.forEach((it) => {
+              if (item.time_type_id == it.id) {
+                //it.select = false;
+                this.$set(it, "time", item.time);
+                this.$set(it, "business_start", item.business_start);
+                this.$set(it, "business_end", item.business_end);
+              }
+            });
+          });
+        }
         if (res.business_days.length > 0) {
           let business_days = [];
           this.dayList.forEach((item) => {
@@ -440,7 +465,6 @@ export default {
           });
           this.detailFoodImagesFile = food_permit_image;
         }
-        console.log(this.formData)
         this.getCityList();
         this.getDistrictList();
       });
@@ -530,21 +554,24 @@ export default {
       );
       this.formData.food_permit_image.splice(index, 1);
     },
-    //新增用餐时段
-    addTimeList() {
-      if (this.timeKey && this.timeVal) {
-        let timeItem = this.timeList.find((item) => this.timeKey == item.id);
-        timeItem.select = false;
-        timeItem.time = this.timeVal;
-        this.timeKey = this.timeVal = "";
-      }
-    },
-    //删除用餐时段
-    deleteTime(id) {
-      let timeItem = this.timeList.find((item) => id == item.id);
-      timeItem.select = true;
-      timeItem.time = "";
-    },
+    // //新增用餐时段
+    // addTimeList() {
+    //   if (this.timeKey && this.timeVal) {
+    //     let timeItem = this.timeList.find((item) => this.timeKey == item.id);
+    //     timeItem.select = false;
+    //     timeItem.time = this.timeVal;
+    //     timeItem.business_start = this.business_start;
+    //     timeItem.business_end = this.business_end;
+    //     this.timeKey = this.timeVal = this.business_start = this.business_end =
+    //       "";
+    //   }
+    // },
+    // //删除用餐时段
+    // deleteTime(id) {
+    //   let timeItem = this.timeList.find((item) => id == item.id);
+    //   timeItem.select = true;
+    //   timeItem.time = "";
+    // },
     onSubmit() {
       let aData = JSON.parse(JSON.stringify(this.formData)),
         business_days = [];
@@ -558,8 +585,14 @@ export default {
       aData.business_days = business_days.join(",");
       aData.cook_finish_time = [];
       this.timeList.forEach((item) => {
-        if (!item.select){
-          aData.cook_finish_time.push({time_type_id:item.id,time:item.time})
+        if (item.time || item.business_start || item.business_end) {
+          aData.cook_finish_time.push({
+            time_type_id: item.id,
+            time_type_name: item.name,
+            time: item.time,
+            business_start: item.business_start || '',
+            business_end: item.business_end || '',
+          });
         }
       });
       let saveApi = aData.vendor_id ? vendorEdit : vendorAdd;
@@ -602,19 +635,18 @@ p {
 .item_content {
   width: 100%;
   display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  align-items: center;
   p {
     display: flex;
     justify-content: center;
     flex: 1;
   }
-}
-.item_content {
-  position: relative;
-  margin-bottom: 20px;
-  align-items: center;
-  div {
+  .item_sth {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
 }
