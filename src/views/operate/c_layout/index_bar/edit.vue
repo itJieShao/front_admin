@@ -18,11 +18,11 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="轮播位置">
-        <el-input placeholder="请输入图片轮播的位置"></el-input>
+        <el-input placeholder="请输入图片轮播的位置" v-model="formData.order"></el-input>
         <span class="form_tip">注：如果轮播位置为空，则默认为最后一张轮播图片</span>
       </el-form-item>
       <el-form-item label="位置地址">
-        <el-input placeholder="请输入图片跳转页面的地址"></el-input>
+        <el-input placeholder="请输入图片跳转页面的地址" v-model="formData.address"></el-input>
       </el-form-item>
     </el-form>
     <el-row type="flex" class="row-bg" justify="end">
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { saveBanner } from "@/api/operate/c_layout/banner";
 export default {
   data() {
     return {
@@ -63,6 +64,9 @@ export default {
     //删除图片
     handleMainImgRemove(file, fileList) {
       this.formData.image = "";
+    },
+    onSubmit(){
+      
     },
   },
 };

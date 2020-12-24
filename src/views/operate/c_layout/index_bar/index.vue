@@ -29,7 +29,7 @@
 
       <el-table-column width="200" align="center" label="图片缩略图">
         <template slot-scope="scope">
-          <img style="width:200px;" :src="scope.row.url" alt="">
+          <img style="width:150px;" :src="scope.row.url" alt="">
         </template>
       </el-table-column>
 
