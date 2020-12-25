@@ -15,13 +15,13 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="图片ID">
+      <el-table-column align="center" width="120" label="图片ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="轮播排序">
+      <el-table-column align="center" width="120" label="轮播排序">
         <template slot-scope="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { bannerList } from "@/api/operate/c_layout/banner";
+import { bannerList,sortBanner,delBanner } from "@/api/operate/c_layout/banner";
 export default {
   data() {
     return {

@@ -36,3 +36,12 @@ export function releaseMenu(data) {
         data
     })
 }
+
+//小程序菜单时段
+export function getTimeTypeData(data) {
+    return request({
+        url: '/vendor/time-type/get-business-data',
+        method: 'post',
+        data
+    })
+}

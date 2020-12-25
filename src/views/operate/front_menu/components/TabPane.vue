@@ -214,9 +214,9 @@
       >
         <el-tab-pane
           v-for="item in timeList"
-          :key="item.id"
-          :label="item.name"
-          :name="item.id"
+          :key="item.time_type_id"
+          :label="item.time_type_name"
+          :name="item.time_type_id"
         >
           <el-table
             ref="multipleTable"
@@ -296,7 +296,7 @@
 </template>
 <script>
 import { vendorPackageList } from "@/api/basic";
-import { getTimeTypeData } from "@/api/store";
+import { getTimeTypeData } from "@/api/operate/front_menu";
 import {
   menuDetail,
   saveMenu,
@@ -408,8 +408,8 @@ export default {
     },
   },
   filters:{
-    time_type_name(id,timeList){
-      return timeList.find(item => item.id == id).name;
+    time_type_name(time_type_id,timeList){
+      return timeList.find(item => item.time_type_id == time_type_id).time_type_name;
     }
   },
   created() {
@@ -421,8 +421,8 @@ export default {
   methods: {
     //获取门店用餐时段列表
     getTimeTypeData() {
-      getTimeTypeData().then((res) => {
-        this.timeTabActive = res[0].id;
+      getTimeTypeData({vendor_id:this.vendor_ids[0]}).then((res) => {
+        this.timeTabActive = res[0].time_type_id;
         this.timeList = res;
       });
     },
@@ -448,7 +448,7 @@ export default {
       }
     },
     pasteBtn(index) {
-      this.$set(this.formData.menu_data, index, this.copyMenuItem);
+      this.$set(this.formData.menu_data, index, JSON.parse(JSON.stringify(this.copyMenuItem)));
       this.pasteMenuDialog = false;
     },
     //清空菜单
