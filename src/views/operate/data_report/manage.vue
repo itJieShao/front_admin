@@ -537,7 +537,10 @@
           </el-card>
         </el-col>
       </el-row>
-      <h3>用户数据</h3>
+      <div class="userDataTitle">
+        <h3>用户数据</h3>
+        <p @click="moreUserData">更多>></p>
+      </div>
       <el-row :gutter="10">
         <el-col :span="12">
           <el-card shadow="always">
@@ -664,7 +667,6 @@
 <script>
 import { customerData } from "@/api/operate/data_report/manage";
 import Echart from "@/components/Echart";
-import { start } from "nprogress";
 export default {
   components: {
     Echart,
@@ -687,6 +689,9 @@ export default {
     this.getCustomerData();
   },
   methods: {
+    moreUserData(){
+      this.$router.push('/operate/data_report/user')
+    },
     timeChange() {
       this.time_type = "5";
       this.getCustomerData();
@@ -717,6 +722,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.userDataTitle{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p{
+    cursor: pointer;
+  }
+}
 h4 {
   margin: 0;
 }
