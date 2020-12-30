@@ -120,6 +120,13 @@ const operateRouter = {
                     component: () => import('@/views/operate/data_report/manage'),
                     name: 'Manage',
                     meta: { title: '经营报表', icon: 'el-icon-s-help', auth: "manage_list" },
+                },
+                {
+                    path: 'user',
+                    component: () => import('@/views/operate/data_report/user'),
+                    name: 'User',
+                    meta: { title: '用户报表', icon: 'el-icon-s-help', activeMenu:"/operate/data_report/manage" },
+                    hidden:true,
                 }
             ]
         },
