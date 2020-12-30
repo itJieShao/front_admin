@@ -9,6 +9,15 @@ export function bannerList(data) {
     })
 }
 
+//首页/个人中心banner图详情
+export function bannerDetail(data) {
+    return request({
+        url: '/other/other/bar-detail',
+        method: 'post',
+        data
+    })
+}
+
 //新增/编辑 首页/个人banner图
 export function saveBanner(data) {
     return request({

@@ -45,16 +45,19 @@
             <i
               @click="userChangePosition(1, scope.$index)"
               class="el-icon-top"
-              v-show="list.length > 2 && scope.$index != 0"
+              v-show="list.length > 1 && scope.$index != 0"
             ></i>
             <i
               @click="userChangePosition(2, scope.$index)"
               class="el-icon-bottom"
-              v-show="list.length > 2 && scope.$index != list.length - 1"
+              v-show="list.length > 1 && scope.$index != list.length - 1"
             ></i>
           </div>
-          <el-button size="mini" @click="goEdit(scope.row.package_id)"
+          <el-button size="mini" @click="goEdit(scope.row.id)"
             >编辑</el-button
+          >
+          <el-button type="danger" size="mini" @click="delBtn(scope.row.id,scope.$index)"
+            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -69,7 +72,15 @@ export default {
     return {
       list: [],
       loading: false,
+      type:1
     };
+  },
+  computed:{
+    sortListIds(){
+      let ids = [];
+      this.list.forEach(item => ids.push(item.id));
+      return ids;
+    },
   },
   created() {
     this.getList();
@@ -82,26 +93,35 @@ export default {
       } else {
         list[index] = list.splice(index + 1, 1, list[index])[0];
       }
+      sortBanner({type:this.type,order:this.sortListIds})
     },
     addMeal() {
-      this.$router.push("/operate/c_layout/index_bar_add");
+      this.$router.push("/operate/c_layout/index_banner_add");
     },
-    goEdit(package_id) {
+    goEdit(id) {
       this.$router.push(
-        `/operate/c_layout/index_bar_edit?package_id=${package_id}`
-      );
-    },
-    goDetail(package_id) {
-      this.$router.push(
-        `/basic/goods/preinstall_meal_detail?package_id=${package_id}`
+        `/operate/c_layout/index_banner_edit?id=${id}`
       );
     },
     getList() {
       this.loading = true;
-      bannerList({type:1}).then((res) => {
+      bannerList({type:this.type}).then((res) => {
         this.list = res;
         this.loading = false;
       });
+    },
+    delBtn(id,index){
+      delBanner({type:this.type,id}).then(res =>{
+        if (res){
+          this.list.splice(index,1);
+          this.$notify({
+            title: "成功",
+            message: "删除成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      })
     },
   },
 };

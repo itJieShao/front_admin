@@ -163,7 +163,8 @@
           <template slot-scope="scope">
             <span v-if="scope.row.diff_qty == 0">库存一致</span>
             <span v-else-if="scope.row.diff_qty > 0">库存增加</span>
-            <span v-else>库存减少</span>
+            <span v-else-if="scope.row.diff_qty < 0">库存减少</span>
+            <span v-else>{{scope.row.diff_qty}}</span>
           </template>
         </el-table-column>
       </el-table>

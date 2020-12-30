@@ -6,25 +6,53 @@
         <el-input v-model="title" />
       </el-form-item>
       <el-form-item label="内容">
-        <Editor @getNewHtml="getNewHtml" />
+        <Editor @getNewHtml="getNewHtml" :value="content" />
       </el-form-item>
+      <el-row type="flex" class="row-bg" justify="end">
+        <el-button type="primary" @click="onSubmit">保存</el-button>
+      </el-row>
     </el-form>
   </div>
 </template>
 
 <script>
+import { aboutData, saveAbout } from "@/api/operate/c_layout/about";
 import Editor from "@/components/Editor";
 export default {
   components: { Editor },
   data() {
     return {
       title: "",
-      newHtml: "",
+      content: "",
     };
   },
+  created() {
+    this.getDetail();
+  },
   methods: {
-    getNewHtml(newHtml) {
-      this.newHtml = newHtml;
+    getDetail() {
+      aboutData().then((res) => {
+        this.title = res.title;
+        this.content = res.content;
+      });
+    },
+    getNewHtml(content) {
+      this.content = content;
+    },
+    onSubmit() {
+      saveAbout({ title: this.title, content: this.content }).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "保存成功",
+            type: "success",
+            duration: 1000,
+            onClose: () => {
+              this.$router.go(-1);
+            },
+          });
+        }
+      });
     },
   },
 };

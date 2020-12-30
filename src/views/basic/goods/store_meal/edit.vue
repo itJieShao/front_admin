@@ -98,6 +98,7 @@
             filterable
             placeholder="请选择折扣优惠"
           >
+            <el-option label="无" :value="0"></el-option>
             <el-option
               v-for="item in couponList"
               :key="item.id"
@@ -195,7 +196,7 @@ export default {
         take_code: "",
         vendor_id: "",
         sale_price: "",
-        coupon_id: "",
+        coupon_id: 0,
         desc: "",
       }, //表单提交数据
       checkedPackageData: {},
@@ -217,7 +218,6 @@ export default {
   components: { Pagination },
   computed: {
     discount_price() {
-      console.log(this.discount_rate, this.formData.coupon_id);
       if (this.discount_rate && this.formData.coupon_id) {
         return (this.formData.sale_price * this.discount_rate).toFixed(2);
       }
@@ -237,6 +237,7 @@ export default {
   methods: {
     //选择优惠之后计算折扣率
     couponChange(val) {
+      if (!val) return;
       this.discount_rate = this.couponList.find(
         (item) => item.id == val
       ).discount;

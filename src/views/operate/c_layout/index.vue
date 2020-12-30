@@ -38,10 +38,10 @@ export default {
     jumpUrl(type) {
       switch (type) {
         case 1:
-          this.$router.push("/operate/c_layout/index_bar");
+          this.$router.push("/operate/c_layout/index_banner");
           break;
         case 2:
-          this.$router.push("/operate/c_layout/store_notice");
+          this.$router.push("/operate/c_layout/user_banner");
           break;
         case 3:
           this.$router.push("/operate/c_layout/store_notice");

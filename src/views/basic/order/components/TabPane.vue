@@ -31,7 +31,31 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="用户">
+      <el-table-column width="300" align="center" label="套餐名称">
+        <template slot-scope="scope">
+          <p v-for="(item, index) in scope.row.vendor_package_names" :key="index">
+            {{ item }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="150" align="center" label="用餐时段">
+        <template slot-scope="scope">
+          <p v-for="(item, index) in scope.row.time_types" :key="index">
+            {{ item.time_type_name }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="150" align="center" label="套餐状态">
+        <template slot-scope="scope">
+          <p v-for="(item, index) in scope.row.take_statuss" :key="index">
+            {{ item.take_status_name }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="100" align="center" label="用户">
         <template slot-scope="scope">
           <span>{{ scope.row.customer_name }}</span>
         </template>
@@ -43,18 +67,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="商品名称">
+      <!-- <el-table-column width="250" align="center" label="商品名称">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.vendor_package_name }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="份数">
         <template slot-scope="scope">
-          <p v-for="(item, index) in scope.row.package_data" :key="index">
-            {{ item.vendor_package_num }}
+          <p v-for="(item, index) in scope.row.vendor_package_nums" :key="index">
+            {{ item }}
           </p>
         </template>
       </el-table-column>
@@ -65,13 +89,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100" align="center" label="单价">
+      <!-- <el-table-column width="100" align="center" label="单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.sale_price }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="100" align="center" label="应付总价">
         <template slot-scope="scope">
@@ -85,13 +109,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100" align="center" label="实付单价">
+      <!-- <el-table-column width="100" align="center" label="实付单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.discount_price }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="100" align="center" label="实付总价">
         <template slot-scope="scope">
@@ -99,9 +123,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="160" align="center" label="预约日期">
+      <el-table-column width="240" align="center" label="取餐时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.book_at ? scope.row.book_at : "无" }}</span>
+          <p v-for="(item, index) in scope.row.take_ats" :key="index">
+            {{ item }}
+          </p>
         </template>
       </el-table-column>
 
@@ -111,7 +137,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" align="center" label="订单状态">
+      <el-table-column width="120" class-name="status-col" align="center" label="订单状态">
         <template slot-scope="scope">
           <span v-if="scope.row.order_status == -2">报损取消</span>
           <span v-else-if="scope.row.order_status == -1">已取消</span>

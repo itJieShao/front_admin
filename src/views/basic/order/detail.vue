@@ -49,13 +49,17 @@
     </el-row>
     <el-row style="margin-top: 15px" :gutter="12">
       <el-col :span="4">
-        <el-card shadow="always"> 订单类型：{{ detail.book_at?"预约订单":"当天订单" }} </el-card>
+        <el-card shadow="always">
+          订单类型：{{ detail.book_at ? "预约订单" : "当天订单" }}
+        </el-card>
       </el-col>
       <el-col :span="6" v-if="detail.book_at">
         <el-card shadow="always"> 预约日期：{{ detail.book_at }} </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="always"> 手机号码：{{ detail.customer_mobile }} </el-card>
+        <el-card shadow="always">
+          手机号码：{{ detail.customer_mobile }}
+        </el-card>
       </el-col>
     </el-row>
     <el-row
@@ -125,6 +129,15 @@
                 </div>
                 <p class="goods_title">{{ it.vendor_package_name }}</p>
                 <p style="margin-top: 10px">套餐组合：{{ it.product_name }}</p>
+                <div class="tab_item">
+                  <div class="time_type_bg1">{{ it.time_type_name }}</div>
+                  <div style="background-color: #000;" v-if="detail.order_status == -1">不能取餐</div>
+                  <div style="background-color: #ccc;" v-else-if="detail.order_status == 0">待支付</div>
+                  <template v-else-if="detail.order_status >= 1">
+                    <div style="background-color: #87a6de;" v-if="it.take_status">已取餐</div>
+                    <div style="background-color: #fbb959;" v-else>待取餐</div>
+                  </template>
+                </div>
               </div>
             </div>
             <div class="goods_bot">
@@ -226,6 +239,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tab_item {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tab_item div {
+  border-radius: 20px;
+  font-size: 14px;
+  color: #fff;
+  padding: 5px 20px;
+}
+.time_type_bg1 {
+  background-color: #cebaf7;
+}
+
+.time_type_bg2 {
+  background-color: #b8f4d5;
+}
+
+.time_type_bg3 {
+  background-color: #fcce90;
+}
+
+.time_type_bg4 {
+  background-color: #f792a1;
+}
+
+.time_type_bg5 {
+  background-color: #b5d0f7;
+}
+
+.time_type_bg6 {
+  background-color: #ead0b5;
+}
 .y_tip {
   border-radius: 50%;
   width: 30px;
@@ -247,8 +295,8 @@ p {
     display: flex;
     img {
       display: block;
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       border: 1px solid #ddd;
     }
     .goods_info {
@@ -259,7 +307,7 @@ p {
         justify-content: space-between;
       }
       .goods_title {
-        margin-top: 20px;
+        margin-top: 10px;
       }
     }
   }

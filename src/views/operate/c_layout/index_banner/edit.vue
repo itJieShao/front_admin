@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>新增首页banner</h2>
+    <h2>{{ $route.query.id ? "编辑首页banner" : "新增首页banner" }}</h2>
     <el-form label-width="80px">
       <el-form-item label="图片">
         <el-upload
@@ -18,11 +18,19 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="轮播位置">
-        <el-input placeholder="请输入图片轮播的位置" v-model="formData.order"></el-input>
-        <span class="form_tip">注：如果轮播位置为空，则默认为最后一张轮播图片</span>
+        <el-input
+          placeholder="请输入图片轮播的位置"
+          v-model="formData.order"
+        ></el-input>
+        <span class="form_tip"
+          >注：如果轮播位置为空，则默认为最后一张轮播图片</span
+        >
       </el-form-item>
       <el-form-item label="位置地址">
-        <el-input placeholder="请输入图片跳转页面的地址" v-model="formData.address"></el-input>
+        <el-input
+          placeholder="请输入图片跳转页面的地址"
+          v-model="formData.address"
+        ></el-input>
       </el-form-item>
     </el-form>
     <el-row type="flex" class="row-bg" justify="end">
@@ -35,11 +43,12 @@
 </template>
 
 <script>
-import { saveBanner } from "@/api/operate/c_layout/banner";
+import { saveBanner, bannerDetail } from "@/api/operate/c_layout/banner";
 export default {
   data() {
     return {
       formData: {
+        type: 1,
         id: "",
         image: "",
         order: "",
@@ -47,9 +56,24 @@ export default {
       },
       dialogVisible: false,
       dialogImageUrl: "",
+      detailImgFile:[],
     };
   },
+  created() {
+    if (this.$route.query.id) {
+      this.formData.id = this.$route.query.id;
+      this.getDetail();
+    }
+  },
   methods: {
+    getDetail() {
+      bannerDetail({ id: this.formData.id }).then((res) => {
+        this.formData.image = res.url;
+        this.formData.order = res.order;
+        this.formData.address = res.address;
+        this.detailImgFile = [{ name: "detailImgFile", url: res.url }];
+      });
+    },
     //上传图片
     upLoadMainImg(res, file) {
       if (res.status) {
@@ -65,8 +89,20 @@ export default {
     handleMainImgRemove(file, fileList) {
       this.formData.image = "";
     },
-    onSubmit(){
-      
+    onSubmit() {
+      saveBanner(this.formData).then((res) => {
+        if (res) {
+          this.$notify({
+            title: "成功",
+            message: "保存成功",
+            type: "success",
+            duration: 1000,
+            onClose: () => {
+              this.$router.go(-1);
+            },
+          });
+        }
+      });
     },
   },
 };
