@@ -187,19 +187,19 @@
       </span>
     </el-dialog>
     <el-dialog
+      :close-on-click-modal="false"
       width="60%"
       title="门店套餐列表"
       :visible.sync="dialogTableVisible"
     >
-      <el-row :gutter="20" style="margin-bottom: 20px">
-        <el-col :span="20">
+      <el-row :gutter="20" style="margin-bottom: 20px;display: flex; justify-content: flex-end">
+        <el-col :span="15" style="display:flex;">
           <el-input
             v-model="listData.name"
             :placeholder="`请输入套餐名称搜索`"
           ></el-input>
-        </el-col>
-        <el-col :span="4">
           <el-button
+            style="margin-left:20px;"
             @click="getVendorPackageList"
             type="primary"
             icon="el-icon-search"
