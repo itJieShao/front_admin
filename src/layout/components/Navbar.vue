@@ -8,7 +8,10 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu-box">
-      <p class="right-menu-user">{{userName}}</p>
+      <!-- <p class="right-menu-user">
+        <i class="el-icon-message-solid"></i>
+      </p> -->
+      <p class="right-menu-user">{{ userName }}</p>
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
@@ -50,8 +53,8 @@ export default {
     Hamburger,
   },
   computed: {
-    userName(){
-      return localStorage.getItem("userName") || ""
+    userName() {
+      return localStorage.getItem("userName") || "";
     },
     ...mapGetters(["sidebar", "avatar"]),
   },
