@@ -310,6 +310,7 @@ export default {
         { name: "申请退款", type: 4 },
         { name: "驳回退款", type: 6 },
         { name: "退款成功", type: 5 },
+        { name: "已取消", type: -1 },
       ],
       discountsList: [
         { name: "折扣", type: 1 },

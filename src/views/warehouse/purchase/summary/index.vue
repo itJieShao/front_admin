@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20" style="margin-bottom: 20px">
-    
+      <el-col :span="24" style="display: flex; justify-content: flex-end">
+        <el-button type="warning" @click="exportBtn">导出 Excel</el-button>
+      </el-col>
     </el-row>
     <el-table
       v-loading="loading"
@@ -10,7 +12,14 @@
       fit
       highlight-current-row
       style="width: 100%"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        fixed="left"
+        align="center"
+        width="55"
+      ></el-table-column>
       <el-table-column width="180" align="center" label="进货汇总ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -70,10 +79,12 @@
           <span>{{ scope.row.status_name }}</span>
         </template>
       </el-table-column>
-      
+
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goDetail(scope.row.id)">详情</el-button>
+          <el-button size="mini" @click="goDetail(scope.row.id)"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -89,6 +100,7 @@
 
 <script>
 import { purchaseTotalList } from "@/api/warehouse";
+import { exportExcle } from "@/api/common";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -97,10 +109,11 @@ export default {
       list: [],
       listData: {
         page: 1,
-        page_size: 10
+        page_size: 10,
       },
       loading: false,
       total: 0,
+      checkedSummaryList: [],
     };
   },
   created() {
@@ -108,7 +121,9 @@ export default {
   },
   methods: {
     goDetail(purchase_total_id) {
-      this.$router.push(`/warehouse/purchase/summary_detail?purchase_total_id=${purchase_total_id}`);
+      this.$router.push(
+        `/warehouse/purchase/summary_detail?purchase_total_id=${purchase_total_id}`
+      );
     },
     addPurchase() {
       this.$router.push("/warehouse/purchase/purchase_add");
@@ -119,6 +134,33 @@ export default {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
+      });
+    },
+    handleSelectionChange(val) {
+      this.checkedSummaryList = val;
+    },
+    //导出
+    exportBtn() {
+      if (!this.checkedSummaryList.length) {
+        return this.$message.error("请先选中要导出的行");
+      }
+      let ids = [];
+      this.checkedSummaryList.forEach((item) => ids.push(item.id));
+      const notify = this.$notify({
+        title: "正在导出",
+        message: "正在导出Excel表",
+        position: "bottom-right",
+        duration: 0,
+      });
+      exportExcle({
+        module: "SUMMARY_DATA",
+        type: 1,
+        ids: ids.join(","),
+      }).then((res) => {
+        if (res) {
+          notify.close();
+          window.open(res.path);
+        }
       });
     },
   },

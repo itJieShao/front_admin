@@ -53,3 +53,12 @@ export function vendorList(data) {
         data
     })
 }
+
+//导出Excle
+export function exportExcle(data) {
+    return request({
+        url: '/other/export/excel',
+        method: 'post',
+        data
+    })
+}
