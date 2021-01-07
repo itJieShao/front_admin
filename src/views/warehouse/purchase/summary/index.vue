@@ -157,8 +157,8 @@ export default {
         type: 1,
         ids: ids.join(","),
       }).then((res) => {
+        notify.close();
         if (res) {
-          notify.close();
           window.open(res.path);
         }
       });

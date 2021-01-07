@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="4">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -181,6 +181,10 @@ export default {
         this.loading = false;
       });
     },
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
+    }
   },
 };
 </script>

@@ -1,10 +1,18 @@
 <template>
   <div>
-    <el-row>
-      <el-col
-        :span="24"
-        style="margin-bottom: 20px; display: flex; justify-content: flex-end"
-      >
+    <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-col :span="8">
+        <el-input
+          v-model="listData.condition"
+          placeholder="请输入搜索内容"
+        ></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
+      </el-col>
+      <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button type="success" @click="orderDialog = true">筛选</el-button>
       </el-col>
     </el-row>
@@ -33,7 +41,10 @@
 
       <el-table-column width="300" align="center" label="套餐名称">
         <template slot-scope="scope">
-          <p v-for="(item, index) in scope.row.vendor_package_names" :key="index">
+          <p
+            v-for="(item, index) in scope.row.vendor_package_names"
+            :key="index"
+          >
             {{ item }}
           </p>
         </template>
@@ -77,7 +88,10 @@
 
       <el-table-column align="center" label="份数">
         <template slot-scope="scope">
-          <p v-for="(item, index) in scope.row.vendor_package_nums" :key="index">
+          <p
+            v-for="(item, index) in scope.row.vendor_package_nums"
+            :key="index"
+          >
             {{ item }}
           </p>
         </template>
@@ -137,7 +151,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120" class-name="status-col" align="center" label="订单状态">
+      <el-table-column
+        width="120"
+        class-name="status-col"
+        align="center"
+        label="订单状态"
+      >
         <template slot-scope="scope">
           <span v-if="scope.row.order_status == -2">报损取消</span>
           <span v-else-if="scope.row.order_status == -1">已取消</span>
@@ -208,16 +227,16 @@
           >
           </el-date-picker> -->
         </el-form-item>
-        <!-- <el-form-item label="用餐时段">
-          <el-checkbox-group v-model="listData.order_status">
+        <el-form-item label="用餐时段">
+          <el-checkbox-group v-model="listData.dinner_time_ids">
             <el-checkbox
-              v-for="item in orderStatusList"
-              :key="item.type"
-              :label="item.type"
+              v-for="item in timeList"
+              :key="item.id"
+              :label="item.id"
               >{{ item.name }}</el-checkbox
             >
           </el-checkbox-group>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="下单时间">
           <el-date-picker
             v-model="created_at_date"
@@ -271,6 +290,7 @@
 
 <script>
 import { orderList } from "@/api/basic";
+import { getTimeTypeData } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
   props: {
@@ -284,6 +304,8 @@ export default {
     return {
       list: [],
       listData: {
+        condition: "",
+        dinner_time_ids:[],
         page: 1,
         page_size: 10,
         vendor_ids: this.vendor_ids,
@@ -298,7 +320,7 @@ export default {
         created_at_start: "",
         created_at_end: "",
       },
-      take_at_date:"",
+      take_at_date: "",
       created_at_date: "",
       // startDatePicker: this.beginDate(),
       // endDatePicker: this.processDate(),
@@ -312,6 +334,7 @@ export default {
         { name: "退款成功", type: 5 },
         { name: "已取消", type: -1 },
       ],
+      timeList: [],
       discountsList: [
         { name: "折扣", type: 1 },
         { name: "满减", type: 2 },
@@ -332,16 +355,17 @@ export default {
       this.listData.created_at_start = val[0];
       this.listData.created_at_end = val[1];
     },
-    "listData.has_favourable"(val){
-      if (val == 2){
+    "listData.has_favourable"(val) {
+      if (val == 2) {
         this.listData.discounts = [];
         this.listData.discount_price_start = "";
         this.listData.discount_price_end = "";
       }
-    }
+    },
   },
   created() {
-    this.getList();
+    this.getList(); 
+    this.getTimeTypeData();
   },
   methods: {
     // beginDate() {
@@ -366,6 +390,11 @@ export default {
     //     },
     //   };
     // },
+    getTimeTypeData() {
+      getTimeTypeData().then((res) => {
+        this.timeList = res;
+      });
+    },
     searchBtn() {
       this.page = 1;
       this.getList();
