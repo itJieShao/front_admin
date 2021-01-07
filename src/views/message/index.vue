@@ -40,7 +40,8 @@
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <span>{{ scope.row.status_name }}</span>
+          <span style="color:green;font-weight: 600;" v-if="scope.row.status_name == '已读'">{{ scope.row.status_name }}</span>
+          <span style="color:red;font-weight: 600;" v-else>{{ scope.row.status_name }}</span>
         </template>
       </el-table-column>
 

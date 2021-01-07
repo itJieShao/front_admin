@@ -7,7 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    messageCount:0
   }
 }
 
@@ -28,7 +29,10 @@ const mutations = {
   },
   SET_ROLE_ID: (state, role_id) => {
     state.role_id = role_id
-  }
+  },
+  SET_MSG_COUNT: (state, count) => {
+    state.messageCount = count
+  } 
 }
 
 const actions = {

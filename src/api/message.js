@@ -17,3 +17,12 @@ export function messageDetail(data) {
         data
     })
 }
+
+//审核消息数量
+export function messageCount(data) {
+    return request({
+        url: '/other/get/audit-msg-num',
+        method: 'post',
+        data
+    })
+}

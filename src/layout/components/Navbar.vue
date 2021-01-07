@@ -8,9 +8,15 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu-box">
-      <!-- <p class="right-menu-user">
-        <i class="el-icon-message-solid"></i>
-      </p> -->
+      <div class="message-box" @click="jumpMsg">
+        <i
+          style="font-size: 20px; color: #666"
+          class="el-icon-message-solid"
+        ></i>
+        <span class="message-tip" v-if="user.messageCount > 0">{{
+          user.messageCount
+        }}</span>
+      </div>
       <p class="right-menu-user">{{ userName }}</p>
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="click">
@@ -43,7 +49,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import { messageCount } from "@/api/message";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 
@@ -52,13 +59,25 @@ export default {
     Breadcrumb,
     Hamburger,
   },
+  created() {
+    this.messageCount();
+  },
   computed: {
     userName() {
       return localStorage.getItem("userName") || "";
     },
+    ...mapState(["user"]),
     ...mapGetters(["sidebar", "avatar"]),
   },
   methods: {
+    jumpMsg() {
+      this.$router.push("/message/index");
+    },
+    messageCount() {
+      messageCount().then((res) => {
+        this.$store.commit("user/SET_MSG_COUNT", res.count);
+      });
+    },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -71,6 +90,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.message-box {
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.message-tip {
+  margin-left: -5px;
+  margin-top: -5px;
+  background-color: red;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-size: 12px;
+}
 .navbar {
   height: 50px;
   overflow: hidden;

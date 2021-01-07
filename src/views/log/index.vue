@@ -6,6 +6,7 @@
           style="width: 100%"
           v-model="listData.module"
           placeholder="请选择模块搜索"
+          filterable
         >
           <el-option label="全部模块"></el-option>
           <el-option
