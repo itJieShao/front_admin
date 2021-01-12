@@ -186,10 +186,20 @@
     />
     <el-dialog title="订单筛选" :visible.sync="orderDialog">
       <el-form label-width="80px">
-        <el-form-item label="订单状态">
+        <el-form-item label="订单状态" style="margin-bottom:10px;">
           <el-checkbox-group v-model="listData.order_status">
             <el-checkbox
               v-for="item in orderStatusList"
+              :key="item.type"
+              :label="item.type"
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="套餐状态">
+          <el-checkbox-group v-model="listData.take_status">
+            <el-checkbox
+              v-for="item in takeStatusList"
               :key="item.type"
               :label="item.type"
               >{{ item.name }}</el-checkbox
@@ -305,12 +315,13 @@ export default {
       list: [],
       listData: {
         condition: "",
-        dinner_time_ids:[],
+        dinner_time_ids: [],
         page: 1,
         page_size: 10,
         vendor_ids: this.vendor_ids,
         export: "",
         order_status: [],
+        take_status: [],
         has_favourable: "",
         discounts: [],
         discount_price_start: "",
@@ -327,12 +338,15 @@ export default {
       orderStatusList: [
         { name: "未付款", type: 0 },
         { name: "待取餐", type: 1 },
-        { name: "部分取餐", type: 2 },
         { name: "已完成", type: 3 },
         { name: "申请退款", type: 4 },
         { name: "驳回退款", type: 6 },
         { name: "退款成功", type: 5 },
         { name: "已取消", type: -1 },
+      ],
+      takeStatusList: [
+        { name: "未取餐", type: 0 },
+        { name: "已取餐", type: 1 },
       ],
       timeList: [],
       discountsList: [
@@ -364,7 +378,7 @@ export default {
     },
   },
   created() {
-    this.getList(); 
+    this.getList();
     this.getTimeTypeData();
   },
   methods: {
