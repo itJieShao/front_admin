@@ -93,11 +93,19 @@ export default {
     };
   },
   components: { Pagination },
-  created() {
-    if (this.$route.query.type) {
-      this.listData.status = 2;
-    }
-    this.getList();
+  created() {},
+  watch: {
+    "$route.query.type": {
+      handler(type) {
+        if (type) {
+          this.listData.status = 2;
+        } else {
+          this.listData.status = "";
+        }
+        this.getList();
+      },
+      immediate: true,
+    },
   },
   methods: {
     goDetail(id) {
