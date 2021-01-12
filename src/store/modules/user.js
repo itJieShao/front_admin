@@ -1,4 +1,4 @@
-import { login, logout } from '@/api/user'
+import { login, logout,changePwd } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -46,6 +46,22 @@ const actions = {
         commit('SET_ROLE_ID',admin_data.role_id)
         setToken(token)
         resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  //user changePwd
+  changePwd({ commit, state },payload) {
+    return new Promise((resolve, reject) => {
+      changePwd({token:state.token,users_id:payload.id,password:payload.password}).then((res) => {
+        removeToken() // must remove  token  first
+        resetRouter()
+        commit('RESET_STATE')
+        localStorage.removeItem("userName")
+        localStorage.removeItem("router")
+        resolve(res)
       }).catch(error => {
         reject(error)
       })

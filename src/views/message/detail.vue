@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { messageDetail,messageCount } from "@/api/message";
+import { messageDetail } from "@/api/message";
 export default {
   data() {
     return {
@@ -22,7 +22,6 @@ export default {
   },
   created() {
     this.getDetail();
-    this.messageCount();
   },
   methods: {
     getDetail() {
@@ -31,11 +30,6 @@ export default {
       }).then((res) => {
         this.detail = res;
       });
-    },
-    messageCount(){
-      messageCount().then(res => {
-        this.$store.commit('user/SET_MSG_COUNT',res.count)
-      })
     },
     seeDetail() {
       let url = "";

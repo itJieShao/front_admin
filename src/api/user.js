@@ -15,3 +15,11 @@ export function logout(data) {
     data
   })
 }
+
+export function changePwd(data) {
+  return request({
+    url: '/admin/admin/save-user-password',
+    method: 'post',
+    data
+  })
+}

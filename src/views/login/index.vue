@@ -157,6 +157,7 @@ export default {
                   item_1.hidden = item_1.children.every(item => item.hidden);
                 }
               });
+              localStorage.setItem("userId",res.admin_data.id);
               localStorage.setItem("userName",res.admin_data.name);
               localStorage.setItem("router", JSON.stringify(router));
               this.$router.push({ path: this.redirect || "/" });

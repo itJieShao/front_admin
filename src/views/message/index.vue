@@ -40,8 +40,14 @@
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <span style="color:green;font-weight: 600;" v-if="scope.row.status_name == '已读'">{{ scope.row.status_name }}</span>
-          <span style="color:red;font-weight: 600;" v-else>{{ scope.row.status_name }}</span>
+          <span
+            style="color: green; font-weight: 600"
+            v-if="scope.row.status_name == '已读'"
+            >{{ scope.row.status_name }}</span
+          >
+          <span style="color: red; font-weight: 600" v-else>{{
+            scope.row.status_name
+          }}</span>
         </template>
       </el-table-column>
 
@@ -53,7 +59,9 @@
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button @click="goDetail(scope.row.id)" size="mini">详情</el-button>
+          <el-button @click="goDetail(scope.row.id)" size="mini"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +86,7 @@ export default {
         page: 1,
         page_size: 10,
         title: "",
+        status: "",
       },
       loading: false,
       total: 0,
@@ -85,6 +94,9 @@ export default {
   },
   components: { Pagination },
   created() {
+    if (this.$route.query.type) {
+      this.listData.status = 2;
+    }
     this.getList();
   },
   methods: {
@@ -99,7 +111,7 @@ export default {
         this.loading = false;
       });
     },
-    searchBtn(){
+    searchBtn() {
       this.listData.page = 1;
       this.getList();
     },
