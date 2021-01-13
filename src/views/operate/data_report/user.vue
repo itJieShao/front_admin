@@ -6,7 +6,7 @@
       v-loading="loading"
     ></div>
     <div class="pageTitle">
-      <i @click="$router.go(-1)" class="el-icon-arrow-left"></i>
+      <!-- <i @click="$router.go(-1)" class="el-icon-arrow-left"></i> -->
       <h2>用户报表</h2>
     </div>
     <el-card shadow="always">
@@ -135,6 +135,7 @@
           <el-card shadow="always">
             <h4>男/女用户复购率</h4>
             <Echart
+              :key="timer"
               id="chart"
               unit="人"
               :pieData="repurchaseData.rate_data"
@@ -185,6 +186,7 @@ export default {
       ],
       time_type: "1",
       loading: false,
+      timer:"",
     };
   },
   created() {
@@ -226,6 +228,7 @@ export default {
         }
         res.count_data = count_data;
         this.repurchaseData = res;
+        this.timer = new Date().getTime();
         this.loading = false;
       });
     },

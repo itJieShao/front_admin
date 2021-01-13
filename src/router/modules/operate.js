@@ -34,6 +34,26 @@ const operateRouter = {
             meta: { title: '问卷详情', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire' },
         },
         {
+            path: 'questionnaire_tpl',
+            component: () => import('@/views/operate/questionnaire_tpl'),
+            name: 'QuestionnaireTpl',
+            meta: { title: '问卷模板', icon: 'el-icon-s-help' },
+        },
+        {
+            path: 'questionnaire_tpl_add',
+            component: () => import('@/views/operate/questionnaire_tpl/add'),
+            name: 'QuestionnaireTplAdd',
+            hidden:true,
+            meta: { title: '新增问卷模板', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire_tpl' },
+        },
+        {
+            path: 'questionnaire_tpl_detail',
+            component: () => import('@/views/operate/questionnaire_tpl/detail'),
+            name: 'QuestionnaireTplDetail',
+            hidden:true,
+            meta: { title: '问卷模板详情', icon: 'el-icon-s-help', activeMenu:'/operate/questionnaire_tpl' },
+        },
+        {
             path: 'c_layout',
             component: () => import('@/views/operate/c_layout'),
             name: 'CLayout',
@@ -125,9 +145,14 @@ const operateRouter = {
                     path: 'user',
                     component: () => import('@/views/operate/data_report/user'),
                     name: 'User',
-                    meta: { title: '用户报表', icon: 'el-icon-s-help', activeMenu:"/operate/data_report/manage" },
-                    hidden:true,
-                }
+                    meta: { title: '用户报表', icon: 'el-icon-s-help', auth: "manage_list" },
+                },
+                {
+                    path: 'meal',
+                    component: () => import('@/views/operate/data_report/meal'),
+                    name: 'Meal',
+                    meta: { title: '套餐报表', icon: 'el-icon-s-help', auth: "manage_list" },
+                },
             ]
         },
     ]

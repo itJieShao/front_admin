@@ -527,6 +527,7 @@
               <p class="unit">元</p>
             </div>
             <Echart
+              :key="timer"
               id="chart"
               unit="元"
               :pieData="detail.loss_detail"
@@ -683,6 +684,7 @@ export default {
       ],
       time_type: "1",
       loading: false,
+      timer:"",
     };
   },
   created() {
@@ -714,6 +716,7 @@ export default {
       }
       customerData(aData).then((res) => {
         this.detail = res;
+        this.timer = new Date().getTime();
         this.loading = false;
       });
     },

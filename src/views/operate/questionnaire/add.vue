@@ -24,6 +24,10 @@
             v-model="formData.title"
           ></el-input>
         </el-form-item>
+        <!-- <el-form-item label="小程序问卷">
+          <el-radio v-model="item.answer_type" label="1">小程序首页问卷</el-radio>
+          <el-radio v-model="item.answer_type" label="2">不在小程序上显示</el-radio>
+        </el-form-item> -->
         <el-form-item label="有效期">
           <el-date-picker
             v-model="effective_date"
@@ -145,6 +149,9 @@
     </el-card>
     <el-card style="margin-top: 20px" shadow="always">
       <h3>问卷内容</h3>
+      <!-- <el-button @click="addQuestionContent" type="success"
+        >新增问卷内容</el-button
+      > -->
       <el-form label-width="100px">
         <el-form-item
           :label="`第${index + 1}题`"
@@ -198,6 +205,15 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
+    <!-- <el-dialog :visible.sync="dialogQuestionTpl">
+      <pagination
+        v-show="total > 0"
+        :total="total"
+        :page.sync="listData.page"
+        :limit.sync="listData.page_size"
+        @pagination="getList"
+      />
+    </el-dialog> -->
   </div>
 </template>
 

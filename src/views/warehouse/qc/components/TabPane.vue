@@ -7,7 +7,14 @@
       fit
       highlight-current-row
       style="width: 100%"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        fixed="left"
+        align="center"
+        width="55"
+      ></el-table-column>
       <el-table-column width="200" align="center" label="QC分配ID">
         <template slot-scope="scope">
           <span>{{ scope.row.allocation_id }}</span>
@@ -76,8 +83,12 @@
 
       <el-table-column width="180" align="center" label="配货状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == 0" type="warning" effect="dark">待分配</el-tag>
-          <el-tag v-else-if="scope.row.status == 1" type="danger" effect="dark">分配减少</el-tag>
+          <el-tag v-if="scope.row.status == 0" type="warning" effect="dark"
+            >待分配</el-tag
+          >
+          <el-tag v-else-if="scope.row.status == 1" type="danger" effect="dark"
+            >分配减少</el-tag
+          >
           <el-tag v-else type="success" effect="dark">分配正常</el-tag>
         </template>
       </el-table-column>
@@ -128,9 +139,7 @@ export default {
   },
   methods: {
     goDetail(allocation_id) {
-      this.$router.push(
-        `/warehouse/qc_detail?allocation_id=${allocation_id}`
-      );
+      this.$router.push(`/warehouse/qc_detail?allocation_id=${allocation_id}`);
     },
     getList() {
       this.loading = true;
@@ -139,6 +148,9 @@ export default {
         this.list = res.list;
         this.loading = false;
       });
+    },
+    handleSelectionChange(val) {
+      this.$emit('checkedItem',val) 
     },
   },
 };

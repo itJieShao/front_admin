@@ -62,3 +62,30 @@ export function getOrderData(data) {
         data
     })
 }
+
+//问卷模板列表
+export function questionnaireTplList(data) {
+    return request({
+        url: '/customer/questionnaire-template/list',
+        method: 'post',
+        data
+    })
+}
+
+//新增问卷模板
+export function questionnaireTplAdd(data) {
+    return request({
+        url: '/customer/questionnaire-template/add',
+        method: 'post',
+        data
+    })
+}
+
+//问卷模板详情
+export function questionnaireTplDetail(data) {
+    return request({
+        url: '/customer/questionnaire-template/detail',
+        method: 'post',
+        data
+    })
+}
