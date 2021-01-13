@@ -83,6 +83,14 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
+            <p>售卖日期</p>
+            <p>{{ detail.saled_at }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
             <p>入库总份数</p>
             <p>{{ detail.qty }}</p>
           </div>
@@ -104,6 +112,9 @@
           </div>
         </el-card>
       </el-col>
+    </el-row>
+    <el-divider />
+    <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -112,9 +123,6 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-divider />
-    <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -164,7 +172,7 @@
             <span v-if="scope.row.diff_qty == 0">库存一致</span>
             <span v-else-if="scope.row.diff_qty > 0">库存增加</span>
             <span v-else-if="scope.row.diff_qty < 0">库存减少</span>
-            <span v-else>{{scope.row.diff_qty}}</span>
+            <span v-else>{{ scope.row.diff_qty }}</span>
           </template>
         </el-table-column>
       </el-table>
