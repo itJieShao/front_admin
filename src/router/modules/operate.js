@@ -145,13 +145,13 @@ const operateRouter = {
                     path: 'user',
                     component: () => import('@/views/operate/data_report/user'),
                     name: 'User',
-                    meta: { title: '用户报表', icon: 'el-icon-s-help', auth: "manage_list" },
+                    meta: { title: '用户报表', icon: 'el-icon-s-help', auth: "customer_report" },
                 },
                 {
                     path: 'meal',
                     component: () => import('@/views/operate/data_report/meal'),
                     name: 'Meal',
-                    meta: { title: '套餐报表', icon: 'el-icon-s-help', auth: "manage_list" },
+                    meta: { title: '套餐报表', icon: 'el-icon-s-help', auth: "package_report" },
                 },
             ]
         },

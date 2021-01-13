@@ -540,7 +540,7 @@
       </el-row>
       <div class="userDataTitle">
         <h3>用户数据</h3>
-        <p @click="moreUserData">更多>></p>
+        <!-- <p @click="moreUserData">更多>></p> -->
       </div>
       <el-row :gutter="10">
         <el-col :span="12">
