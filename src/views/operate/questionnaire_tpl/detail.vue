@@ -105,12 +105,7 @@
         <el-table-column prop="id" label="问卷ID"> </el-table-column>
         <el-table-column prop="title" label="问卷标题"> </el-table-column>
         <el-table-column prop="nper" label="期数"> </el-table-column>
-        <el-table-column prop="valid_at_start" label="有效期">
-            <template slot-scope="scope">
-                <span>{{scope.row.valid_at_start}}</span>至
-                <span>{{scope.row.valid_at_end}}</span>
-            </template>
-        </el-table-column>
+        <el-table-column prop="valid_at" label="有效期"> </el-table-column>
         <el-table-column prop="people_num" label="填卷人数"> </el-table-column>
         <el-table-column prop="reward_names" label="奖励"> </el-table-column>
         <el-table-column prop="created_at" label="创建时间"></el-table-column>
