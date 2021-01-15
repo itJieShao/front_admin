@@ -74,7 +74,9 @@
                     class="el-icon-error"
                     @click="delGoods(index, idx, idxc)"
                   ></i>
-                  <p class="time_type_font">{{itc.time_type_id | time_type_name(timeList)}}</p>
+                  <p class="time_type_font">
+                    {{ itc.time_type_id | time_type_name(timeList) }}
+                  </p>
                   <img class="goods_img" :src="itc.main_image" alt="" />
                   <div class="goods_sth">
                     <p class="goods_title">
@@ -192,14 +194,17 @@
       title="门店套餐列表"
       :visible.sync="dialogTableVisible"
     >
-      <el-row :gutter="20" style="margin-bottom: 20px;display: flex; justify-content: flex-end">
-        <el-col :span="15" style="display:flex;">
+      <el-row
+        :gutter="20"
+        style="margin-bottom: 20px; display: flex; justify-content: flex-end"
+      >
+        <el-col :span="15" style="display: flex">
           <el-input
             v-model="listData.name"
             :placeholder="`请输入套餐名称搜索`"
           ></el-input>
           <el-button
-            style="margin-left:20px;"
+            style="margin-left: 20px"
             @click="getVendorPackageList"
             type="primary"
             icon="el-icon-search"
@@ -373,6 +378,7 @@ export default {
       pasteIndex: 0, //拷贝菜单下标
       clearMenuDialog: false,
       clearIndex: 0, //清除菜单下标
+      postVendorMenuIdFlag: false,
     };
   },
   computed: {
@@ -407,10 +413,11 @@ export default {
       }
     },
   },
-  filters:{
-    time_type_name(time_type_id,timeList){
-      return timeList.find(item => item.time_type_id == time_type_id).time_type_name;
-    }
+  filters: {
+    time_type_name(time_type_id, timeList) {
+      return timeList.find((item) => item.time_type_id == time_type_id)
+        .time_type_name;
+    },
   },
   created() {
     this.getVendorPackageList();
@@ -421,7 +428,7 @@ export default {
   methods: {
     //获取门店用餐时段列表
     getTimeTypeData() {
-      getTimeTypeData({vendor_id:this.vendor_ids[0]}).then((res) => {
+      getTimeTypeData({ vendor_id: this.vendor_ids[0] }).then((res) => {
         this.timeTabActive = res[0].time_type_id;
         this.timeList = res;
       });
@@ -448,7 +455,11 @@ export default {
       }
     },
     pasteBtn(index) {
-      this.$set(this.formData.menu_data, index, JSON.parse(JSON.stringify(this.copyMenuItem)));
+      this.$set(
+        this.formData.menu_data,
+        index,
+        JSON.parse(JSON.stringify(this.copyMenuItem))
+      );
       this.pasteMenuDialog = false;
     },
     //清空菜单
@@ -498,12 +509,18 @@ export default {
     getMenuDetail() {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
-      menuDetail({
-        vendor_menu_id: this.formData.vendor_menu_id,
+      let aData = {
         time_type,
         menu_type,
         vendor_id: this.vendor_id,
-      }).then((res) => {
+      };
+      if (this.postVendorMenuIdFlag) {
+        aData.vendor_menu_id = this.formData.vendor_menu_id;
+      }
+      menuDetail(aData).then((res) => {
+        if (this.postVendorMenuIdFlag) {
+          this.postVendorMenuIdFlag = false;
+        }
         this.formData.menu_data = [];
         switch (menu_type) {
           case 1:
@@ -644,7 +661,7 @@ export default {
     //选择门店套餐
     handleSelectionChange(val) {
       val.forEach((item) => {
-        item.time_type_id = this.timeTabActive; 
+        item.time_type_id = this.timeTabActive;
       });
       this.vendorpackageChecked = val;
     },
@@ -659,7 +676,8 @@ export default {
         if (
           cache.find(
             (c) =>
-              c.time_type_id === t.time_type_id && c.vendor_package_id === t.vendor_package_id
+              c.time_type_id === t.time_type_id &&
+              c.vendor_package_id === t.vendor_package_id
           )
         ) {
           continue;
@@ -704,12 +722,15 @@ export default {
         item.forEach((it, idx) => {
           let vendor_package_data = [];
           it.vendor_package_data.forEach((itd) => {
-            vendor_package_data.push({time_type_id:itd.time_type_id,vendor_package_id:itd.vendor_package_id});
+            vendor_package_data.push({
+              time_type_id: itd.time_type_id,
+              vendor_package_id: itd.vendor_package_id,
+            });
           });
           menu_data[index].push({
             label: it.label,
             label_image: it.label_image,
-            vendor_package_data
+            vendor_package_data,
           });
         });
       });
@@ -757,6 +778,7 @@ export default {
     },
     //查看历史版本
     seeMenu(item) {
+      this.postVendorMenuIdFlag = true;
       this.formData.vendor_menu_id = item.vendor_menu_id;
       this.formData.vendor_id = item.vendor_id;
       this.formData.menu_type = item.menu_type;
@@ -780,7 +802,7 @@ img:not([src]) {
   display: flex;
   flex-wrap: wrap;
   .menu_box_content {
-    margin: 0 15px 15px 0;  
+    margin: 0 15px 15px 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -860,7 +882,7 @@ img:not([src]) {
               top: -10px;
               color: red;
             }
-            .time_type_font{
+            .time_type_font {
               position: absolute;
               top: 0;
               left: 0;

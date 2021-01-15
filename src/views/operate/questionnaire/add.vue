@@ -41,6 +41,7 @@
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
+            :default-time="['', '23:59:59']"
           >
           </el-date-picker>
         </el-form-item>
