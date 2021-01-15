@@ -38,7 +38,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>填卷次数</p>
-            <p>{{ detail.nper }}</p>
+            <p>{{ detail.write_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -54,7 +54,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>引用问卷</p>
-            <p>{{ detail.limit_people }}</p>
+            <p>{{ detail.use_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -62,7 +62,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>最近一次引用</p>
-            <p>{{ detail.people_num }}</p>
+            <p>{{ detail.last_questionnaire_title }}</p>
           </div>
         </el-card>
       </el-col>
@@ -70,7 +70,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>最近一次引用时间</p>
-            <p>{{ detail.created_user_name }}</p>
+            <p>{{ detail.last_questionnaire_at }}</p>
           </div>
         </el-card>
       </el-col>
@@ -116,12 +116,8 @@
         <el-table-column prop="created_at" label="创建时间"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
-            <span
-              :style="
-                scope.row.status ? 'background:green;' : 'background:red;'
-              "
-              >{{ scope.row.status ? "有效" : "无效" }}</span
-            >
+            <el-tag type="success" v-if="scope.row.status">有效</el-tag>
+            <el-tag type="danger" v-else>无效</el-tag>
           </template>
         </el-table-column>
       </el-table>

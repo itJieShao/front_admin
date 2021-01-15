@@ -397,9 +397,14 @@ export default {
           duration: 1000,
         });
       }
-      let questionnaire_template_id = this.formData.questionnaire_template_id;
+      let questionnaire_template_id = this.formData.questionnaire_template_id.concat(
+        this.questionnaireTpl[this.index].id
+      );
       let pageContent = this.pageContent;
       let content = this.formData.content;
+      this.formData.questionnaire_template_id = Array.from(
+        new Set(questionnaire_template_id)
+      );
       this.questionnaireTpl[this.index].content.forEach((item) => {
         this.checkedQuestionnaire.forEach((it) => {
           if (
@@ -408,7 +413,6 @@ export default {
               (c) => c.questionnaire_template_question_id == it
             ) === -1
           ) {
-            questionnaire_template_id.push(it);
             pageContent.push(item);
             content.push({
               questionnaire_template_question_id: it,
