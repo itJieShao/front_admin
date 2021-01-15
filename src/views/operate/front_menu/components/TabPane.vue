@@ -499,7 +499,7 @@ export default {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
       menuDetail({
-        //vendor_menu_id: this.formData.vendor_menu_id,
+        vendor_menu_id: this.formData.vendor_menu_id,
         time_type,
         menu_type,
         vendor_id: this.vendor_id,

@@ -153,11 +153,7 @@
     </el-card>
     <el-card style="margin-top: 20px" shadow="always">
       <h3>问卷内容</h3>
-      <div
-        v-for="(item, index) in pageContent"
-        :label="item.id"
-        :key="index"
-      >
+      <div v-for="(item, index) in pageContent" :label="item.id" :key="index">
         <div v-if="item.answer_type == 1">【单选题】{{ item.title }}</div>
         <div v-else-if="item.answer_type == 2">【多选题】{{ item.title }}</div>
         <div v-else>【填空题】{{ item.title }}</div>
@@ -382,10 +378,18 @@ export default {
     this.getMemberCardData();
     this.getQuestionnaireTplList();
   },
+  watch: {
+    dialogQuestionTplCon(isOpen) {
+      if (!isOpen) {
+        this.isIndeterminate = false;
+        this.checkAll = this.checkedQuestionnaire = [];
+      }
+    },
+  },
   methods: {
     //问卷模板添加到问卷
     addToQuestion() {
-      if (!this.checkedQuestionnaireIds.length) {
+      if (!this.checkedQuestionnaire.length) {
         return this.$message({
           message: "请选择问卷模板内容",
           type: "error",
@@ -397,8 +401,13 @@ export default {
       let content = this.formData.content;
       this.questionnaireTpl[this.index].content.forEach((item) => {
         this.checkedQuestionnaire.forEach((it) => {
-          if (item.id == it && content.findIndex(c => c.questionnaire_template_question_id == it) === -1) {
-            questionnaire_template_id.push(it)
+          if (
+            item.id == it &&
+            content.findIndex(
+              (c) => c.questionnaire_template_question_id == it
+            ) === -1
+          ) {
+            questionnaire_template_id.push(it);
             pageContent.push(item);
             content.push({
               questionnaire_template_question_id: it,
@@ -411,6 +420,8 @@ export default {
       });
       this.pageContent = pageContent;
       this.formData.content = content;
+      this.dialogQuestionTpl = false;
+      this.dialogQuestionTplCon = false;
     },
     handleCheckAllChange(val) {
       this.checkedQuestionnaire = val ? this.checkedQuestionnaireIds : [];

@@ -153,6 +153,12 @@ const operateRouter = {
                     name: 'Meal',
                     meta: { title: '套餐报表', icon: 'el-icon-s-help', auth: "package_report" },
                 },
+                {
+                    path: 'questionnaire',
+                    component: () => import('@/views/operate/data_report/questionnaire'),
+                    name: 'Questionnaire',
+                    meta: { title: '问卷报表', icon: 'el-icon-s-help', auth: "questionnaire_report" },
+                },
             ]
         },
     ]
