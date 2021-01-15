@@ -67,7 +67,7 @@
             </el-col>
             <el-col :span="8">
               <el-card shadow="always">
-                <h4>套餐总份数</h4>
+                <h4>套餐总款数</h4>
                 <div class="data_box">
                   <p class="data">{{ detail.total_species_num }}</p>
                   <p class="unit">款</p>
