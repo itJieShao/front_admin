@@ -116,7 +116,7 @@
               <el-row :gutter="10" class="rank">
                 <el-col :span="20">
                   <el-row :gutter="24" style="display: flex">
-                    <div class="rank_sth" style="margin-left: 50px">
+                    <div class="rank_sth" style="margin:0 20px 0 50px;width:280px;">
                       <p>{{ item.package_name }}</p>
                       <img :src="item.iamge" alt="" />
                     </div>

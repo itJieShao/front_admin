@@ -76,7 +76,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>有效期</p>
-            <p>{{ detail.valid_at_start }}至{{ detail.valid_at_end }}</p>
+            <p>{{ detail.valid_at }}</p>
           </div>
         </el-card>
       </el-col>
@@ -151,7 +151,12 @@
     </el-row>
     <el-divider></el-divider>
     <el-card shadow="always">
-      <el-table v-loading="loading" :data="detail.customer_data" stripe style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="detail.customer_data"
+        stripe
+        style="width: 100%"
+      >
         <el-table-column prop="customer_name" label="用户昵称">
         </el-table-column>
         <el-table-column prop="phone" label="手机号码"> </el-table-column>
@@ -337,9 +342,11 @@ export default {
         } else {
           item.answer_data.forEach((it) => {
             userItem.questionnaire_data.forEach((itd) => {
-              if (itd.answer == it.id) {
-                it.active = true;
-              }
+              itd.answer.forEach((itdc) => {
+                if (itdc == it.id) {
+                  it.active = true;
+                }
+              });
             });
           });
         }

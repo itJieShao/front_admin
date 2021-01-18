@@ -46,10 +46,7 @@
 
       <el-table-column width="200" align="center" label="有效期">
         <template slot-scope="scope">
-          <span
-            >{{ scope.row.valid_at_start }} 至
-            {{ scope.row.valid_at_end }}</span
-          >
+          <span>{{ scope.row.valid_at }}</span>
         </template>
       </el-table-column>
 
@@ -100,7 +97,10 @@
 </template>
 
 <script>
-import { questionnaireList,questionnaireDisable } from "@/api/operate/questionnaire";
+import {
+  questionnaireList,
+  questionnaireDisable,
+} from "@/api/operate/questionnaire";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -134,11 +134,11 @@ export default {
         this.loading = false;
       });
     },
-    searchBtn(){
+    searchBtn() {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(id,index) {
+    updateStatus(id, index) {
       questionnaireDisable({ id }).then((res) => {
         if (res) {
           this.list[index].status = 0;

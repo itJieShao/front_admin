@@ -17,6 +17,14 @@ export function orderDetail(data) {
     data
   })
 }
+//取消订单
+export function cancelOrder(data) {
+  return request({
+    url: '/order/order/cancel',
+    method: 'post',
+    data
+  })
+}
 //订单管理模块 --- end
 
 //门店列表

@@ -169,10 +169,17 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" fixed="right" align="center" label="操作">
+      <el-table-column width="200" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
+          >
+          <el-button
+            v-if="scope.row.can_cancel"
+            size="mini"
+            type="danger"
+            @click="cancelOrder(scope.row.id, scope.$index)"
+            >取消订单</el-button
           >
         </template>
       </el-table-column>
@@ -186,7 +193,7 @@
     />
     <el-dialog title="订单筛选" :visible.sync="orderDialog">
       <el-form label-width="80px">
-        <el-form-item label="订单状态" style="margin-bottom:10px;">
+        <el-form-item label="订单状态" style="margin-bottom: 10px">
           <el-checkbox-group v-model="listData.order_status">
             <el-checkbox
               v-for="item in orderStatusList"
@@ -299,7 +306,7 @@
 </template>
 
 <script>
-import { orderList } from "@/api/basic";
+import { orderList, cancelOrder } from "@/api/basic";
 import { getTimeTypeData } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
@@ -404,6 +411,29 @@ export default {
     //     },
     //   };
     // },
+
+    //取消订单
+    cancelOrder(order_id, index) {
+      this.$confirm("是否确定取消该订单", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        cancelOrder({ order_id, type: 2 }).then((res) => {
+          if (res) {
+            this.$notify({
+              title: "成功",
+              message: "取消订单成功",
+              type: "success",
+              duration: 1000,
+              onClose: () => {
+                this.$set(this.list[index], "can_cancel", 0);
+              },
+            });
+          }
+        });
+      });
+    },
     getTimeTypeData() {
       getTimeTypeData().then((res) => {
         this.timeList = res;
