@@ -46,12 +46,22 @@
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
-                  <p>厨师</p>
-                  <p>{{ detail.created_user_name }}</p>
+                  <p>重量</p>
+                  <p>{{ detail.weight }}</p>
                 </div>
               </el-card>
             </el-col>
             <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>厨师</p>
+                  <p>{{ detail.created_user_name }}</p>
+                </div>
+              </el-card>
+            </el-col>  
+          </el-row>
+          <el-row style="margin-top: 15px" :gutter="12">
+            <el-col :span="6">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>供应商</p>
@@ -59,8 +69,6 @@
                 </div>
               </el-card>
             </el-col>
-          </el-row>
-          <el-row style="margin-top: 15px" :gutter="12">
             <el-col :span="6">
               <el-card shadow="always">
                 <div class="item_flex">
@@ -69,7 +77,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>成本预警价</p>
@@ -77,7 +85,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>基础成本价</p>
@@ -85,7 +93,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>毛利率</p>
