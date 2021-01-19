@@ -157,7 +157,7 @@
             <div class="time_info">
               <p>下单时间：{{ detail.created_at }}</p>
               <p>付款时间：{{ detail.pay_at }}</p>
-              <p>取餐时间：{{ detail.take_at }}</p>
+              <p>取餐时间：{{ detail.take_at.join(',') }}</p>
             </div>
           </div>
         </el-card>
