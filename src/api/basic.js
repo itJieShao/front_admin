@@ -20,7 +20,7 @@ export function orderDetail(data) {
 //取消订单
 export function cancelOrder(data) {
   return request({
-    url: '/order/order/cancel',
+    url: '/order/back-ground/cancel',
     method: 'post',
     data
   })
