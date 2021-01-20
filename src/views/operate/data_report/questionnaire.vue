@@ -98,6 +98,7 @@
       >
       <div style="margin: 15px 0"></div>
       <el-checkbox-group
+        v-if="questionnaireTpl.length"
         v-model="checkedQuestionnaire"
         @change="handleCheckedChange"
       >
