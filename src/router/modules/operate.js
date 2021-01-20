@@ -37,7 +37,7 @@ const operateRouter = {
             path: 'questionnaire_tpl',
             component: () => import('@/views/operate/questionnaire_tpl'),
             name: 'QuestionnaireTpl',
-            meta: { title: '问卷模板', icon: 'el-icon-s-help', auth: "questionnaire_tpl" },
+            meta: { title: '问卷模板', icon: 'el-icon-s-help', auth: "questionnaire_template" },
         },
         {
             path: 'questionnaire_tpl_add',
