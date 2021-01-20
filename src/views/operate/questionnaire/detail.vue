@@ -283,6 +283,17 @@ export default {
       total: 0,
     };
   },
+  watch:{
+    dialogFlag(flag){
+      if (!flag){
+        this.detail.questionnaire_data.forEach(item => {
+          item.answer_data.forEach(it => {
+            it.active = false
+          })
+        })
+      }
+    }
+  },
   components: {
     Echart,
     Pagination,

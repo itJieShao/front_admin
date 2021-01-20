@@ -103,6 +103,34 @@
             </el-col>
           </el-row>
         </el-form-item>
+        <el-form-item label="单品要求">
+          <el-row :gutter="12">
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>加热速率</p>
+                  <p>{{ detail.heating_rate }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>敏感度</p>
+                  <p>{{ detail.temperature_curve_sensitive_name }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>单元格位置</p>
+                  <p>{{ detail.cell_location_name }}</p>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-form-item>
         <el-form-item label="加工指标">
           <el-card shadow="always">
             <p>{{ detail.process_indicators }}</p>
