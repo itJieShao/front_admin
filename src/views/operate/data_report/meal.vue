@@ -118,7 +118,7 @@
                   <el-row :gutter="24" style="display: flex">
                     <div class="rank_sth" style="margin:0 20px 0 50px;width:280px;">
                       <p>{{ item.package_name }}</p>
-                      <img :src="item.iamge" alt="" />
+                      <img :src="item.image" alt="" />
                     </div>
                     <div class="rank_sth">
                       <p>销量</p>
