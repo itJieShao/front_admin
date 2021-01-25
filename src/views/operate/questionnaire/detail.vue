@@ -64,15 +64,15 @@
       </el-col>
     </el-row>
     <el-row :gutter="12" style="margin-top: 10px">
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>创建时间</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.created_at }}</p>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <el-card shadow="always">
           <div class="item_flex">
             <p>有效期</p>
@@ -80,7 +80,15 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>小程序问卷</p>
+            <p>{{ detail.show_position_name }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>状态</p>
@@ -92,7 +100,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6" v-if="detail.status">
+      <el-col :span="4" v-if="detail.status">
         <el-card shadow="always">
           <div class="item_flex">
             <p>操作</p>
@@ -118,7 +126,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>奖励类型</p>
@@ -127,6 +135,14 @@
         </el-card>
       </el-col>
       <el-col :span="6">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>奖励有效期</p>
+            <p>{{ item.valid_at }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
         <img style="height: 110px" :src="item.image" alt="" />
       </el-col>
     </el-row>

@@ -98,7 +98,7 @@
             <el-form-item label-width="auto" label="奖励类型">
               <el-radio-group v-model="item.type" @change="item.reward_id = ''">
                 <el-radio label="1">红包</el-radio>
-                <el-radio label="2">次数卡</el-radio>
+                <!-- <el-radio label="2">次数卡</el-radio> -->
                 <el-radio label="3">优惠券</el-radio>
               </el-radio-group>
             </el-form-item>
@@ -111,7 +111,7 @@
             >
               <el-option
                 v-for="it in redEnvelopesData"
-                :label="it.name"
+                :label="it.name + '（有效期：' + it.valid_at + '）'"
                 :value="it.id"
               ></el-option>
             </el-select>
@@ -137,10 +137,11 @@
             >
               <el-option
                 v-for="it in couponData"
-                :label="it.name"
+                :label="it.name + '（有效期：' + it.valid_at + '）'"
                 :value="it.id"
               ></el-option>
             </el-select>
+            <span v-if="item.reward_id">奖励有效期：{{ item.reward_valid_at }}</span>
           </el-card>
           <el-button @click="addReward" type="success">新增奖励</el-button>
         </el-form-item>
@@ -470,17 +471,17 @@ export default {
     },
     rewardChange(id, type, index) {
       if (type == 1) {
-        this.formData.reward[index].reward_name = this.redEnvelopesData.find(
-          (item) => item.id == id
-        ).name;
+        let rewardItem = this.redEnvelopesData.find((item) => item.id == id);
+        this.formData.reward[index].reward_name = rewardItem.name;
+        this.formData.reward[index].reward_valid_at = rewardItem.valid_at;
       } else if (type == 2) {
-        this.formData.reward[index].reward_name = this.memberCardData.find(
-          (item) => item.id == id
-        ).name;
+        let rewardItem = this.memberCardData.find((item) => item.id == id);
+        this.formData.reward[index].reward_name = rewardItem.name;
+        this.formData.reward[index].reward_valid_at = rewardItem.valid_at;
       } else {
-        this.formData.reward[index].reward_name = this.couponData.find(
-          (item) => item.id == id
-        ).name;
+        let rewardItem = this.couponData.find((item) => item.id == id);
+        this.formData.reward[index].reward_name = rewardItem.name;
+        this.formData.reward[index].reward_valid_at = rewardItem.valid_at;
       }
     },
     //上传封面图
