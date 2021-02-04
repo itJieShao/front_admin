@@ -5,10 +5,14 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop'
+  device: 'desktop',
+  copyMenuItem:[]
 }
 
 const mutations = {
+  UPLOADMENU: (state,menuItem) => {
+    state.copyMenuItem = menuItem
+  },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false

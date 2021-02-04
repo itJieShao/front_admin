@@ -300,6 +300,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { vendorPackageList } from "@/api/basic";
 import { getTimeTypeData } from "@/api/operate/front_menu";
 import {
@@ -382,6 +383,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["app"]), //拷贝的菜单数据
     day_tip() {
       let day_tip = "";
       switch (this.formData.menu_type) {
@@ -429,8 +431,10 @@ export default {
     //获取门店用餐时段列表
     getTimeTypeData() {
       getTimeTypeData({ vendor_id: this.vendor_ids[0] }).then((res) => {
-        this.timeTabActive = res[0].time_type_id;
-        this.timeList = res;
+        if (res.length) {
+          this.timeTabActive = res[0].time_type_id || "";
+          this.timeList = res;
+        }
       });
     },
     //复制菜单
@@ -438,6 +442,10 @@ export default {
       this.copyMenuItem = JSON.parse(
         JSON.stringify(this.formData.menu_data[index])
       );
+      // this.$store.commit(
+      //   "app/UPLOADMENU",
+      //   JSON.parse(JSON.stringify(this.formData.menu_data[index]))
+      // );
       this.$notify({
         title: "成功",
         message: "复制成功",
@@ -459,6 +467,7 @@ export default {
         this.formData.menu_data,
         index,
         JSON.parse(JSON.stringify(this.copyMenuItem))
+        // JSON.parse(JSON.stringify(this.app.copyMenuItem))
       );
       this.pasteMenuDialog = false;
     },
