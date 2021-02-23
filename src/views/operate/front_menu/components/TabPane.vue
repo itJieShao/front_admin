@@ -12,15 +12,16 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="8" style="display:flex;align-items: center;">
         <el-button icon="el-icon-check" @click="saveMenuClick" type="primary"
           >保存</el-button
         >
         <el-button icon="el-icon-plus" @click="openReleaseMenu" type="success"
           >发布</el-button
         >
+        <p style="color:red;margin-left:10px;font-size:12px;" v-if="!releaseStatus">菜单还未发布哦</p>
       </el-col>
-      <el-col :span="16" style="display: flex; justify-content: flex-end">
+      <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button @click="historyMenuListDialog = true" type="warning"
           >历史版本</el-button
         >
@@ -324,6 +325,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      releaseStatus:1,
       pageLoading: false,
       timeList: [],
       timeTabActive: "",
@@ -527,6 +529,7 @@ export default {
         aData.vendor_menu_id = this.formData.vendor_menu_id;
       }
       menuDetail(aData).then((res) => {
+        this.releaseStatus = res.status;
         if (this.postVendorMenuIdFlag) {
           this.postVendorMenuIdFlag = false;
         }
@@ -747,11 +750,12 @@ export default {
       saveMenu(aData).then((res) => {
         if (res) {
           this.formData.vendor_menu_id = res.vendor_menu_id;
-          this.$notify({
-            title: "成功",
-            message: "保存成功",
-            type: "success",
-            duration: 1000,
+          this.$confirm("已保存当前菜单，是否一并发布到小程序菜单？", "提示", {
+            confirmButtonText: "发布",
+            cancelButtonText: "不用了",
+            type: "warning",
+          }).then(() => {
+            this.openReleaseMenu();
           });
         }
       });
@@ -776,6 +780,7 @@ export default {
         if (res) {
           this.getHistoryMenu();
           this.releaseMenuDialog = false;
+          this.releaseStatus = 1;
           this.$notify({
             title: "成功",
             message: "发布成功",
