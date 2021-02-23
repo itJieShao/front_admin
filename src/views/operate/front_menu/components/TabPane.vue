@@ -756,6 +756,8 @@ export default {
             type: "warning",
           }).then(() => {
             this.openReleaseMenu();
+          }).catch(() => {
+            this.releaseStatus = 0;
           });
         }
       });
