@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //审核接口
 export function audit(data) {
     return request({
-        url: '/product/audit/audit',
+        url: '/other/audit/audit',
         method: 'post',
         data
     })
