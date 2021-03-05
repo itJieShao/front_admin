@@ -439,11 +439,11 @@ export default {
           this.formData.business_days = business_days;
         }
         if (res.image) {
-          this.formData.images = res.image;
-          delete this.formData.image;
+          this.$set(this.formData, "images", res.image);
           this.detailMainImgFile = [
             { name: "detailMainImgFile", url: res.image },
           ];
+          delete this.formData.image;
         }
         if (res.business_license.length > 0) {
           let business_license = [];
@@ -590,8 +590,8 @@ export default {
             time_type_id: item.id,
             time_type_name: item.name,
             time: item.time,
-            business_start: item.business_start || '',
-            business_end: item.business_end || '',
+            business_start: item.business_start || "",
+            business_end: item.business_end || "",
           });
         }
       });
