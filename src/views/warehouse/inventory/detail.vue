@@ -177,6 +177,34 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <el-card shadow="always" style="margin-top:15px;">
+      <p class="item_title">盘货商品列表</p>
+      <el-table :data="detail.eims_data" stripe style="width: 100%">
+        <el-table-column align="center" prop="good_id" label="商品ID">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="good_name"
+          label="商品名称"
+          width="200"
+        >
+        </el-table-column>
+        <!-- <el-table-column align="center" prop="take_code" label="配货员报损数量">
+        </el-table-column>
+        <el-table-column align="center" prop="qty" label="店员报损数量">
+        </el-table-column> -->
+        <el-table-column align="center" prop="last_in_store_num" label="上次入库">
+        </el-table-column>
+        <el-table-column align="center" prop="num" label="应存库存">
+        </el-table-column>
+        <el-table-column align="center" prop="real_num" label="实际库存">
+        </el-table-column>
+        <el-table-column align="center" prop="diff" label="盘货差额">
+        </el-table-column>
+        <el-table-column align="center" prop="diff_name" label="盘货差额">
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
