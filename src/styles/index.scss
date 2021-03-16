@@ -103,6 +103,9 @@ img:not([src]) {
   }
 }
 .form_tip{
-  color: #777;
+  color: #999;
   font-size: 14px;
+  display: block;
+  line-height: 20px;
+  margin-top: 5px;
 }

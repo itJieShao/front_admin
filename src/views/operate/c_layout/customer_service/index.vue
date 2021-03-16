@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>关于我们</h2>
+    <h2>联系客服</h2>
     <el-tabs v-model="tabActive" style="margin-top: 15px" type="border-card">
       <el-tab-pane
         v-for="item in tabCon"
@@ -29,14 +29,13 @@ export default {
           name: "一合拾盒小程序",
         },
         {
-          key: "0",
+          key: "2",
           name: "盒小饭堂小程序",
         },
       ],
     };
   },
+  methods: {},
 };
 </script>
 
-<style>
-</style>

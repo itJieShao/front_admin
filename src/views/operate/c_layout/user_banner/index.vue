@@ -27,6 +27,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" width="160" label="使用环境">
+        <template slot-scope="scope">
+          <span>{{ scope.row.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="200" align="center" label="图片缩略图">
         <template slot-scope="scope">
           <img style="width:150px;" :src="scope.row.url" alt="">
@@ -41,7 +47,7 @@
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <div style="display: inline-block; width: 100px">
+          <div v-if="list.length > 1" style="display: inline-block; width: 100px">
             <i
               @click="userChangePosition(1, scope.$index)"
               class="el-icon-top"

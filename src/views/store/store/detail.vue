@@ -126,11 +126,21 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12" v-if="detail.business_days_name">
+      <el-col :span="8" v-if="detail.business_days_name">
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
             <p>{{ detail.business_days_name.join("、") }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>所属小程序环境</p>
+            <p>
+              {{ detail.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}
+            </p>
           </div>
         </el-card>
       </el-col>

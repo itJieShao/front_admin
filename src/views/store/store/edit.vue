@@ -21,6 +21,12 @@
         <el-form-item label="门店名称">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
+        <el-form-item label="所属小程序环境">
+        <el-select style="width:100%;" v-model="formData.env" placeholder="请选择所属小程序环境">
+          <el-option label="一合拾盒小程序" :value="1"></el-option>
+          <el-option label="盒小饭堂小程序" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
         <el-form-item label="城市">
           <el-select
             @change="provinceChange"
@@ -303,6 +309,7 @@ export default {
   data() {
     return {
       formData: {
+        env:"",
         images: "",
         name: "",
         province_code: "",

@@ -165,6 +165,13 @@ const operateRouter = {
             meta: { title: '编辑门店优惠促销公告', activeMenu:'/operate/c_layout' },
         },
         {
+            path: 'c_layout/customer_service',
+            component: () => import('@/views/operate/c_layout/customer_service'),
+            name: 'customerService',
+            hidden:true,
+            meta: { title: '联系客服', activeMenu:'/operate/c_layout' },
+        },
+        {
             path: 'c_layout/about',
             component: () => import('@/views/operate/c_layout/about'),
             name: 'about',

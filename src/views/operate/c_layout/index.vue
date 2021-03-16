@@ -60,20 +60,10 @@ export default {
           this.$router.push("/operate/c_layout/index_bot_banner");
           break;
         case 3:
-          this.$message({
-            showClose: true,
-            message: "暂未开放",
-            type: "warning",
-          });
-          //this.$router.push("/operate/c_layout/store_notice");
+          this.$router.push("/operate/c_layout/store_notice");
           break;
         case 4:
-          this.$message({
-            showClose: true,
-            message: "暂未开放",
-            type: "warning",
-          });
-          //this.$router.push("/operate/c_layout/store_notice");
+          this.$router.push("/operate/c_layout/customer_service");
           break;
         case 5:
           this.$router.push("/operate/c_layout/about");

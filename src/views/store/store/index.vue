@@ -39,6 +39,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" width="160" label="所属小程序环境">
+        <template slot-scope="scope">
+          <span>{{ scope.row.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="200" align="center" label="省市">
         <template slot-scope="scope">
           <span>{{ scope.row.province_name }}{{ scope.row.city_name }}</span>

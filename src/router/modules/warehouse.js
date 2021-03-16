@@ -5,7 +5,7 @@ const warehouseRouter = {
     component: Layout,
     name: 'Warehouse',
     alwaysShow: true,
-    meta: { title: '仓库管理', icon: 'el-icon-s-help' },
+    meta: { title: '供应链管理', icon: 'el-icon-s-help' },
     children: [
         {
             path: 'purchase',

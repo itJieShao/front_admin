@@ -1,5 +1,5 @@
 <template>
-  <div id="editor"></div>
+  <div :class="className"></div>
 </template>
 
 <script>
@@ -10,7 +10,13 @@ export default {
       editor: null,
     };
   },
-  props: ["value"],
+  props: {
+    value:String,
+    className:{
+      type: String,
+      default: "editor"
+    }
+  },
   watch: {
     value(val) {
       if (val !== this.editor.txt.html()) {
@@ -19,7 +25,7 @@ export default {
     },
   },
   mounted() {
-    const editor = new E("#editor");
+    const editor = new E(`.${this.className}`);
     editor.config.showLinkImg = false;//隐藏插入网络图片的功能
     // 配置 server 接口地址
     editor.config.uploadImgServer = this.$editorUpLoadApi;

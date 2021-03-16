@@ -15,64 +15,49 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="门店名称">
+      <el-table-column align="center" width="200" label="门店名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.package_id }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="优惠促销公告条数">
+      <el-table-column align="center" width="180" label="优惠促销公告条数">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.content_data.length }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="发布时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.package_label_name }}</span>
+          <span>{{ scope.row.time }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作人员">
         <template slot-scope="scope">
-          <span>{{ scope.row.sale_price }}</span>
+          <span>{{ scope.row.admin_user_name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goEdit(scope.row.package_id)"
+          <el-button size="mini" @click="goEdit(scope.row.id)"
             >编辑</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="listData.page"
-      :limit.sync="listData.page_size"
-      @pagination="getList"
-    />
   </div>
 </template>
 
 <script>
-import { packageList } from "@/api/basic";
-import Pagination from "@/components/Pagination";
+import { storeNoticeList } from "@/api/operate/c_layout/store_notice";
 export default {
-  components: { Pagination },
   data() {
     return {
-      list: null,
-      listData: {
-        page: 1,
-        page_size: 10,
-        name: "",
-        export: "",
-      },
+      list: [],
       loading: false,
-      total: 0,
+      type:1
     };
   },
   created() {
@@ -82,21 +67,15 @@ export default {
     addMeal() {
       this.$router.push("/operate/c_layout/store_notice/add");
     },
-    goEdit(package_id) {
+    goEdit(id) {
       this.$router.push(
-        `/operate/c_layout/store_notice/edit?package_id=${package_id}`
-      );
-    },
-    goDetail(package_id) {
-      this.$router.push(
-        `/basic/goods/preinstall_meal_detail?package_id=${package_id}`
+        `/operate/c_layout/store_notice/edit?id=${id}`
       );
     },
     getList() {
       this.loading = true;
-      packageList(this.listData).then((res) => {
-        this.list = res.list;
-        this.total = res.count;
+      storeNoticeList().then((res) => {
+        this.list = res;
         this.loading = false;
       });
     },
