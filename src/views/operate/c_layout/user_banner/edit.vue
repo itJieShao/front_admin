@@ -75,6 +75,7 @@ export default {
   methods: {
     getDetail() {
       bannerDetail({ id: this.formData.id }).then((res) => {
+        this.formData.env = res.env,
         this.formData.image = res.url;
         this.formData.order = res.order;
         this.formData.address = res.address;

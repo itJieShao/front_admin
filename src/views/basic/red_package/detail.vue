@@ -127,19 +127,11 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段</p>
+              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
               <p>{{ detail.time_type_names }}</p>
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="4">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>串联时段</p>
-              <p>{{ detail.time_type_mode_name }}</p>
             </div>
           </el-card>
         </el-col>
@@ -353,19 +345,11 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段</p>
+              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
               <p>{{ detail.time_type_names }}</p>
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="4">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>串联时段</p>
-              <p>{{ detail.time_type_mode_name }}</p>
             </div>
           </el-card>
         </el-col>
@@ -487,19 +471,11 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段</p>
+              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
               <p>{{ detail.time_type_names }}</p>
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="4">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>串联时段</p>
-              <p>{{ detail.time_type_mode_name }}</p>
             </div>
           </el-card>
         </el-col>
