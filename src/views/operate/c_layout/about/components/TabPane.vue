@@ -2,7 +2,7 @@
   <div>
     <el-form label-width="50px">
       <el-form-item label="标题">
-        <el-input v-model="title" />
+        <el-input v-model="title" placeholder="请输入标题" />
       </el-form-item>
       <el-form-item label="内容">
         <Editor @getNewHtml="getNewHtml" :value="content" />
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getDetail() {
-      aboutData({env:this.type}).then((res) => {
+      aboutData({ env: this.type }).then((res) => {
         this.title = res.title;
         this.content = res.content;
       });
@@ -40,16 +40,17 @@ export default {
       this.content = content;
     },
     onSubmit() {
-      saveAbout({ title: this.title, content: this.content }).then((res) => {
+      saveAbout({
+        env: this.type,
+        title: this.title,
+        content: this.content,
+      }).then((res) => {
         if (res) {
           this.$notify({
             title: "成功",
             message: "保存成功",
             type: "success",
             duration: 1000,
-            onClose: () => {
-              this.$router.go(-1);
-            },
           });
         }
       });

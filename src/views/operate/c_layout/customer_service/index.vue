@@ -29,7 +29,7 @@ export default {
           name: "一合拾盒小程序",
         },
         {
-          key: "2",
+          key: "0",
           name: "盒小饭堂小程序",
         },
       ],

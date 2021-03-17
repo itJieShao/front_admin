@@ -25,8 +25,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="小程序问卷">
+          <el-radio v-model="formData.show_position" label="3"
+            >一合拾盒小程序</el-radio
+          >
           <el-radio v-model="formData.show_position" label="1"
-            >小程序首页问卷</el-radio
+            >盒小饭堂小程序</el-radio
           >
           <el-radio v-model="formData.show_position" label="2"
             >不在小程序上显示</el-radio
@@ -338,7 +341,7 @@ export default {
         type: "",
         reward: [],
         limit_people: "",
-        show_position: "1",
+        show_position: "3",
         questionnaire_template_id: [],
         content: [],
         // content: [
@@ -553,13 +556,11 @@ export default {
         this.formData.valid_at_end = this.effective_date[1];
       }
       let aData = JSON.parse(JSON.stringify(this.formData));
-      // aData.content.forEach((item) => {
-      //   let answer = item.answer;
-      //   item.answer = [];
-      //   answer.forEach((it) => {
-      //     item.answer.push(it.value);
-      //   });
-      // });
+      aData.content.forEach((item) => {
+        if (!item.questionnaire_template_answer_ids.length){
+          item.questionnaire_template_answer_ids = [""];
+        }
+      });
       questionnaireAdd(aData).then((res) => {
         if (res) {
           this.$notify({

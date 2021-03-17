@@ -41,7 +41,7 @@
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <div style="display: inline-block; width: 100px">
+          <div v-if="list.length > 1" style="display: inline-block; width: 100px">
             <i
               @click="userChangePosition(1, scope.$index)"
               class="el-icon-top"

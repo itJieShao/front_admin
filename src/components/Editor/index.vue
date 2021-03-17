@@ -11,11 +11,11 @@ export default {
     };
   },
   props: {
-    value:String,
-    className:{
+    value: String,
+    className: {
       type: String,
-      default: "editor"
-    }
+      default: "editor",
+    },
   },
   watch: {
     value(val) {
@@ -26,13 +26,13 @@ export default {
   },
   mounted() {
     const editor = new E(`.${this.className}`);
-    editor.config.showLinkImg = false;//隐藏插入网络图片的功能
+    editor.config.showLinkImg = false; //隐藏插入网络图片的功能
     // 配置 server 接口地址
     editor.config.uploadImgServer = this.$editorUpLoadApi;
-    editor.config.uploadFileName = 'file'
+    editor.config.uploadFileName = "file";
     editor.config.uploadImgParams = {
-      token: this.$store.state.user.token
-    }
+      token: this.$store.state.user.token,
+    };
     // 配置 onchange 回调函数
     editor.config.onchange = (newHtml) => {
       this.$emit("getNewHtml", newHtml);
@@ -46,4 +46,5 @@ export default {
 </script>
 
 <style>
+
 </style>

@@ -17,31 +17,25 @@
     >
       <el-table-column align="center" width="200" label="门店名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" width="180" label="优惠促销公告条数">
-        <template slot-scope="scope">
-          <span>{{ scope.row.content_data.length }}</span>
+          <span>{{ scope.row.vendor_name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="发布时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.time }}</span>
+          <span>{{ scope.row.updated_at }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作人员">
         <template slot-scope="scope">
-          <span>{{ scope.row.admin_user_name }}</span>
+          <span>{{ scope.row.updated_admin_name }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goEdit(scope.row.id)"
+          <el-button size="mini" @click="goEdit(scope.row.vendor_id)"
             >编辑</el-button
           >
         </template>
@@ -67,9 +61,9 @@ export default {
     addMeal() {
       this.$router.push("/operate/c_layout/store_notice/add");
     },
-    goEdit(id) {
+    goEdit(vendor_id) {
       this.$router.push(
-        `/operate/c_layout/store_notice/edit?id=${id}`
+        `/operate/c_layout/store_notice/edit?vendor_id=${vendor_id}`
       );
     },
     getList() {
