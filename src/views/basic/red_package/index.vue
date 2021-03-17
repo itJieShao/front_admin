@@ -89,9 +89,27 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" align="center" label="有效期">
+      <el-table-column width="100" align="center" label="共存">
         <template slot-scope="scope">
-          <span>{{ scope.row.valid_at }}</span>
+          <span>{{ scope.row.coexistence_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200" align="center" label="使用门店">
+        <template slot-scope="scope">
+          <span>{{ scope.row.vendor_names }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200" align="center" label="禁用门店">
+        <template slot-scope="scope">
+          <span>{{ scope.row.disable_vendor_names }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200" align="center" label="使用时段">
+        <template slot-scope="scope">
+          <span>{{ scope.row.time_type }}</span>
         </template>
       </el-table-column>
 
