@@ -181,6 +181,7 @@
               :key="item.vendor_id"
               :label="item.vendor_name"
               :value="item.vendor_id"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -195,10 +196,11 @@
             placeholder="请选择禁用的指定门店"
           >
             <el-option
-              v-for="item in storeList"
+              v-for="item in disableStoreList"
               :key="item.vendor_id"
               :label="item.vendor_name"
               :value="item.vendor_id"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -260,6 +262,7 @@
               :key="item.vendor_id"
               :label="item.vendor_name"
               :value="item.vendor_id"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -360,6 +363,7 @@
                 :key="item.vendor_id"
                 :label="item.vendor_name"
                 :value="item.vendor_id"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -374,10 +378,11 @@
               placeholder="请选择禁用的指定门店"
             >
               <el-option
-                v-for="item in storeList"
+                v-for="item in disableStoreList"
                 :key="item.vendor_id"
                 :label="item.vendor_name"
                 :value="item.vendor_id"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -488,6 +493,7 @@
               :key="item.vendor_id"
               :label="item.vendor_name"
               :value="item.vendor_id"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -502,10 +508,11 @@
             placeholder="请选择禁用的指定门店"
           >
             <el-option
-              v-for="item in storeList"
+              v-for="item in disableStoreList"
               :key="item.vendor_id"
               :label="item.vendor_name"
               :value="item.vendor_id"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -529,7 +536,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="满足金额">
-            <el-input v-model="formData.condition_price" placeholder="请输入满足使用条件的金额"></el-input>
+            <el-input
+              v-model="formData.condition_price"
+              placeholder="请输入满足使用条件的金额"
+            ></el-input>
           </el-form-item>
         </template>
         <el-form-item label="使用时段">
@@ -682,6 +692,7 @@ export default {
     return {
       list: [],
       storeList: [],
+      disableStoreList: [],
       listData: {
         page: 1,
         page_size: 10,
@@ -741,6 +752,26 @@ export default {
       this.formData.valid_at_start = val[0];
       this.formData.valid_at_end = val[1];
     },
+    "formData.vendor_ids"(arr){
+      this.disableStoreList.forEach(item => {
+        item.disabled = false;
+        arr.forEach(it => {
+          if (item.vendor_id == it){
+            item.disabled = true
+          }
+        })
+      })
+    },
+    "formData.disable_vendor_ids"(arr){
+      this.storeList.forEach(item => {
+        item.disabled = false;
+        arr.forEach(it => {
+          if (item.vendor_id == it){
+            item.disabled = true
+          }
+        })
+      })
+    }
   },
   created() {
     this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
@@ -865,7 +896,8 @@ export default {
     },
     getStoreList() {
       searchStoreList().then((res) => {
-        this.storeList = res;
+        this.storeList = JSON.parse(JSON.stringify(res));
+        this.disableStoreList = JSON.parse(JSON.stringify(res));
       });
     },
     copy(id) {},
