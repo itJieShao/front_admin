@@ -23,7 +23,7 @@
           <el-card shadow="always">
             <div class="item_flex">
               <p>共存</p>
-              <p>{{ detail.coextence_name }}</p>
+              <p>{{ detail.coexistence_name }}</p>
             </div>
           </el-card>
         </el-col>
