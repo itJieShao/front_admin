@@ -420,12 +420,20 @@
             v-if="formData.mode"
             :label="formData.mode == 1 ? '提前时间' : '时段过后时间'"
           >
-            <el-input
+            <!-- <el-input
               type="number"
               placeholder="请输入时间"
               v-model="formData.discount_at"
               ><template slot="append">小时</template></el-input
+            > -->
+            <el-time-picker
+              style="width: 100%"
+              v-model="formData.discount_at"
+              format="HH:mm:ss"
+              value-format="HH:mm:ss"
+              placeholder="请选择时间点"
             >
+            </el-time-picker>
           </el-form-item>
           <el-form-item label="使用时段">
             <el-radio v-model="formData.time_type_mode" label="1"
@@ -770,26 +778,26 @@ export default {
       this.formData.valid_at_start = val[0];
       this.formData.valid_at_end = val[1];
     },
-    "formData.vendor_ids"(arr){
-      this.disableStoreList.forEach(item => {
+    "formData.vendor_ids"(arr) {
+      this.disableStoreList.forEach((item) => {
         item.disabled = false;
-        arr.forEach(it => {
-          if (item.vendor_id == it){
-            item.disabled = true
+        arr.forEach((it) => {
+          if (item.vendor_id == it) {
+            item.disabled = true;
           }
-        })
-      })
+        });
+      });
     },
-    "formData.disable_vendor_ids"(arr){
-      this.storeList.forEach(item => {
+    "formData.disable_vendor_ids"(arr) {
+      this.storeList.forEach((item) => {
         item.disabled = false;
-        arr.forEach(it => {
-          if (item.vendor_id == it){
-            item.disabled = true
+        arr.forEach((it) => {
+          if (item.vendor_id == it) {
+            item.disabled = true;
           }
-        })
-      })
-    }
+        });
+      });
+    },
   },
   created() {
     this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
