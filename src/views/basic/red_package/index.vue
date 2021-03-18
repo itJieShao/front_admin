@@ -429,8 +429,8 @@
             <el-time-picker
               style="width: 100%"
               v-model="formData.discount_at"
-              format="HH:mm:ss"
-              value-format="HH:mm:ss"
+              format="HH:mm"
+              value-format="HH:mm"
               placeholder="请选择时间点"
             >
             </el-time-picker>
