@@ -434,6 +434,8 @@
               placeholder="请选择时间点"
             >
             </el-time-picker>
+            <span class="form_tip" v-if="formData.mode == 1">（注：这里的提前时间指的是提前一天）</span>
+            <span class="form_tip" v-else>（注：这里指的是当天用餐时段过后的时间）</span>
           </el-form-item>
           <el-form-item label="使用时段">
             <el-radio v-model="formData.time_type_mode" label="1"
@@ -560,12 +562,6 @@
                 :value="1"
               ></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="满足金额">
-            <el-input
-              v-model="formData.condition_price"
-              placeholder="请输入满足使用条件的金额"
-            ></el-input>
           </el-form-item>
         </template>
         <el-form-item label="使用时段">
