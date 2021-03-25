@@ -196,8 +196,9 @@
                   <div class="i_right">
                     <p>{{ item.num }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteMaterial(item.material_id)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -223,7 +224,7 @@
                     </p>
                   </div>
                   <div>
-                      <el-input type="number" v-model="materialNum"></el-input>
+                    <el-input type="number" v-model="materialNum"></el-input>
                   </div>
                 </div>
               </div>
@@ -259,8 +260,9 @@
                   <div class="i_right">
                     <p>{{ item.num }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteSeasoning(item.seasoning_id)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -319,8 +321,9 @@
                   <div class="i_right">
                     <p>{{ item.temperature }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteTemperatureCorve(index)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -632,8 +635,7 @@ p {
 .el-input-number {
   flex: 1;
 }
-.del_btn {
-  margin-left: 20px;
+.el-icon-delete {
   cursor: pointer;
 }
 .i_position {

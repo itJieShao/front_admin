@@ -22,11 +22,15 @@
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="所属小程序环境">
-        <el-select style="width:100%;" v-model="formData.env" placeholder="请选择所属小程序环境">
-          <el-option label="一合拾盒小程序" :value="1"></el-option>
-          <el-option label="盒小饭堂小程序" :value="0"></el-option>
-        </el-select>
-      </el-form-item>
+          <el-select
+            style="width: 100%"
+            v-model="formData.env"
+            placeholder="请选择所属小程序环境"
+          >
+            <el-option label="一合拾盒小程序" :value="1"></el-option>
+            <el-option label="盒小饭堂小程序" :value="0"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="城市">
           <el-select
             @change="provinceChange"
@@ -107,6 +111,84 @@
             ></bm-local-search>
           </baidu-map>
         </el-form-item>
+        <el-form-item label="外卖功能">
+          <el-select
+            style="width: 100%"
+            placeholder="请选择外卖功能"
+            v-model="formData.need_distribution"
+          >
+            <el-option label="关闭外卖配送" :value="0"></el-option>
+            <el-option label="开放外卖配送" :value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <template v-if="formData.need_distribution">
+          <el-form-item label="外卖时段">
+            <el-checkbox-group v-model="formData.distribution_time_type_ids">
+              <el-checkbox v-for="item in timeList" :label="item.id">{{
+                item.name
+              }}</el-checkbox>
+            </el-checkbox-group>
+            <span class="form_tip"
+              >（注：如果只选择了午餐开通外卖，用户同时下单早餐、午餐，则无法配送，必须是分开下才能配送午餐）</span
+            >
+          </el-form-item>
+          <el-form-item label="配送范围">
+            <el-input
+              v-model="formData.distribution_distance"
+              placeholder="请输入配送范围"
+            >
+              <template slot="append">米</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="配送费设置">
+            <el-card shadow="always">
+              <div>
+                <div class="item_title">
+                  <p>距离(单位/米)</p>
+                  <p>配送费(单位/元)</p>
+                  <p>配送时间(单位/分钟)</p>
+                </div>
+                <el-divider />
+                <div
+                  class="item_content"
+                  v-for="(item, index) in formData.distribution_rule_data"
+                  :key="index"
+                >
+                  <div>
+                    <el-input
+                      class="distribution_rule_input"
+                      :disabled="
+                        index == formData.distribution_rule_data.length - 1
+                      "
+                      type="number"
+                      v-model="item.distance"
+                      placeholder="请输入距离"
+                    ></el-input>
+                  </div>
+                  <div>
+                    <el-input
+                      class="distribution_rule_input"
+                      type="number"
+                      v-model="item.fee"
+                      placeholder="请输入配送费"
+                    ></el-input>
+                  </div>
+                  <div>
+                    <el-input
+                      class="distribution_rule_input"
+                      type="number"
+                      v-model="item.time"
+                      placeholder="请输入配送时间"
+                    ></el-input>
+                  </div>
+                </div>
+              </div>
+              <el-button type="success" @click="addDistribution"
+                >新增</el-button
+              >
+            </el-card>
+          </el-form-item>
+        </template>
         <el-form-item label="运营管理人员">
           <el-select
             style="width: 100%"
@@ -309,7 +391,7 @@ export default {
   data() {
     return {
       formData: {
-        env:"",
+        env: "",
         images: "",
         name: "",
         province_code: "",
@@ -332,6 +414,11 @@ export default {
         business_license: [],
         food_permit: "",
         food_permit_image: [],
+
+        need_distribution: 0,
+        distribution_distance: "",
+        distribution_time_type_ids: [],
+        distribution_rule_data: [{ distance: "", fee: "", time: "" }],
       },
       detailMainImgFile: [], //详情门店图片
       detailImagesFile: [], //详情营业执照
@@ -362,6 +449,13 @@ export default {
       zoom: 0, //编辑回显地图参数
     };
   },
+  watch: {
+    "formData.distribution_distance"(val) {
+      this.formData.distribution_rule_data[
+        this.formData.distribution_rule_data.length - 1
+      ].distance = val;
+    },
+  },
   async created() {
     await this.getProvinceList();
     if (this.$route.query.vendor_id) {
@@ -374,6 +468,13 @@ export default {
     this.getAdminList();
   },
   methods: {
+    addDistribution() {
+      this.formData.distribution_rule_data.unshift({
+        distance: "",
+        fee: "",
+        time: "",
+      });
+    },
     //获取门店用餐时段列表
     getTimeTypeData() {
       return getTimeTypeData().then((res) => {
@@ -415,7 +516,11 @@ export default {
     },
     getVendorDetail() {
       vendorDetail({ vendor_id: this.formData.vendor_id }).then((res) => {
-        this.formData = res;
+        for (let key in this.formData) {
+          if (res[key]) {
+            this.formData[key] = res[key];
+          }
+        }
         this.formData.vendor_id = res.id;
         this.formData.province_code = res.province_id;
         this.formData.city_code = res.city_id;
@@ -444,6 +549,13 @@ export default {
             });
           });
           this.formData.business_days = business_days;
+        }
+        if (res.distribution_time_type_ids.length > 0) {
+          let distribution_time_type_ids = [];
+          res.distribution_time_type_ids.forEach((item) => {
+            distribution_time_type_ids.push(Number(item));
+          });
+          this.formData.distribution_time_type_ids = distribution_time_type_ids;
         }
         if (res.image) {
           this.$set(this.formData, "images", res.image);
@@ -602,6 +714,12 @@ export default {
           });
         }
       });
+      aData.distribution_time_type_ids = JSON.stringify(
+        aData.distribution_time_type_ids
+      );
+      aData.distribution_rule_data = JSON.stringify(
+        aData.distribution_rule_data
+      );
       let saveApi = aData.vendor_id ? vendorEdit : vendorAdd;
       saveApi(aData).then((res) => {
         if (res) {
@@ -645,6 +763,9 @@ p {
   position: relative;
   margin-bottom: 20px;
   align-items: center;
+  div {
+    flex: 1;
+  }
   p {
     display: flex;
     justify-content: center;
@@ -661,5 +782,10 @@ p {
   cursor: pointer;
   position: absolute;
   right: 0;
+}
+.distribution_rule_input {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
 }
 </style>

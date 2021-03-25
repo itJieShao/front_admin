@@ -1,7 +1,166 @@
 <template>
   <div class="app-container">
-    <template v-if="detail.type == 3 || detail.type == 4">
-      <h2>优惠红包详情</h2>
+    <template v-if="detail.type == 3">
+      <h2>红包详情</h2>
+      <el-row :gutter="12">
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>红包ID</p>
+              <p>{{ detail.id }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>类型</p>
+              <p>{{ detail.type_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>共存</p>
+              <p>{{ detail.coextence_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>名称</p>
+              <p>{{ detail.name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>优惠金额</p>
+              <p>{{ detail.favourable_price }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>数量</p>
+              <p>{{ detail.num }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>有效期</p>
+              <p>{{ detail.valid_at }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>创建时间</p>
+              <p>{{ detail.created_at }}</p>
+            </div>
+          </el-card>
+        </el-col>
+
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>已领</p>
+              <p>{{ detail.receive_num }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>每人限领数量</p>
+              <p>{{ detail.receive_num_limit }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>创建人</p>
+              <p>{{ detail.created_user_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>使用门店</p>
+              <p>{{ detail.vendor_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>禁用门店</p>
+              <p>{{ detail.disable_vendor_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>
+                使用时段{{
+                  detail.time_type_mode_name
+                    ? "（" + detail.time_type_mode_name + "）"
+                    : ""
+                }}
+              </p>
+              <p>{{ detail.time_type_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>状态</p>
+              <p>
+                <el-tag effect="dark" type="danger" v-if="detail.status == 0"
+                  >已禁用</el-tag
+                >
+                <el-tag effect="dark" type="success" v-else>已启用</el-tag>
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>操作</p>
+              <p>
+                <el-button
+                  v-if="detail.status == 1"
+                  @click="disable"
+                  size="mini"
+                  >禁用</el-button
+                >
+                <el-button @click="copy" size="mini">复制</el-button>
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </template>
+    <template v-if="detail.type == 4">
+      <h2>满减优惠详情</h2>
       <el-row :gutter="12">
         <el-col :span="4">
           <el-card shadow="always">
@@ -53,14 +212,6 @@
         </el-col>
       </el-row>
       <el-row style="margin-top: 15px" :gutter="12">
-        <el-col :span="4">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>折扣率</p>
-              <p>{{ detail.discount }}</p>
-            </div>
-          </el-card>
-        </el-col>
         <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
@@ -93,8 +244,164 @@
             </div>
           </el-card>
         </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>每人限领数量</p>
+              <p>{{ detail.receive_num_limit }}</p>
+            </div>
+          </el-card>
+        </el-col>
       </el-row>
       <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>创建人</p>
+              <p>{{ detail.created_user_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>使用门店</p>
+              <p>{{ detail.vendor_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>禁用门店</p>
+              <p>{{ detail.disable_vendor_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>
+                使用时段{{
+                  detail.time_type_mode_name
+                    ? "（" + detail.time_type_mode_name + "）"
+                    : ""
+                }}
+              </p>
+              <p>{{ detail.time_type_names }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>状态</p>
+              <p>
+                <el-tag effect="dark" type="danger" v-if="detail.status == 0"
+                  >已禁用</el-tag
+                >
+                <el-tag effect="dark" type="success" v-else>已启用</el-tag>
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>操作</p>
+              <p>
+                <el-button
+                  v-if="detail.status == 1"
+                  @click="disable"
+                  size="mini"
+                  >禁用</el-button
+                >
+                <el-button @click="copy" size="mini">复制</el-button>
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </template>
+    <template v-if="detail.type == 8">
+      <h2>优惠折扣详情</h2>
+      <el-row :gutter="12">
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>优惠ID</p>
+              <p>{{ detail.id }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>类型</p>
+              <p>{{ detail.type_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>共存</p>
+              <p>{{ detail.coextence_name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>名称</p>
+              <p>{{ detail.name }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>折扣率</p>
+              <p>{{ detail.discount }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>创建时间</p>
+              <p>{{ detail.created_at }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>有效期</p>
+              <p>{{ detail.valid_at }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>数量</p>
+              <p>{{ detail.num }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>已领</p>
+              <p>{{ detail.receive_num }}</p>
+            </div>
+          </el-card>
+        </el-col>
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
@@ -111,7 +418,9 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
               <p>使用门店</p>
@@ -119,7 +428,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
               <p>禁用门店</p>
@@ -130,7 +439,13 @@
         <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
+              <p>
+                使用时段{{
+                  detail.time_type_mode_name
+                    ? "（" + detail.time_type_mode_name + "）"
+                    : ""
+                }}
+              </p>
               <p>{{ detail.time_type_names }}</p>
             </div>
           </el-card>
@@ -348,7 +663,13 @@
         <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
+              <p>
+                使用时段{{
+                  detail.time_type_mode_name
+                    ? "（" + detail.time_type_mode_name + "）"
+                    : ""
+                }}
+              </p>
               <p>{{ detail.time_type_names }}</p>
             </div>
           </el-card>
@@ -403,7 +724,7 @@
       </el-row>
     </template>
     <template v-if="detail.type == 1 || detail.type == 7">
-      <h2>折扣详情</h2>
+      <h2>{{ detail.type == 1 ? "套餐" : "下单" }}折扣详情</h2>
       <el-row :gutter="12">
         <el-col :span="4">
           <el-card shadow="always">
@@ -474,7 +795,13 @@
         <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>使用时段{{detail.time_type_mode_name?"（"+detail.time_type_mode_name+"）": ""}}</p>
+              <p>
+                使用时段{{
+                  detail.time_type_mode_name
+                    ? "（" + detail.time_type_mode_name + "）"
+                    : ""
+                }}
+              </p>
               <p>{{ detail.time_type_names }}</p>
             </div>
           </el-card>

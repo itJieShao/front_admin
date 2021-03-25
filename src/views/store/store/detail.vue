@@ -126,21 +126,11 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8" v-if="detail.business_days_name">
+      <el-col :span="12" v-if="detail.business_days_name">
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
             <p>{{ detail.business_days_name.join("、") }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>所属小程序环境</p>
-            <p>
-              {{ detail.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}
-            </p>
           </div>
         </el-card>
       </el-col>
@@ -161,6 +151,61 @@
         </el-card>
       </el-col> -->
     </el-row>
+    <el-row style="margin-top: 15px" :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>所属小程序环境</p>
+            <p>
+              {{ detail.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>外卖功能</p>
+            <p>
+              {{ detail.need_distribution ? "开放外卖配送" : "关闭外卖配送" }}
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <template v-if="detail.need_distribution">
+        <el-col :span="12">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>外卖时段</p>
+              <p>
+                {{ detail.distribution_time_type_names }}
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>配送范围</p>
+              <p>
+                {{ detail.distribution_distance }}
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+      </template>
+    </el-row>
+    <template v-if="detail.need_distribution">
+      <el-divider />
+      <el-table :data="detail.distribution_rule_data" style="width: 100%">
+        <el-table-column align="center" prop="distance" label="距离(单位/米)">
+        </el-table-column>
+        <el-table-column align="center" prop="fee" label="配送费(单位/元)">
+        </el-table-column>
+        <el-table-column align="center" prop="time" label="配送时间(单位/分钟)">
+        </el-table-column>
+      </el-table>
+    </template>
     <el-divider />
     <el-row :gutter="12">
       <el-col :span="24">

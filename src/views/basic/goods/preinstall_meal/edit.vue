@@ -194,7 +194,7 @@ export default {
         export: "",
         name: "",
         page: 1,
-        page_size: 5,
+        page_size: 10,
       },
       labelList: [],
       productList: [],
