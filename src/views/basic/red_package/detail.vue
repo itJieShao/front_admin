@@ -784,7 +784,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" v-if="detail.mode != 3">
           <el-card shadow="always">
             <div class="item_flex">
               <p>{{ detail.mode == 2 ? "超时" : "提前" }}时间</p>
@@ -792,7 +792,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="detail.mode == 3 ? 12 : 8">
           <el-card shadow="always">
             <div class="item_flex">
               <p>

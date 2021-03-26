@@ -343,10 +343,11 @@
             >
               <el-option label="提前下单" :value="1"></el-option>
               <el-option label="过时清仓" :value="2"></el-option>
+              <el-option label="第二份半价" :value="3"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item
-            v-if="formData.mode"
+            v-if="formData.mode == 1 || formData.mode == 2"
             :label="formData.mode == 1 ? '提前时间' : '时段过后时间'"
           >
             <!-- <el-input
@@ -370,7 +371,7 @@
               >（注：这里指的是当天用餐时段过后的时间）</span
             >
           </el-form-item>
-          <el-form-item label="折扣率">
+          <el-form-item v-if="formData.mode == 1 || formData.mode == 2" label="折扣率">
             <el-input
               placeholder="请输入0-1的折扣率"
               v-model="formData.discount"
@@ -939,7 +940,9 @@ export default {
       } else if (ftype == 3) {
         this.dialogTitle = "新增套餐折扣";
       } else if (ftype == 4) {
-        this.dialogTitle = "新增红包/优惠券";
+        this.dialogTitle = "新增优惠券";
+      } else if (ftype == 5) {
+        this.dialogTitle = "新增红包";
       }
       this.formData = JSON.parse(JSON.stringify(this.defaultFormData));
       this.valid_at = "";

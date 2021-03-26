@@ -111,7 +111,7 @@
             ></bm-local-search>
           </baidu-map>
         </el-form-item>
-        <el-form-item label="外卖功能">
+        <el-form-item label="外卖功能" v-if="false">
           <el-select
             style="width: 100%"
             placeholder="请选择外卖功能"
@@ -550,7 +550,7 @@ export default {
           });
           this.formData.business_days = business_days;
         }
-        if (res.distribution_time_type_ids.length > 0) {
+        if (res.distribution_time_type_ids && res.distribution_time_type_ids.length > 0) {
           let distribution_time_type_ids = [];
           res.distribution_time_type_ids.forEach((item) => {
             distribution_time_type_ids.push(Number(item));

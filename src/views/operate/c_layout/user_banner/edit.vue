@@ -3,7 +3,7 @@
     <h2>{{ $route.query.id ? "编辑个人中心banner" : "新增个人中心banner" }}</h2>
     <el-form label-width="80px">
       <el-form-item label="使用环境">
-        <el-select style="width:100%;" v-model="formData.env" placeholder="请选择使用环境">
+        <el-select :disabled="$route.query.id" style="width:100%;" v-model="formData.env" placeholder="请选择使用环境">
           <el-option label="一合拾盒小程序" :value="1"></el-option>
           <el-option label="盒小饭堂小程序" :value="0"></el-option>
         </el-select>
