@@ -102,6 +102,27 @@ const operateRouter = {
             meta: { title: '编辑首页中部广告图', activeMenu:'/operate/c_layout' },
         },
         {
+            path: 'c_layout/index_md1_banner',
+            component: () => import('@/views/operate/c_layout/index_md1_banner'),
+            name: 'indexMd1Bar',
+            hidden:true,
+            meta: { title: '首页中部宣传图', activeMenu:'/operate/c_layout' },
+        },
+        {
+            path: 'c_layout/index_md1_banner_add',
+            component: () => import('@/views/operate/c_layout/index_md1_banner/edit'),
+            name: 'indexMd1BarAdd',
+            hidden:true,
+            meta: { title: '新增首页中部宣传图', activeMenu:'/operate/c_layout' },
+        },
+        {
+            path: 'c_layout/index_md1_banner_edit',
+            component: () => import('@/views/operate/c_layout/index_md1_banner/edit'),
+            name: 'indexMd1BarEdit',
+            hidden:true,
+            meta: { title: '编辑首页中部宣传图', activeMenu:'/operate/c_layout' },
+        },
+        {
             path: 'c_layout/index_bot_banner',
             component: () => import('@/views/operate/c_layout/index_bot_banner'),
             name: 'indexBotBar',

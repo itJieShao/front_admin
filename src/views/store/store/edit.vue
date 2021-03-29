@@ -111,7 +111,7 @@
             ></bm-local-search>
           </baidu-map>
         </el-form-item>
-        <el-form-item label="外卖功能" v-if="false">
+        <el-form-item label="外卖功能">
           <el-select
             style="width: 100%"
             placeholder="请选择外卖功能"
@@ -181,6 +181,11 @@
                       placeholder="请输入配送时间"
                     ></el-input>
                   </div>
+                  <i
+                    v-if="formData.distribution_rule_data.length > 1 && index != formData.distribution_rule_data.length - 1"
+                    @click="deleteDistributionRule(index)"
+                    class="el-icon-delete delete-btn"
+                  ></i>
                 </div>
               </div>
               <el-button type="success" @click="addDistribution"
@@ -468,6 +473,9 @@ export default {
     this.getAdminList();
   },
   methods: {
+    deleteDistributionRule(index){
+      this.formData.distribution_rule_data.splice(index,1)
+    },
     addDistribution() {
       this.formData.distribution_rule_data.unshift({
         distance: "",
@@ -521,6 +529,14 @@ export default {
             this.formData[key] = res[key];
           }
         }
+        if (res.distribution_distance == 0) {
+          this.formData.distribution_distance = "";
+        }
+        if (!res.distribution_rule_data.length) {
+          this.formData.distribution_rule_data = [
+            { distance: "", fee: "", time: "" },
+          ];
+        }
         this.formData.vendor_id = res.id;
         this.formData.province_code = res.province_id;
         this.formData.city_code = res.city_id;
@@ -550,7 +566,10 @@ export default {
           });
           this.formData.business_days = business_days;
         }
-        if (res.distribution_time_type_ids && res.distribution_time_type_ids.length > 0) {
+        if (
+          res.distribution_time_type_ids &&
+          res.distribution_time_type_ids.length > 0
+        ) {
           let distribution_time_type_ids = [];
           res.distribution_time_type_ids.forEach((item) => {
             distribution_time_type_ids.push(Number(item));
