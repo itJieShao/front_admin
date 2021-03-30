@@ -529,6 +529,7 @@ export default {
             this.formData[key] = res[key];
           }
         }
+        this.formData.env = res.env;
         if (res.distribution_distance == 0) {
           this.formData.distribution_distance = "";
         }
