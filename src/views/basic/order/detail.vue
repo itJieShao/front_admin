@@ -150,7 +150,7 @@
     </el-row>
     <el-divider />
     <el-row :gutter="12">
-      <el-col :span="detail.after_sale_data.length ? 12 : 24">
+      <el-col :span="8">
         <el-card shadow="always">
           <div>
             <p>订单操作时间</p>
@@ -162,7 +162,18 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12" v-if="detail.after_sale_data.length > 0">
+      <el-col :span="8" v-if="detail.receive_at || detail.distribution_at">
+        <el-card shadow="always">
+          <div>
+            <p>配送操作时间</p>
+            <div class="time_info">
+              <p>配送接单：{{ detail.receive_at }}</p>
+              <p>配送完成：{{ detail.distribution_at }}</p>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8" v-if="detail.after_sale_data.length > 0">
         <el-card shadow="always">
           <div>
             <p>售后操作时间</p>

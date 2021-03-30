@@ -85,6 +85,30 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="140" align="center" label="外卖功能">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.need_distribution_name }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="160" align="center" label="外卖时段">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.distribution_time_type_names }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140" align="center" label="配送范围">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.distribution_distance }}
+          </span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="130" align="center" label="设备">
         <template slot-scope="scope">
           <el-tag type="success" effect="dark">
