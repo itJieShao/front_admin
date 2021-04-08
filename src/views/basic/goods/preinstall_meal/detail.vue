@@ -6,6 +6,9 @@
         <el-form-item label="套餐标题">
           <p>{{ detail.name }}</p>
         </el-form-item>
+        <el-form-item label="副标题">
+          <p>{{ detail.title }}</p>
+        </el-form-item>
         <el-form-item label="套餐主图">
           <img :src="detail.main_image" alt="" />
         </el-form-item>

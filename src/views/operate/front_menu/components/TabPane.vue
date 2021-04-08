@@ -12,14 +12,19 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="8" style="display:flex;align-items: center;">
+      <el-col :span="8" style="display: flex; align-items: center">
         <el-button icon="el-icon-check" @click="saveMenuClick" type="primary"
           >保存</el-button
         >
         <el-button icon="el-icon-plus" @click="openReleaseMenu" type="success"
           >发布</el-button
         >
-        <p style="color:red;margin-left:10px;font-size:12px;" v-if="!releaseStatus">菜单还未发布哦</p>
+        <p
+          style="color: red; margin-left: 10px; font-size: 12px"
+          v-if="!releaseStatus"
+        >
+          菜单还未发布哦
+        </p>
       </el-col>
       <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button @click="historyMenuListDialog = true" type="warning"
@@ -43,11 +48,22 @@
               v-for="(it, idx) in item"
             >
               <img style="width: 50%" :src="it.label_image" alt="" />
-              <div>
-                <p>{{ it.label }}</p>
+              <div style="align-items: center">
+                <div v-if="it.time_type_id" style="flex-direction: column">
+                  <p>{{ it.label }}</p>
+                  <p>({{ it.time_type_name }})</p>
+                </div>
+                <p v-else>{{ it.label }}</p>
                 <i
                   @click="
-                    openTypeDialog(index, 1, it.label, it.label_image, idx)
+                    openTypeDialog(
+                      index,
+                      1,
+                      it.label,
+                      it.label_image,
+                      it.time_type_id,
+                      idx
+                    )
                   "
                   class="el-icon-edit"
                 ></i>
@@ -76,7 +92,7 @@
                     @click="delGoods(index, idx, idxc)"
                   ></i>
                   <p class="time_type_font">
-                    {{ itc.time_type_id | time_type_name(timeList) }}
+                    {{ itc.time_type_id | time_type_name(vendorTimeList) }}
                   </p>
                   <img class="goods_img" :src="itc.main_image" alt="" />
                   <div class="goods_sth">
@@ -183,6 +199,22 @@
             v-model="type_name"
           ></el-input>
         </el-form-item>
+        <el-form-item label="分类时段">
+          <el-select
+            placeholder="请选择标签时段"
+            clearable
+            style="width: 100%"
+            v-model="label_time_type_id"
+          >
+            <el-option
+              v-for="item in timeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTypeVisible = false">取 消</el-button>
@@ -219,7 +251,7 @@
         type="border-card"
       >
         <el-tab-pane
-          v-for="item in timeList"
+          v-for="item in vendorTimeList"
           :key="item.time_type_id"
           :label="item.time_type_name"
           :name="item.time_type_id"
@@ -298,22 +330,38 @@
         >
       </span>
     </el-dialog>
+    <el-dialog title="提示" :visible.sync="StoreMenuDialog" width="30%" center>
+      <p v-for="(item, index) in defect_package_names" :key="index">
+        {{ vendor_name }}没有预设套餐"{{ item }}"对应的门店套餐
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="StoreMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="copyTipFont">好的，复制</el-button>
+      </span>
+    </el-dialog>
+    <textarea id="copyTxt" cols="30" rows="10"></textarea>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import { vendorPackageList } from "@/api/basic";
-import { getTimeTypeData } from "@/api/operate/front_menu";
+import { getVendorTimeTypeData } from "@/api/operate/front_menu";
+import { getTimeTypeData } from "@/api/store";
 import {
   menuDetail,
   saveMenu,
   releaseMenu,
   historyMenu,
+  copyVendorMenu,
 } from "@/api/operate/front_menu";
 import Pagination from "@/components/Pagination";
 export default {
   props: {
     vendor_id: {
+      type: String,
+      default: "",
+    },
+    vendor_name: {
       type: String,
       default: "",
     },
@@ -325,8 +373,9 @@ export default {
   components: { Pagination },
   data() {
     return {
-      releaseStatus:1,
+      releaseStatus: 1,
       pageLoading: false,
+      vendorTimeList: [],
       timeList: [],
       timeTabActive: "",
       MenuType: [
@@ -382,6 +431,10 @@ export default {
       clearMenuDialog: false,
       clearIndex: 0, //清除菜单下标
       postVendorMenuIdFlag: false,
+      label_time_type_id: "",
+      label_time_type_name: "",
+      StoreMenuDialog: false,
+      defect_package_names: [],
     };
   },
   computed: {
@@ -403,6 +456,15 @@ export default {
     },
   },
   watch: {
+    label_time_type_id(val) {
+      if (val) {
+        this.label_time_type_name = this.timeList.find(
+          (item) => item.id == val
+        ).name;
+      } else {
+        this.label_time_type_name = "";
+      }
+    },
     "formData.time_type"() {
       this.getMenuDetail();
     },
@@ -414,28 +476,43 @@ export default {
         this.type_name = "";
         this.label_image = "";
         this.label_image_file = [];
+        this.label_time_type_id = "";
       }
     },
   },
   filters: {
-    time_type_name(time_type_id, timeList) {
-      return timeList.find((item) => item.time_type_id == time_type_id)
-        .time_type_name;
+    time_type_name(time_type_id, vendorTimeList) {
+      if (time_type_id && vendorTimeList.length) {
+        return vendorTimeList.find((item) => item.time_type_id == time_type_id)
+          .time_type_name;
+      }
     },
   },
   created() {
     this.getVendorPackageList();
     this.getMenuDetail();
     this.getHistoryMenu();
+    this.getVendorTimeTypeData();
     this.getTimeTypeData();
   },
   methods: {
-    //获取门店用餐时段列表
+    copyTipFont() {
+      copyTxt.value = this.defect_package_names.join(",");
+      copyTxt.select();
+      document.execCommand("copy");
+      this.StoreMenuDialog = false;
+    },
     getTimeTypeData() {
-      getTimeTypeData({ vendor_id: this.vendor_ids[0] }).then((res) => {
+      getTimeTypeData().then((res) => {
+        this.timeList = res;
+      });
+    },
+    //获取门店用餐时段列表
+    getVendorTimeTypeData() {
+      getVendorTimeTypeData({ vendor_id: this.vendor_ids[0] }).then((res) => {
         if (res.length) {
           this.timeTabActive = res[0].time_type_id || "";
-          this.timeList = res;
+          this.vendorTimeList = res;
         }
       });
     },
@@ -444,10 +521,11 @@ export default {
       this.copyMenuItem = JSON.parse(
         JSON.stringify(this.formData.menu_data[index])
       );
-      // this.$store.commit(
-      //   "app/UPLOADMENU",
-      //   JSON.parse(JSON.stringify(this.formData.menu_data[index]))
-      // );
+      this.$store.commit("app/COPYMENUPARM", {
+        copy_vendor_menu_id: this.formData.vendor_menu_id,
+        copy_vendor_id: this.vendor_id,
+        copy_day: index + 1,
+      });
       this.$notify({
         title: "成功",
         message: "复制成功",
@@ -465,12 +543,38 @@ export default {
       }
     },
     pasteBtn(index) {
-      this.$set(
-        this.formData.menu_data,
-        index,
-        JSON.parse(JSON.stringify(this.copyMenuItem))
-        // JSON.parse(JSON.stringify(this.app.copyMenuItem))
-      );
+      if (this.app.copy_vendor_id == this.vendor_id) {
+        this.$set(
+          this.formData.menu_data,
+          index,
+          JSON.parse(JSON.stringify(this.copyMenuItem))
+        );
+      } else {
+        copyVendorMenu({
+          vendor_menu_id: this.app.copy_vendor_menu_id,
+          day: this.app.copy_day,
+          vendor_id: this.app.copy_vendor_id,
+        }).then((res) => {
+          if (res.defect_package_names.length) {
+            this.defect_package_names = res.defect_package_names;
+            this.StoreMenuDialog = true;
+          }
+          if (res.vendor_menu_data && res.vendor_menu_data.length) {
+            res.vendor_menu_data.forEach((item, index) => {
+              if (index == 0) {
+                item.checked = true;
+              } else {
+                item.checked = false;
+              }
+            });
+            this.$set(
+              this.formData.menu_data,
+              index,
+              JSON.parse(JSON.stringify(res.vendor_menu_data))
+            );
+          }
+        });
+      }
       this.pasteMenuDialog = false;
     },
     //清空菜单
@@ -576,11 +680,12 @@ export default {
       this.formData.menu_data[index][idx].checked = true;
     },
     //打开分类弹窗
-    openTypeDialog(index, type, type_name, label_image, idx) {
+    openTypeDialog(index, type, type_name, label_image, time_type_id, idx) {
       if (type) {
         this.type_name = type_name;
         this.label_image = label_image;
         this.label_image_file = [{ name: "labelImageFile", url: label_image }];
+        this.label_time_type_id = time_type_id;
         this.menu_data_c_index = idx;
       }
       this.typeEdit = type;
@@ -637,10 +742,18 @@ export default {
         this.formData.menu_data[this.menu_data_index][
           this.menu_data_c_index
         ].label_image = this.label_image;
+        this.formData.menu_data[this.menu_data_index][
+          this.menu_data_c_index
+        ].time_type_id = this.label_time_type_id;
+        this.formData.menu_data[this.menu_data_index][
+          this.menu_data_c_index
+        ].time_type_name = this.label_time_type_name;
       } else {
         this.formData.menu_data[this.menu_data_index].push({
           label: this.type_name,
           label_image: this.label_image,
+          time_type_id: this.label_time_type_id,
+          time_type_name: this.label_time_type_name,
           vendor_package_data: [],
           checked: !this.formData.menu_data[this.menu_data_index].length
             ? true
@@ -742,6 +855,7 @@ export default {
           menu_data[index].push({
             label: it.label,
             label_image: it.label_image,
+            time_type_id: it.time_type_id,
             vendor_package_data,
           });
         });
@@ -754,11 +868,13 @@ export default {
             confirmButtonText: "发布",
             cancelButtonText: "不用了",
             type: "warning",
-          }).then(() => {
-            this.openReleaseMenu();
-          }).catch(() => {
-            this.releaseStatus = 0;
-          });
+          })
+            .then(() => {
+              this.openReleaseMenu();
+            })
+            .catch(() => {
+              this.releaseStatus = 0;
+            });
         }
       });
     },
@@ -806,6 +922,13 @@ export default {
 };
 </script>
 <style lang="scss">
+#copyTxt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: -20;
+}
 .main_img_hide .el-upload--picture-card {
   display: none;
 }

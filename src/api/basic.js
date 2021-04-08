@@ -381,7 +381,7 @@ export function customerCouponList(data) {
 //上传图片接口
 export function uploadImg(data) {
   return request({
-    url: '/vendor/vendor/upload_image',
+    url: '/vendor/vendor/upload_image?upload_type=1',
     method: 'post',
     data
   })

@@ -6,6 +6,9 @@
         <el-form-item label="套餐标题" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
+        <el-form-item label="副标题">
+          <el-input v-model="formData.title"></el-input>
+        </el-form-item>
         <el-form-item label="套餐主图" prop="main_image">
           <el-upload
             :file-list="detailMainImgFile"
@@ -182,6 +185,7 @@ export default {
       },
       formData: {
         name: "",
+        title:"",
         main_image: "",
         image: [],
         product_data: [],

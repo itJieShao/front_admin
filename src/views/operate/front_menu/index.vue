@@ -11,6 +11,7 @@
           ref="table"
           v-if="tabActive == item.vendor_id"
           :vendor_id="item.vendor_id"
+          :vendor_name="item.vendor_name"
           :vendor_ids="[item.vendor_id]"
         />
       </el-tab-pane>

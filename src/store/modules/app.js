@@ -6,12 +6,16 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  copyMenuItem:[]
+  copy_vendor_menu_id:"",
+  copy_vendor_id:"",
+  copy_day:"",
 }
 
 const mutations = {
-  UPLOADMENU: (state,menuItem) => {
-    state.copyMenuItem = menuItem
+  COPYMENUPARM: (state,param) => {
+    state.copy_vendor_menu_id = param.copy_vendor_menu_id;
+    state.copy_vendor_id = param.copy_vendor_id;
+    state.copy_day = param.copy_day;
   },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened
