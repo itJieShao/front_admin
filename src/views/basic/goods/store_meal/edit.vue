@@ -8,6 +8,9 @@
         <el-form-item label="门店套餐标题">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
+        <el-form-item label="副标题">
+            <el-input v-model="formData.title"></el-input>
+          </el-form-item>  
         <el-form-item label="预设套餐" v-if="!formData.vendor_package_id">
           <el-button type="success" @click="dialogTableVisible = true"
             >选择预设套餐</el-button
@@ -16,7 +19,7 @@
         <div v-show="formData.package_id">
           <el-form-item label="套餐名称">
             <el-input disabled v-model="checkedPackageData.name"></el-input>
-          </el-form-item>
+          </el-form-item>         
           <el-form-item label="套餐主图">
             <div class="main_img_box">
               <img :src="checkedPackageData.main_image" alt="" />
@@ -191,6 +194,7 @@ export default {
     return {
       formData: {
         name: "",
+        title:"",
         package_id: "",
         package_label_id: "",
         take_code: "",
