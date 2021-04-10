@@ -50,6 +50,7 @@ export default {
       formData: {
         vendor_id: "",
         content: "",
+        horn:"",
       },
       storeList:[]
     };
@@ -67,6 +68,7 @@ export default {
     },
     getDetail() {
       storeNoticeDetail({ vendor_id: this.formData.vendor_id }).then((res) => {
+        this.$set(this.formData, "horn", res.horn);
         this.$set(this.formData, "content", res.content);
       });
     },
