@@ -254,7 +254,7 @@
           v-for="item in vendorTimeList"
           :key="item.time_type_id"
           :label="item.time_type_name"
-          :name="item.time_type_id"
+          :name="item.time_type_id"  
         >
           <el-table
             ref="multipleTable"
@@ -456,6 +456,11 @@ export default {
     },
   },
   watch: {
+    timeTabActive(val){
+      if (val){
+        this.getVendorPackageList();
+      }
+    },
     label_time_type_id(val) {
       if (val) {
         this.label_time_type_name = this.timeList.find(
@@ -777,6 +782,7 @@ export default {
     //门店套餐列表
     getVendorPackageList() {
       this.loading = true;
+      this.listData.time_type_id = this.timeTabActive;
       vendorPackageList(this.listData).then((res) => {
         this.total = res.count;
         this.packageList = res.list;

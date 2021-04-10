@@ -9,8 +9,8 @@
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="副标题">
-            <el-input v-model="formData.title"></el-input>
-          </el-form-item>  
+          <el-input v-model="formData.title"></el-input>
+        </el-form-item>
         <el-form-item label="预设套餐" v-if="!formData.vendor_package_id">
           <el-button type="success" @click="dialogTableVisible = true"
             >选择预设套餐</el-button
@@ -19,7 +19,7 @@
         <div v-show="formData.package_id">
           <el-form-item label="套餐名称">
             <el-input disabled v-model="checkedPackageData.name"></el-input>
-          </el-form-item>         
+          </el-form-item>
           <el-form-item label="套餐主图">
             <div class="main_img_box">
               <img :src="checkedPackageData.main_image" alt="" />
@@ -78,6 +78,21 @@
         </el-form-item>
         <el-form-item label="套餐号">
           <el-input v-model="formData.take_code"></el-input>
+        </el-form-item>
+        <el-form-item label="用餐时段">
+          <el-select
+            style="width: 100%"
+            multiple
+            v-model="formData.time_type_ids"
+            placeholder="请选择用餐时段"
+          >
+            <el-option
+              v-for="item in timeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-divider />
         <!-- <el-form-item label="进货价">
@@ -162,7 +177,10 @@
         ></el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="checkedPackage(scope.row)"
+            <el-button
+              type="success"
+              size="mini"
+              @click="checkedPackage(scope.row)"
               >选择该套餐</el-button
             >
           </template>
@@ -187,6 +205,7 @@ import {
   selectCouponList,
   searchStoreList,
 } from "@/api/basic";
+import { getTimeTypeData } from "@/api/store";
 import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
@@ -194,7 +213,7 @@ export default {
     return {
       formData: {
         name: "",
-        title:"",
+        title: "",
         package_id: "",
         package_label_id: "",
         take_code: "",
@@ -202,6 +221,7 @@ export default {
         sale_price: "",
         coupon_id: 0,
         desc: "",
+        time_type_ids: [],
       }, //表单提交数据
       checkedPackageData: {},
       packageListData: {
@@ -217,6 +237,7 @@ export default {
       total: 0,
       dialogTableVisible: false,
       discount_rate: "", //折扣率
+      timeList: [],
     };
   },
   components: { Pagination },
@@ -228,6 +249,7 @@ export default {
     },
   },
   async created() {
+    this.getTimeTypeData();
     await this.getCouponList();
     if (this.$route.query.vendor_package_id) {
       this.formData.vendor_package_id = this.$route.query.vendor_package_id;
@@ -236,9 +258,14 @@ export default {
       this.getStoreList();
     }
     this.getpackageList();
-    this.getLabelList(); 
+    this.getLabelList();
   },
   methods: {
+    getTimeTypeData() {
+      getTimeTypeData().then((res) => {
+        this.timeList = res;
+      });
+    },
     //选择优惠之后计算折扣率
     couponChange(val) {
       if (!val) return;
@@ -263,15 +290,25 @@ export default {
       vendorPackageDetail({
         vendor_package_id: this.$route.query.vendor_package_id,
       }).then((res) => {
+        let time_type_ids = [];
+        if (res.time_type_ids.length) {
+          res.time_type_ids.forEach((item) => {
+            time_type_ids.push(Number(item));
+          });
+        }
+        res.time_type_ids = time_type_ids;
         this.formData = res;
+        console.log(this.formData.time_type_ids);
         this.checkedPackageData = {
           name: res.package_name,
           main_image: res.main_image,
           image: res.image,
         };
-        this.discount_rate = this.couponList.find(
-          (item) => item.id == res.coupon_id
-        ).discount;
+        if (res.coupon_id) {
+          this.discount_rate = this.couponList.find(
+            (item) => item.id == res.coupon_id
+          ).discount;
+        }
       });
     },
     //标签列表
@@ -302,7 +339,9 @@ export default {
     },
     //提交
     onSubmit() {
-      updateVendorPackage(this.formData).then((res) => {
+      let aData = JSON.parse(JSON.stringify(this.formData));
+      aData.time_type_ids = JSON.stringify(aData.time_type_ids);
+      updateVendorPackage(aData).then((res) => {
         if (res) {
           this.$notify({
             title: "成功",

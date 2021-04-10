@@ -23,6 +23,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <!-- <el-form-item>
+        <el-input placeholder="喇叭公告" v-model="formData."></el-input>
+      </el-form-item> -->
       <el-form-item label="优惠公告内容">
         <Editor @getNewHtml="getNewHtml" :value="formData.content" />
       </el-form-item>
