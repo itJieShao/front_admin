@@ -38,18 +38,20 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="餐盒图片">
-          <p>第1个盒子</p>
-          <el-upload
-            :file-list="detailImagesFile"
-            multiple
-            :action="$upLoadImgApi"
-            list-type="picture-card"
-            :on-success="upLoadImg"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+          <div class="mealImgBox">
+            <p>第1个盒子</p>
+            <el-upload
+              :file-list="detailImagesFile"
+              multiple
+              :action="$upLoadImgApi"
+              list-type="picture-card"
+              :on-success="upLoadImg"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </div>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -96,4 +98,5 @@ export default {
 </script>
 
 <style>
+    
 </style>

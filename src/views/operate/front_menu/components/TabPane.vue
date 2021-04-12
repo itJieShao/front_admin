@@ -55,7 +55,7 @@
                 </div>
                 <p v-else>{{ it.label }}</p>
                 <i
-                  @click="
+                  @click.stop="
                     openTypeDialog(
                       index,
                       1,
@@ -67,7 +67,7 @@
                   "
                   class="el-icon-edit"
                 ></i>
-                <i @click="delType(index, idx)" class="el-icon-error"></i>
+                <i @click.stop="delType(index, idx)" class="el-icon-error"></i>
               </div>
             </div>
             <el-button
@@ -456,6 +456,11 @@ export default {
     },
   },
   watch: {
+    dialogTableVisible(flag){
+      if (!flag){
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     timeTabActive(val) {
       if (val) {
         this.getVendorPackageList();
@@ -591,7 +596,7 @@ export default {
       this.clearIndex = index;
     },
     clearBtn() {
-      this.formData.menu_data[this.clearIndex] = [];
+      this.$set(this.formData.menu_data,[this.clearIndex],[]);
       this.clearMenuDialog = false;
     },
     upNumCase(num) {
@@ -684,7 +689,9 @@ export default {
       this.formData.menu_data[index].forEach((item, idx) => {
         item.checked = false;
       });
-      this.formData.menu_data[index][idx].checked = true;
+      if (this.formData.menu_data[index][idx]){
+        this.formData.menu_data[index][idx].checked = true;
+      }   
     },
     //打开分类弹窗
     openTypeDialog(index, type, type_name, label_image, time_type_id, idx) {
