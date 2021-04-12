@@ -558,7 +558,7 @@ export default {
         copyVendorMenu({
           vendor_menu_id: this.app.copy_vendor_menu_id,
           day: this.app.copy_day,
-          vendor_id: this.app.copy_vendor_id,
+          vendor_id: this.vendor_id,
         }).then((res) => {
           if (res.defect_package_names.length) {
             this.defect_package_names = res.defect_package_names;
