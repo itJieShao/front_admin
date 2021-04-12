@@ -8,6 +8,7 @@
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </el-col> -->
       <el-col :span="24" style="display: flex; justify-content: flex-end">
+        <!-- <el-button type="success" @click="mealBox">餐盒</el-button> -->
         <el-button type="success" @click="addPurchase">新增进货</el-button>
         <el-button type="primary" @click="addSummary">生成进货汇总</el-button>
         <el-button type="warning" @click="exportBtn">导出 Excel</el-button>
@@ -150,6 +151,9 @@ export default {
     this.getList();
   },
   methods: {
+    mealBox(){
+      this.$router.push("/warehouse/purchase/mealBox");
+    },
     goDetail(purchase_id) {
       this.$router.push(
         `/warehouse/purchase/purchase_detail?purchase_id=${purchase_id}`

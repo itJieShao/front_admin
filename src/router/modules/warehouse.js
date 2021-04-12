@@ -14,6 +14,12 @@ const warehouseRouter = {
             meta: { title: '进货管理', icon: 'table' },
             children: [
                 {
+                    path: 'mealBox',
+                    name: 'mealBox',
+                    component: () => import('@/views/warehouse/purchase/mealBox'),
+                    meta: { title: '餐盒', auth: "mealBox" }
+                },
+                {
                     path: 'purchase_list',
                     name: 'PurchaseList',
                     component: () => import('@/views/warehouse/purchase/list'),

@@ -254,7 +254,7 @@
           v-for="item in vendorTimeList"
           :key="item.time_type_id"
           :label="item.time_type_name"
-          :name="item.time_type_id"  
+          :name="item.time_type_id"
         >
           <el-table
             ref="multipleTable"
@@ -456,8 +456,8 @@ export default {
     },
   },
   watch: {
-    timeTabActive(val){
-      if (val){
+    timeTabActive(val) {
+      if (val) {
         this.getVendorPackageList();
       }
     },
@@ -489,7 +489,9 @@ export default {
     time_type_name(time_type_id, vendorTimeList) {
       if (time_type_id && vendorTimeList.length) {
         return vendorTimeList.find((item) => item.time_type_id == time_type_id)
-          .time_type_name;
+          ? vendorTimeList.find((item) => item.time_type_id == time_type_id)
+              .time_type_name
+          : "";
       }
     },
   },
