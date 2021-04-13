@@ -38,22 +38,23 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="餐盒图片">
-          <div class="mealImgBox">
-            <p>第1个盒子</p>
-            <el-upload
-              :file-list="detailImagesFile"
-              multiple
-              :action="$upLoadImgApi"
-              list-type="picture-card"
-              :on-success="upLoadImg"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-            >
-              <i class="el-icon-plus"></i>
-            </el-upload>
-          </div>
+          <el-upload
+            :file-list="detailImagesFile"
+            multiple
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadImg"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
         </el-form-item>
       </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormPwd = false">取 消</el-button>
+        <el-button type="primary" @click="changePwd">确 定</el-button>
+      </span>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
@@ -68,6 +69,7 @@ export default {
     return {
       name: "",
       images: [],
+      detailImagesFile: [],
       dialogFlag: false,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -98,5 +100,4 @@ export default {
 </script>
 
 <style>
-    
 </style>

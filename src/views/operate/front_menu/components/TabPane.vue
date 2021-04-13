@@ -39,109 +39,169 @@
           {{ day_tip + upNumCase(index + 1) }}
         </p>
         <p class="day_tip" v-else>{{ index + 1 + day_tip }}</p>
-        <div class="menu">
-          <div class="type_list">
-            <div
-              @click="typeClick(index, idx)"
-              class="type_item"
-              :style="it.checked ? 'background-color: #fff' : ''"
-              v-for="(it, idx) in item"
-            >
-              <img style="width: 50%" :src="it.label_image" alt="" />
-              <div style="align-items: center">
-                <div v-if="it.time_type_id" style="flex-direction: column">
-                  <p>{{ it.label }}</p>
-                  <p>({{ it.time_type_name }})</p>
+        <div class="menu_con" style="border: 1px solid #ddd">
+          <div class="goods_item" v-if="mainPushData[index]">
+            <div class="goods_info" style="width: 90%; margin: 20px auto">
+              <i class="el-icon-error" @click="delMainPush(index)"></i>
+              <p class="time_type_font">
+                {{
+                  mainPushData[index].time_type_id
+                    | time_type_name(vendorTimeList)
+                }}
+              </p>
+              <img
+                style="width: 100%"
+                class="goods_img"
+                :src="mainPushData[index].main_push_image"
+                alt=""
+              />
+              <div class="goods_sth">
+                <p class="goods_title">
+                  {{ mainPushData[index].name }}
+                </p>
+                <div class="goods_price">
+                  <p
+                    v-if="mainPushData[index].discount_price"
+                    style="text-decoration: line-through"
+                  >
+                    ￥{{ mainPushData[index].sale_price }}
+                  </p>
+                  <p style="color: red">
+                    ￥{{
+                      mainPushData[index].discount_price
+                        ? mainPushData[index].discount_price
+                        : mainPushData[index].sale_price
+                    }}
+                  </p>
                 </div>
-                <p v-else>{{ it.label }}</p>
-                <i
-                  @click.stop="
-                    openTypeDialog(
-                      index,
-                      1,
-                      it.label,
-                      it.label_image,
-                      it.time_type_id,
-                      idx
-                    )
-                  "
-                  class="el-icon-edit"
-                ></i>
-                <i @click.stop="delType(index, idx)" class="el-icon-error"></i>
               </div>
             </div>
-            <el-button
-              @click="openTypeDialog(index, 0)"
-              class="add_type"
-              icon="el-icon-plus"
-              type="success"
-              size="mini"
-              >添加分类</el-button
-            >
           </div>
-          <div class="goods_list">
-            <template v-for="(it, idx) in item">
+          <div class="no_main_push" v-else>暂无主推套餐</div>
+          <div class="menu">
+            <div class="type_list">
               <div
-                class="goods_item"
-                v-for="(itc, idxc) in it.vendor_package_data"
-                v-if="it.checked"
+                @click="typeClick(index, idx)"
+                class="type_item"
+                :style="it.checked ? 'background-color: #fff' : ''"
+                v-for="(it, idx) in item"
               >
-                <div class="goods_info">
-                  <i
-                    class="el-icon-error"
-                    @click="delGoods(index, idx, idxc)"
-                  ></i>
-                  <p class="time_type_font">
-                    {{ itc.time_type_id | time_type_name(vendorTimeList) }}
-                  </p>
-                  <img class="goods_img" :src="itc.main_image" alt="" />
-                  <div class="goods_sth">
-                    <p class="goods_title">
-                      {{ itc.name }}
-                    </p>
-                    <div class="goods_price">
-                      <p
-                        v-if="itc.discount_price"
-                        style="text-decoration: line-through"
-                      >
-                        ￥{{ itc.sale_price }}
-                      </p>
-                      <p style="color: red">
-                        ￥{{
-                          itc.discount_price
-                            ? itc.discount_price
-                            : itc.sale_price
-                        }}
-                      </p>
-                    </div>
+                <img style="width: 50%" :src="it.label_image" alt="" />
+                <div style="align-items: center">
+                  <div v-if="it.time_type_id" style="flex-direction: column">
+                    <p>{{ it.label }}</p>
+                    <p>({{ it.time_type_name }})</p>
                   </div>
-                </div>
-                <div class="opt_goods">
+                  <p v-else>{{ it.label }}</p>
                   <i
-                    class="el-icon-top"
-                    @click="changePackageIndex(1, index, idx, idxc)"
-                    v-show="idxc != 0"
+                    @click.stop="
+                      openTypeDialog(
+                        index,
+                        1,
+                        it.label,
+                        it.label_image,
+                        it.time_type_id,
+                        idx
+                      )
+                    "
+                    class="el-icon-edit"
                   ></i>
                   <i
-                    class="el-icon-bottom"
-                    @click="changePackageIndex(2, index, idx, idxc)"
-                    v-show="idxc != it.vendor_package_data.length - 1"
+                    @click.stop="delType(index, idx)"
+                    class="el-icon-error"
                   ></i>
                 </div>
               </div>
-            </template>
-            <el-button
-              v-show="formData.menu_data[index].length"
-              @click="openPackageList(index)"
-              class="add_goods"
-              icon="el-icon-plus"
-              type="success"
-              size="mini"
-              >添加</el-button
-            >
+              <el-button
+                @click="openTypeDialog(index, 0)"
+                class="add_type"
+                icon="el-icon-plus"
+                type="success"
+                size="mini"
+                >添加分类</el-button
+              >
+            </div>
+            <div class="goods_list">
+              <template v-for="(it, idx) in item">
+                <div
+                  class="goods_item"
+                  v-for="(itc, idxc) in it.vendor_package_data"
+                  v-if="it.checked"
+                >
+                  <div class="goods_info">
+                    <i
+                      class="el-icon-error"
+                      @click="delGoods(index, idx, idxc)"
+                    ></i>
+                    <p class="time_type_font">
+                      {{ itc.time_type_id | time_type_name(vendorTimeList) }}
+                    </p>
+                    <img class="goods_img" :src="itc.main_image" alt="" />
+                    <div class="goods_sth">
+                      <p class="goods_title">
+                        {{ itc.name }}
+                      </p>
+                      <div class="goods_price">
+                        <p
+                          v-if="itc.discount_price"
+                          style="text-decoration: line-through"
+                        >
+                          ￥{{ itc.sale_price }}
+                        </p>
+                        <p style="color: red">
+                          ￥{{
+                            itc.discount_price
+                              ? itc.discount_price
+                              : itc.sale_price
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="opt_goods">
+                    <i
+                      class="el-icon-top"
+                      @click="changePackageIndex(1, index, idx, idxc)"
+                      v-show="idxc != 0"
+                    ></i>
+                    <i
+                      class="el-icon-bottom"
+                      @click="changePackageIndex(2, index, idx, idxc)"
+                      v-show="idxc != it.vendor_package_data.length - 1"
+                    ></i>
+                  </div>
+                  <div
+                    :class="
+                      mainPushData[index] &&
+                      mainPushData[index].vendor_package_id &&
+                      mainPushData[index].vendor_package_id ==
+                        it.vendor_package_data[idxc].vendor_package_id &&
+                      mainPushData[index].time_type_id ==
+                        it.vendor_package_data[idxc].time_type_id
+                        ? 'main_push_act'
+                        : ''
+                    "
+                    class="opt_main_btn"
+                    @click="editMainPush(it.vendor_package_data[idxc], index)"
+                  >
+                    设为主推套餐
+                  </div>
+                </div>
+              </template>
+              <el-button
+                v-show="formData.menu_data[index].length"
+                @click="openPackageList(index)"
+                class="add_goods"
+                icon="el-icon-plus"
+                type="success"
+                size="mini"
+                >添加</el-button
+              >
+            </div>
           </div>
         </div>
-        <div style="display: flex; margin-right: 15px">
+        <div style="display: flex; margin-top: 15px">
           <el-button @click="copyMenu(index)" type="success" size="mini"
             >拷贝</el-button
           >
@@ -249,9 +309,10 @@
         v-model="timeTabActive"
         style="margin-top: 15px"
         type="border-card"
+        :key="timer"
       >
         <el-tab-pane
-          v-for="item in vendorTimeList"
+          v-for="(item, index) in vendorTimeList"
           :key="item.time_type_id"
           :label="item.time_type_name"
           :name="item.time_type_id"
@@ -398,6 +459,7 @@ export default {
         menu_type: 1,
         menu_data: [],
       },
+      mainPushData: [],
       dialogTypeVisible: false, //分类弹窗
       menu_data_index: 0,
       menu_data_c_index: 0,
@@ -435,6 +497,7 @@ export default {
       label_time_type_name: "",
       StoreMenuDialog: false,
       defect_package_names: [],
+      timer: "",
     };
   },
   computed: {
@@ -456,9 +519,9 @@ export default {
     },
   },
   watch: {
-    dialogTableVisible(flag){
-      if (!flag){
-        this.$refs.multipleTable.clearSelection();
+    dialogTableVisible(flag) {
+      if (!flag) {
+        this.timer = new Date().getTime();
       }
     },
     timeTabActive(val) {
@@ -508,6 +571,21 @@ export default {
     this.getTimeTypeData();
   },
   methods: {
+    //删除主推套餐
+    delMainPush(index) {
+      this.mainPushData.splice(index, 1);
+    },
+    //设为主推套餐
+    editMainPush(item, index) {
+      if (!item.main_push_image) {
+        return this.$message({
+          message: "请先为该套餐设置套餐主推图",
+          type: "error",
+          duration: 1500,
+        });
+      }
+      this.$set(this.mainPushData, index, item);
+    },
     copyTipFont() {
       copyTxt.value = this.defect_package_names.join(",");
       copyTxt.select();
@@ -596,7 +674,7 @@ export default {
       this.clearIndex = index;
     },
     clearBtn() {
-      this.$set(this.formData.menu_data,[this.clearIndex],[]);
+      this.$set(this.formData.menu_data, [this.clearIndex], []);
       this.clearMenuDialog = false;
     },
     upNumCase(num) {
@@ -669,6 +747,14 @@ export default {
           this.formData.vendor_menu_id = res.vendor_menu_id;
           res.vendor_menu_data.forEach((item) => {
             this.$set(this.formData.menu_data, item.day, item.list);
+            item.list.forEach((it) => {
+              let itdMainPush = it.vendor_package_data.find(
+                (itd) => itd.type_id == 2
+              );
+              if (itdMainPush) {
+                this.$set(this.mainPushData, item.day, itdMainPush);
+              }
+            });
           });
           this.formData.menu_data.forEach((item, index) => {
             if (item.length) {
@@ -689,9 +775,9 @@ export default {
       this.formData.menu_data[index].forEach((item, idx) => {
         item.checked = false;
       });
-      if (this.formData.menu_data[index][idx]){
+      if (this.formData.menu_data[index][idx]) {
         this.formData.menu_data[index][idx].checked = true;
-      }   
+      }
     },
     //打开分类弹窗
     openTypeDialog(index, type, type_name, label_image, time_type_id, idx) {
@@ -855,9 +941,11 @@ export default {
     //保存
     saveMenuClick() {
       let aData = JSON.parse(JSON.stringify(this.formData));
+      let mainPushData = JSON.parse(JSON.stringify(this.mainPushData));
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
       aData.menu_data.forEach((item, index) => {
+        console.log(item, mainPushData[index]);
         menu_data.push([]);
         item.forEach((it, idx) => {
           let vendor_package_data = [];
@@ -865,6 +953,13 @@ export default {
             vendor_package_data.push({
               time_type_id: itd.time_type_id,
               vendor_package_id: itd.vendor_package_id,
+              type_id:
+                mainPushData[index] &&
+                itd.vendor_package_id ==
+                  mainPushData[index].vendor_package_id &&
+                itd.time_type_id == mainPushData[index].time_type_id
+                  ? 2
+                  : 1,
             });
           });
           menu_data[index].push({
@@ -937,6 +1032,32 @@ export default {
 };
 </script>
 <style lang="scss">
+.no_main_push {
+  width: 90%;
+  height: 232px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main_push_act {
+  background-color: rgba(18, 204, 33, 0.849);
+  color: #fff;
+  border: 1px solid transparent !important;
+}
+.opt_main_btn {
+  width: 10px;
+  font-size: 12px;
+  margin: 0 20px 0 10px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 #copyTxt {
   position: absolute;
   top: 0;
@@ -962,17 +1083,16 @@ img:not([src]) {
     align-items: flex-end;
     justify-content: flex-end;
     .day_tip {
-      margin: 15px 20px 10px 0;
+      margin: 15px 0 10px 0;
       font-size: 14px;
       color: #666;
     }
     .menu {
       display: flex;
-      border: 1px solid #ddd;
-      width: 380px;
-      margin: 0 15px 15px 0;
+      width: 440px;
+      border-top: 1px solid #ddd;
       .type_list {
-        width: 40%;
+        width: 38%;
         height: 600px;
         overflow-y: auto;
         background-color: #eee;
@@ -1013,78 +1133,78 @@ img:not([src]) {
         }
       }
       .goods_list {
-        width: 60%;
+        width: 62%;
         height: 600px;
         overflow-y: auto;
-        .goods_item {
-          margin-top: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          i {
-            cursor: pointer;
-          }
-          .goods_info {
-            width: 150px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            .el-icon-error {
-              font-size: 20px;
-              position: absolute;
-              right: -10px;
-              top: -10px;
-              color: red;
-            }
-            .time_type_font {
-              position: absolute;
-              top: 0;
-              left: 0;
-              background-color: #fff;
-              font-size: 14px;
-              color: #666;
-              padding: 5px 15px;
-              border: 1px solid #ddd;
-            }
-            .goods_img {
-              width: 150px;
-              height: 150px;
-            }
-            .goods_sth {
-              padding: 10px;
-              background-color: #eee;
-              .goods_title {
-                font-size: 14px;
-                color: #666;
-              }
-              .goods_price {
-                display: flex;
-                margin-top: 10px;
-                font-size: 14px;
-                p {
-                  margin-right: 10px;
-                }
-              }
-            }
-          }
-          .opt_goods {
-            margin-left: 15px;
-            display: flex;
-            flex-direction: column;
-            i {
-              font-size: 20px;
-              margin-bottom: 15px;
-            }
-          }
-        }
-        .add_goods {
-          display: flex;
-          justify-content: center;
-          margin: 20px auto;
+      }
+    }
+  }
+}
+.goods_item {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  i {
+    cursor: pointer;
+  }
+  .goods_info {
+    width: 150px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    .el-icon-error {
+      font-size: 20px;
+      position: absolute;
+      right: -10px;
+      top: -10px;
+      color: red;
+    }
+    .time_type_font {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      font-size: 14px;
+      color: #666;
+      padding: 5px 15px;
+      border: 1px solid #ddd;
+    }
+    .goods_img {
+      width: 150px;
+      height: 150px;
+    }
+    .goods_sth {
+      padding: 10px;
+      background-color: #eee;
+      .goods_title {
+        font-size: 14px;
+        color: #666;
+      }
+      .goods_price {
+        display: flex;
+        margin-top: 10px;
+        font-size: 14px;
+        p {
+          margin-right: 10px;
         }
       }
     }
   }
+  .opt_goods {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    i {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+  }
+}
+.add_goods {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
 }
 </style>
 

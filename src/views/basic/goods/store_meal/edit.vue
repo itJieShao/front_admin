@@ -25,6 +25,11 @@
               <img :src="checkedPackageData.main_image" alt="" />
             </div>
           </el-form-item>
+          <el-form-item label="套餐主推广告图" v-if="checkedPackageData.main_push_image">
+            <div class="main_img_box">
+              <img :src="checkedPackageData.main_push_image" alt="" />
+            </div>
+          </el-form-item>
           <el-form-item label="套餐轮播图">
             <div class="imgs_box">
               <div

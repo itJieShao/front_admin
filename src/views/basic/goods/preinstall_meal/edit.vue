@@ -24,6 +24,21 @@
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
+        <el-form-item label="主推广告图">
+          <el-upload
+            :file-list="detailMainPushImgFile"
+            :class="{ main_img_hide: formData.main_push_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadMainPushImg"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleMainPushImgRemove"
+            :data="{ token: $store.state.user.token }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="套餐轮播图" prop="images">
           <el-upload
             :file-list="detailImagesFile"
@@ -187,6 +202,7 @@ export default {
         name: "",
         title:"",
         main_image: "",
+        main_push_image:"",
         image: [],
         product_data: [],
         package_label_id: "",
@@ -207,6 +223,7 @@ export default {
       dialogVisible: false,
       dialogTableVisible: false,
       detailMainImgFile: [],
+      detailMainPushImgFile:[],
       detailImagesFile: [],
     };
   },
@@ -228,6 +245,11 @@ export default {
           if (res.main_image) {
             this.detailMainImgFile = [
               { name: "detailMainImgFile", url: res.main_image },
+            ];
+          }
+          if (res.main_push_image) {
+            this.detailMainPushImgFile = [
+              { name: "detailMainPushImgFile", url: res.main_push_image },
             ];
           }
           if (res.image.length > 0) {
@@ -303,6 +325,10 @@ export default {
     handleMainImgRemove(file, fileList) {
       this.formData.main_image = "";
     },
+    //删除主推广告图
+    handleMainPushImgRemove(file, fileList) {
+      this.formData.main_push_image = "";
+    },
     //删除轮播图
     handleRemove(file, fileList) {
       const index = this.formData.image.findIndex((item) => item == file.url);
@@ -335,6 +361,12 @@ export default {
     upLoadMainImg(res, file) {
       if (res.status) {
         this.formData.main_image = res.data.image_url;
+      }
+    },
+    //上传主推广告图
+    upLoadMainPushImg(res, file) {
+      if (res.status) {
+        this.formData.main_push_image = res.data.image_url;
       }
     },
     //上传轮播图
