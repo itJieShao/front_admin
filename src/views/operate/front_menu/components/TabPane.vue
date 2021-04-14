@@ -687,12 +687,13 @@ export default {
     },
     //清空菜单
     clearMenu(index) {
-      if (!this.formData.menu_data[index].length) return;
+      if (!this.formData.menu_data[index].length && !this.mainPushData[index].vendor_package_id) return;
       this.clearMenuDialog = true;
       this.clearIndex = index;
     },
     clearBtn() {
       this.$set(this.formData.menu_data, [this.clearIndex], []);
+      this.$set(this.mainPushData, [this.clearIndex], {});
       this.clearMenuDialog = false;
     },
     upNumCase(num) {
@@ -886,6 +887,12 @@ export default {
     },
     //删除分类
     delType(index, idx) {
+      if(this.formData.menu_data[index][idx].vendor_package_data.length && this.mainPushData[index].vendor_package_id){
+        let mainPushItem = this.mainPushData[index];
+        if (this.formData.menu_data[index][idx].vendor_package_data.findIndex(item => item.vendor_package_id == mainPushItem.vendor_package_id && item.time_type_id == mainPushItem.time_type_id) != -1){
+          this.$set(this.mainPushData,index,{});
+        }
+      }
       this.formData.menu_data[index].splice(idx, 1);
     },
     //打开门店套餐列表弹窗
@@ -940,6 +947,13 @@ export default {
     },
     //删除门店套餐
     delGoods(index, idx, idxc) {
+      if(this.mainPushData[index].vendor_package_id){
+        let mainPushItem = this.mainPushData[index];
+        let delGood = this.formData.menu_data[index][idx].vendor_package_data[idxc];
+        if (delGood.vendor_package_id == mainPushItem.vendor_package_id && delGood.time_type_id == mainPushItem.time_type_id){
+          this.$set(this.mainPushData,index,{});
+        }
+      }
       this.formData.menu_data[index][idx].vendor_package_data.splice(idxc, 1);
     },
     //门店套餐向上或向下调整位置
