@@ -39,8 +39,11 @@
           {{ day_tip + upNumCase(index + 1) }}
         </p>
         <p class="day_tip" v-else>{{ index + 1 + day_tip }}</p>
-        <div class="menu_con" style="border: 1px solid #ddd">
-          <div class="goods_item" v-if="mainPushData[index]">
+        <div class="menu_con" style="border: 1px solid #ddd; width: 440px">
+          <div
+            class="goods_item"
+            v-if="mainPushData[index] && mainPushData[index].vendor_package_id"
+          >
             <div class="goods_info" style="width: 90%; margin: 20px auto">
               <i class="el-icon-error" @click="delMainPush(index)"></i>
               <p class="time_type_font">
@@ -392,9 +395,16 @@
       </span>
     </el-dialog>
     <el-dialog title="提示" :visible.sync="StoreMenuDialog" width="30%" center>
-      <p v-for="(item, index) in defect_package_names" :key="index">
-        {{ vendor_name }}没有预设套餐"{{ item }}"对应的门店套餐
-      </p>
+      <div ref="context">
+        <p v-for="(item, index) in defect_package_names" :key="index">
+          {{ vendor_name }}没有预设套餐"{{ item }}"对应的门店套餐
+        </p>
+        <p v-for="(item, index) in defect_time_type" :key="index">
+          "{{ item.vendor_package_name_a }}"在本店没有{{
+            item.time_type_name
+          }}时段数据,请修改"{{ item.vendor_package_name_b }}"套餐
+        </p>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="StoreMenuDialog = false">取 消</el-button>
         <el-button type="primary" @click="copyTipFont">好的，复制</el-button>
@@ -497,6 +507,7 @@ export default {
       label_time_type_name: "",
       StoreMenuDialog: false,
       defect_package_names: [],
+      defect_time_type: [],
       timer: "",
     };
   },
@@ -573,7 +584,7 @@ export default {
   methods: {
     //删除主推套餐
     delMainPush(index) {
-      this.mainPushData.splice(index, 1);
+      this.$set(this.mainPushData, index, {});
     },
     //设为主推套餐
     editMainPush(item, index) {
@@ -587,7 +598,9 @@ export default {
       this.$set(this.mainPushData, index, item);
     },
     copyTipFont() {
-      copyTxt.value = this.defect_package_names.join(",");
+      let str = this.$refs.context.innerHTML;
+      let resultTxt = str.replace(/<.*?>/gi, "");
+      copyTxt.value = resultTxt;
       copyTxt.select();
       document.execCommand("copy");
       this.StoreMenuDialog = false;
@@ -647,6 +660,11 @@ export default {
         }).then((res) => {
           if (res.defect_package_names.length) {
             this.defect_package_names = res.defect_package_names;
+          }
+          if (res.defect_time_type.length) {
+            this.defect_time_type = res.defect_time_type;
+          }
+          if (res.defect_package_names.length || res.defect_time_type.length) {
             this.StoreMenuDialog = true;
           }
           if (res.vendor_menu_data && res.vendor_menu_data.length) {
@@ -728,18 +746,22 @@ export default {
           this.postVendorMenuIdFlag = false;
         }
         this.formData.menu_data = [];
+        this.mainPushData = [];
         switch (menu_type) {
           case 1:
             this.formData.menu_data.push([]);
+            this.mainPushData.push({});
             break;
           case 2:
             for (let i = 0; i < 7; i++) {
               this.formData.menu_data.push([]);
+              this.mainPushData.push({});
             }
             break;
           case 3:
             for (let i = 0; i < 31; i++) {
               this.formData.menu_data.push([]);
+              this.mainPushData.push({});
             }
             break;
         }
@@ -945,7 +967,6 @@ export default {
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
       aData.menu_data.forEach((item, index) => {
-        console.log(item, mainPushData[index]);
         menu_data.push([]);
         item.forEach((it, idx) => {
           let vendor_package_data = [];
@@ -955,6 +976,7 @@ export default {
               vendor_package_id: itd.vendor_package_id,
               type_id:
                 mainPushData[index] &&
+                mainPushData[index].vendor_package_id &&
                 itd.vendor_package_id ==
                   mainPushData[index].vendor_package_id &&
                 itd.time_type_id == mainPushData[index].time_type_id
@@ -1089,7 +1111,7 @@ img:not([src]) {
     }
     .menu {
       display: flex;
-      width: 440px;
+      width: 100%;
       border-top: 1px solid #ddd;
       .type_list {
         width: 38%;
