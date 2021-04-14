@@ -21,6 +21,21 @@
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
+        <el-form-item label="餐盒图片">
+          <el-upload
+            :file-list="detailBoxImgFile"
+            :class="{ main_img_hide: formData.box_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadBoxImg"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleBoxImgRemove"
+            :data="{ token: $store.state.user.token }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
         <el-divider />
         <el-form-item label="重量">
           <el-input v-model="formData.weight"></el-input>
@@ -377,6 +392,7 @@ export default {
       formData: {
         name: "",
         image: "",
+        box_image:"",
         product_category_id: "",
         product_package_box_id: "",
         taste_id: "",
@@ -418,6 +434,7 @@ export default {
       time: "",
       temperature: "",
       detailMainImgFile: [],
+      detailBoxImgFile: [],
       heatingRateList: [],
       temperatureCurveSensitive: [
         { name: "最不敏感", id: 1 },
@@ -530,6 +547,11 @@ export default {
             { name: "detailMainImgFile", url: res.image },
           ];
         }
+        if (res.box_image) {
+          this.detailBoxImgFile = [
+            { name: "detailBoxImgFile", url: res.box_image },
+          ];
+        }
         this.$set(this.formData, "material", res.material_data);
         this.$set(this.formData, "seasoning", res.seasoning_data);
         this.$set(this.formData, "temperature_corve", res.temperature_curve);
@@ -597,6 +619,10 @@ export default {
     handleMainImgRemove(file, fileList) {
       this.formData.image = "";
     },
+    //删除餐盒图片
+    handleBoxImgRemove(file, fileList) {
+      this.formData.box_image = "";
+    },
     //查看图片
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -606,6 +632,12 @@ export default {
     upLoadMainImg(res, file) {
       if (res.status) {
         this.formData.image = res.data.image_url;
+      }
+    },
+    //上传餐盒图片
+    upLoadBoxImg(res, file) {
+      if (res.status) {
+        this.formData.box_image = res.data.image_url;
       }
     },
   },

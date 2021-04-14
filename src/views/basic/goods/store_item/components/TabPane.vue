@@ -39,6 +39,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="200" align="center" label="餐盒">
+        <template slot-scope="scope">
+          <img style="max-width:100px;max-height:100px;" :src="scope.row.box_image" alt="" />
+        </template>
+      </el-table-column>
+
       <el-table-column width="200" align="center" label="所属套餐">
         <template slot-scope="scope">
           <span>{{ scope.row.vendor_package_name }}</span>

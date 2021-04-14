@@ -60,6 +60,16 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="180" align="center" label="餐盒">
+        <template slot-scope="scope">
+          <img
+            style="width: 100px; height: 100px"
+            :src="scope.row.box_image"
+            alt=""
+          />
+        </template>
+      </el-table-column>
+
       <el-table-column width="100" align="center" label="味型">
         <template slot-scope="scope">
           <span>{{ scope.row.taste_name }}</span>

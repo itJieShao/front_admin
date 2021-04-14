@@ -980,7 +980,7 @@ export default {
       let mainPushData = JSON.parse(JSON.stringify(this.mainPushData));
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
-      aData.menu_data.forEach((item, index) => {
+      aData.menu_data.forEach((item, index) => { 
         menu_data.push([]);
         item.forEach((it, idx) => {
           let vendor_package_data = [];

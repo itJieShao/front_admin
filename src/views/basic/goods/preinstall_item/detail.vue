@@ -9,6 +9,9 @@
         <el-form-item label="单品图">
           <img :src="detail.image" alt="" />
         </el-form-item>
+        <el-form-item v-if="detail.box_image" label="餐盒图片">
+          <img :src="detail.box_image" alt="" />
+        </el-form-item>
         <el-form-item label="单品信息">
           <el-row :gutter="12">
             <el-col :span="3">

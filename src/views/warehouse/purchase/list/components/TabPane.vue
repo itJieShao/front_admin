@@ -15,6 +15,19 @@
         <span>{{ scope.row.vendor_package_name }}</span>
       </template>
     </el-table-column>
+    <el-table-column align="center" label="餐盒">
+      <template slot-scope="scope">
+        <div class="box_img_con" v-if="scope.row.product_box_images.length">
+          <img
+            v-for="(item, index) in scope.row.product_box_images"
+            :key="index"
+            class="box_img"
+            :src="item"
+            alt=""
+          />
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column align="center" label="标签">
       <template slot-scope="scope">
         <span>{{ scope.row.label_name }}</span>
@@ -57,16 +70,28 @@ export default {
       this.$emit("addPurchaseData", { vendor_package_id: id, num });
     },
     tableRowClassName({ row, rowIndex }) {
-      if(row.in_menu){
-        return 'success-row'
+      if (row.in_menu) {
+        return "success-row";
       }
     },
   },
 };
 </script>
 <style>
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
+.el-table .success-row {
+  background: #f0f9eb;
+}
+.box_img_con {
+  padding: 5px 15px;
+  border: 1px solid #ddd;
+}
+.box_img {
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
+}
+.box_img:first-child {
+  margin-left: 0;
+}
 </style>
 
