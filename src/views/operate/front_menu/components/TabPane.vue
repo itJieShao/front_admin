@@ -926,6 +926,7 @@ export default {
     handleSelectionChange(val) {
       val.forEach((item) => {
         item.time_type_id = this.timeTabActive;
+        item.type_id = 1;
       });
       this.vendorpackageChecked = val;
     },
