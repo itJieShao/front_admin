@@ -40,7 +40,7 @@
         </p>
         <p class="day_tip" v-else>{{ index + 1 + day_tip }}</p>
         <div class="menu_con" style="border: 1px solid #ddd; width: 440px">
-          <div
+          <!-- <div
             class="goods_item"
             v-if="mainPushData[index] && mainPushData[index].vendor_package_id"
           >
@@ -80,7 +80,7 @@
               </div>
             </div>
           </div>
-          <div class="no_main_push" v-else>暂无主推套餐</div>
+          <div class="no_main_push" v-else>暂无主推套餐</div> -->
           <div class="menu">
             <div class="type_list">
               <div
@@ -175,18 +175,16 @@
                     ></i>
                   </div>
                   <div
-                    :class="
-                      mainPushData[index] &&
-                      mainPushData[index].vendor_package_id &&
-                      mainPushData[index].vendor_package_id ==
-                        it.vendor_package_data[idxc].vendor_package_id &&
-                      mainPushData[index].time_type_id ==
-                        it.vendor_package_data[idxc].time_type_id
-                        ? 'main_push_act'
-                        : ''
-                    "
+                    :class="itc.type_id == 2 ? 'main_push_act' : ''"
                     class="opt_main_btn"
-                    @click="editMainPush(it.vendor_package_data[idxc], index)"
+                    @click="
+                      editMainPush(
+                        it.vendor_package_data[idxc],
+                        index,
+                        idx,
+                        idxc
+                      )
+                    "
                   >
                     设为主推套餐
                   </div>
@@ -469,7 +467,7 @@ export default {
         menu_type: 1,
         menu_data: [],
       },
-      mainPushData: [],
+      // mainPushData: [],
       dialogTypeVisible: false, //分类弹窗
       menu_data_index: 0,
       menu_data_c_index: 0,
@@ -584,10 +582,10 @@ export default {
   methods: {
     //删除主推套餐
     delMainPush(index) {
-      this.$set(this.mainPushData, index, {});
+      // this.$set(this.mainPushData, index, {});
     },
     //设为主推套餐
-    editMainPush(item, index) {
+    editMainPush(item, index, idx, idxc) {
       if (!item.main_push_image) {
         return this.$message({
           message: "请先为该套餐设置套餐主推图",
@@ -595,7 +593,13 @@ export default {
           duration: 1500,
         });
       }
-      this.$set(this.mainPushData, index, item);
+      item.type_id == 1 ? (item.type_id = 2) : (item.type_id = 1);
+      // this.$set(
+      //   this.formData.menu_data[index][idx].vendor_package_data[idxc],
+      //   "type_id",
+      //   2
+      // );
+      // this.$set(this.mainPushData, index, item);
     },
     copyTipFont() {
       let str = this.$refs.context.innerHTML;
@@ -687,13 +691,13 @@ export default {
     },
     //清空菜单
     clearMenu(index) {
-      if (!this.formData.menu_data[index].length && !this.mainPushData[index].vendor_package_id) return;
+      if (!this.formData.menu_data[index].length) return;
       this.clearMenuDialog = true;
       this.clearIndex = index;
     },
     clearBtn() {
       this.$set(this.formData.menu_data, [this.clearIndex], []);
-      this.$set(this.mainPushData, [this.clearIndex], {});
+      // this.$set(this.mainPushData, [this.clearIndex], {});
       this.clearMenuDialog = false;
     },
     upNumCase(num) {
@@ -747,22 +751,18 @@ export default {
           this.postVendorMenuIdFlag = false;
         }
         this.formData.menu_data = [];
-        this.mainPushData = [];
         switch (menu_type) {
           case 1:
             this.formData.menu_data.push([]);
-            this.mainPushData.push({});
             break;
           case 2:
             for (let i = 0; i < 7; i++) {
               this.formData.menu_data.push([]);
-              this.mainPushData.push({});
             }
             break;
           case 3:
             for (let i = 0; i < 31; i++) {
               this.formData.menu_data.push([]);
-              this.mainPushData.push({});
             }
             break;
         }
@@ -770,14 +770,14 @@ export default {
           this.formData.vendor_menu_id = res.vendor_menu_id;
           res.vendor_menu_data.forEach((item) => {
             this.$set(this.formData.menu_data, item.day, item.list);
-            item.list.forEach((it) => {
-              let itdMainPush = it.vendor_package_data.find(
-                (itd) => itd.type_id == 2
-              );
-              if (itdMainPush) {
-                this.$set(this.mainPushData, item.day, itdMainPush);
-              }
-            });
+            // item.list.forEach((it) => {
+            //   let itdMainPush = it.vendor_package_data.find(
+            //     (itd) => itd.type_id == 2
+            //   );
+            //   if (itdMainPush) {
+            //     this.$set(this.mainPushData, item.day, itdMainPush);
+            //   }
+            // });
           });
           this.formData.menu_data.forEach((item, index) => {
             if (item.length) {
@@ -887,10 +887,19 @@ export default {
     },
     //删除分类
     delType(index, idx) {
-      if(this.formData.menu_data[index][idx].vendor_package_data.length && this.mainPushData[index].vendor_package_id){
+      if (
+        this.formData.menu_data[index][idx].vendor_package_data.length &&
+        this.mainPushData[index].vendor_package_id
+      ) {
         let mainPushItem = this.mainPushData[index];
-        if (this.formData.menu_data[index][idx].vendor_package_data.findIndex(item => item.vendor_package_id == mainPushItem.vendor_package_id && item.time_type_id == mainPushItem.time_type_id) != -1){
-          this.$set(this.mainPushData,index,{});
+        if (
+          this.formData.menu_data[index][idx].vendor_package_data.findIndex(
+            (item) =>
+              item.vendor_package_id == mainPushItem.vendor_package_id &&
+              item.time_type_id == mainPushItem.time_type_id
+          ) != -1
+        ) {
+          this.$set(this.mainPushData, index, {});
         }
       }
       this.formData.menu_data[index].splice(idx, 1);
@@ -927,31 +936,35 @@ export default {
       let arr = this.formData.menu_data[this.menu_index][
         this.vendor_package_index
       ].vendor_package_data.concat(this.vendorpackageChecked);
-      for (const t of arr) {
-        if (
-          cache.find(
-            (c) =>
-              c.time_type_id === t.time_type_id &&
-              c.vendor_package_id === t.vendor_package_id
-          )
-        ) {
-          continue;
-        }
-        cache.push(t);
-      }
+      // for (const t of arr) {
+      //   if (
+      //     cache.find(
+      //       (c) =>
+      //         c.time_type_id === t.time_type_id &&
+      //         c.vendor_package_id === t.vendor_package_id
+      //     )
+      //   ) {
+      //     continue;
+      //   }
+      //   cache.push(t);
+      // }
       this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package_data = JSON.parse(JSON.stringify(cache));
+      ].vendor_package_data = JSON.parse(JSON.stringify(arr)); //cache
       this.dialogTableVisible = false;
-      //this.$refs.multipleTable.clearSelection();
     },
     //删除门店套餐
     delGoods(index, idx, idxc) {
-      if(this.mainPushData[index].vendor_package_id){
+      if (this.mainPushData[index].vendor_package_id) {
         let mainPushItem = this.mainPushData[index];
-        let delGood = this.formData.menu_data[index][idx].vendor_package_data[idxc];
-        if (delGood.vendor_package_id == mainPushItem.vendor_package_id && delGood.time_type_id == mainPushItem.time_type_id){
-          this.$set(this.mainPushData,index,{});
+        let delGood = this.formData.menu_data[index][idx].vendor_package_data[
+          idxc
+        ];
+        if (
+          delGood.vendor_package_id == mainPushItem.vendor_package_id &&
+          delGood.time_type_id == mainPushItem.time_type_id
+        ) {
+          this.$set(this.mainPushData, index, {});
         }
       }
       this.formData.menu_data[index][idx].vendor_package_data.splice(idxc, 1);
@@ -977,7 +990,6 @@ export default {
     //保存
     saveMenuClick() {
       let aData = JSON.parse(JSON.stringify(this.formData));
-      let mainPushData = JSON.parse(JSON.stringify(this.mainPushData));
       aData.vendor_id = this.vendor_id;
       let menu_data = [];
       aData.menu_data.forEach((item, index) => {
@@ -988,14 +1000,7 @@ export default {
             vendor_package_data.push({
               time_type_id: itd.time_type_id,
               vendor_package_id: itd.vendor_package_id,
-              type_id:
-                mainPushData[index] &&
-                mainPushData[index].vendor_package_id &&
-                itd.vendor_package_id ==
-                  mainPushData[index].vendor_package_id &&
-                itd.time_type_id == mainPushData[index].time_type_id
-                  ? 2
-                  : 1,
+              type_id: itd.type_id,
             });
           });
           menu_data[index].push({
@@ -1243,4 +1248,3 @@ img:not([src]) {
   margin: 20px auto;
 }
 </style>
-
