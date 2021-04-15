@@ -15,9 +15,18 @@
         <span>{{ scope.row.vendor_package_name }}</span>
       </template>
     </el-table-column>
+    <el-table-column width="200" align="center" label="采购数量">
+      <template slot-scope="scope">
+        <el-input-number
+          v-model="scope.row.num"
+          @change="changeNum(scope.row.vendor_package_id, scope.row.num)"
+          :min="0"
+        ></el-input-number>
+      </template>
+    </el-table-column>
     <el-table-column align="center" label="餐盒">
       <template slot-scope="scope">
-        <div class="box_img_con" v-if="scope.row.product_box_images.length">
+        <div class="box_img_con" v-if="scope.row.product_box_images && scope.row.product_box_images.length">
           <img
             v-for="(item, index) in scope.row.product_box_images"
             :key="index"
@@ -48,15 +57,6 @@
     <el-table-column align="center" label="预订数量">
       <template slot-scope="scope">
         <span>{{ scope.row.book_qty }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column width="200" align="center" label="采购数量">
-      <template slot-scope="scope">
-        <el-input-number
-          v-model="scope.row.num"
-          @change="changeNum(scope.row.vendor_package_id, scope.row.num)"
-          :min="0"
-        ></el-input-number>
       </template>
     </el-table-column>
   </el-table>
