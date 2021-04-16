@@ -81,6 +81,13 @@ const operateRouter = {
             meta: { title: '编辑首页banner图', activeMenu:'/operate/c_layout' },
         },
         {
+            path: 'c_layout/index_poste',
+            component: () => import('@/views/operate/c_layout/index_poste/index'),
+            name: 'indexPoste',
+            hidden:true,
+            meta: { title: '首页海报推广图', activeMenu:'/operate/c_layout' },
+        },
+        {
             path: 'c_layout/index_md_banner',
             component: () => import('@/views/operate/c_layout/index_md_banner'),
             name: 'indexMdBar',

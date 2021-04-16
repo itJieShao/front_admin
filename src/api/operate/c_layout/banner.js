@@ -44,3 +44,21 @@ export function delBanner(data) {
         data
     })
 }
+
+//获取海报推广图
+export function getPopup(data) {
+    return request({
+        url: '/other/other/get-popup',
+        method: 'post',
+        data
+    })
+}
+
+//更新海报推广图
+export function updatePopup(data) {
+    return request({
+        url: '/other/other/update-popup',
+        method: 'post',
+        data
+    })
+}
