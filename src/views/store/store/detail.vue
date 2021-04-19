@@ -216,6 +216,7 @@
               <p>结束烹饪时间</p>
               <p>开始营业时间</p>
               <p>结束营业时间</p>
+              <p>催餐时间</p>
             </div>
             <el-divider />
             <div
@@ -234,6 +235,9 @@
               </div>
               <div class="item_sth">
                 <p>{{ item.business_end }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.un_take_remind }}</p>
               </div>
             </div>
           </div>
