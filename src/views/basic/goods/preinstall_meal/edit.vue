@@ -55,7 +55,7 @@
         <el-divider />
         <div style="display: flex">
           <el-form-item label="套餐单品" prop="product_data">
-            <el-button type="success" @click="dialogTableVisible = true"
+            <el-button v-if="formData.product_can_edit" type="success" @click="dialogTableVisible = true"
               >添加套餐单品</el-button
             >
           </el-form-item>
@@ -78,11 +78,13 @@
               >
                 <p>{{ item.product_name }}</p>
                 <p>{{ item.package_box_name }}</p>
-                <el-input-number
+                <el-input-number v-if="formData.product_can_edit"
                   :min="1"
                   v-model="item.product_num"
                 ></el-input-number>
+                <p v-else>{{item.product_num}}</p>
                 <i
+                  v-if="formData.product_can_edit"
                   @click="deleteProduct(index)"
                   class="el-icon-delete del_btn"
                 ></i>
@@ -208,6 +210,7 @@ export default {
         package_label_id: "",
         sale_price: "",
         desc: "",
+        product_can_edit:1,
       }, //表单提交数据
       checkedProductData: [],
       productListData: {

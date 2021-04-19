@@ -264,6 +264,7 @@
                     <p>结束烹饪时间</p>
                     <p>开始营业时间</p>
                     <p>结束营业时间</p>
+                    <p>摧餐时间</p>
                   </div>
                   <el-divider />
                   <!-- <div
@@ -319,6 +320,14 @@
                         format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.business_end"
+                      ></el-time-picker>
+                    </div>
+                    <div class="item_sth">
+                      <el-time-picker
+                        style="margin-left: 20px"
+                        format="HH:mm"
+                        value-format="HH:mm"
+                        v-model="item.un_take_remind"
                       ></el-time-picker>
                     </div>
                   </div>
@@ -552,6 +561,7 @@ export default {
                 this.$set(it, "time", item.time);
                 this.$set(it, "business_start", item.business_start);
                 this.$set(it, "business_end", item.business_end);
+                this.$set(it, "un_take_remind", item.un_take_remind);
               }
             });
           });
@@ -731,6 +741,7 @@ export default {
             time: item.time,
             business_start: item.business_start || "",
             business_end: item.business_end || "",
+            un_take_remind: item.un_take_remind || "",
           });
         }
       });
