@@ -300,7 +300,7 @@
                     </div>
                     <div class="item_sth">
                       <el-time-picker
-                        style="margin-left: 20px"
+                        style="width:150px;"
                         format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.time"
@@ -308,7 +308,7 @@
                     </div>
                     <div class="item_sth">
                       <el-time-picker
-                        style="margin-left: 20px"
+                        style="width:150px;"
                         format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.business_start"
@@ -316,7 +316,7 @@
                     </div>
                     <div class="item_sth">
                       <el-time-picker
-                        style="margin-left: 20px"
+                        style="width:150px;"
                         format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.business_end"
@@ -324,7 +324,7 @@
                     </div>
                     <div class="item_sth">
                       <el-time-picker
-                        style="margin-left: 20px"
+                        style="width:150px;"
                         format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.un_take_remind"
@@ -805,6 +805,7 @@ p {
   .item_sth {
     flex: 1;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
   }
