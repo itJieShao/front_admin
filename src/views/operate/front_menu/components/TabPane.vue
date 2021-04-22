@@ -464,7 +464,7 @@ export default {
       formData: {
         vendor_menu_id: "",
         time_type: 1,
-        menu_type: 1,
+        menu_type: 2,
         menu_data: [],
       },
       // mainPushData: [],
