@@ -223,6 +223,7 @@ export default {
         name: "",
         page: 1,
         page_size: 10,
+        status:1,
       },
       labelList: [],
       productList: [],
