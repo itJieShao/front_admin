@@ -13,7 +13,7 @@
             :on-success="upLoadImage"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleImageRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 10 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -93,7 +93,7 @@
                 :on-success="(value) => upLoadRewardImage(index, value)"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="(value) => handleRewardImageRemove(index)"
-                :data="{ token: $store.state.user.token }"
+                :data="{ token: $store.state.user.token, upload_type: 10 }"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -144,7 +144,9 @@
                 :value="it.id"
               ></el-option>
             </el-select>
-            <span v-if="item.reward_id">奖励有效期：{{ item.reward_valid_at }}</span>
+            <span v-if="item.reward_id"
+              >奖励有效期：{{ item.reward_valid_at }}</span
+            >
           </el-card>
           <el-button @click="addReward" type="success">新增奖励</el-button>
         </el-form-item>
@@ -557,7 +559,7 @@ export default {
       }
       let aData = JSON.parse(JSON.stringify(this.formData));
       aData.content.forEach((item) => {
-        if (!item.questionnaire_template_answer_ids.length){
+        if (!item.questionnaire_template_answer_ids.length) {
           item.questionnaire_template_answer_ids = [""];
         }
       });

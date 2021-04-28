@@ -13,7 +13,7 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token,upload_type:8 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>

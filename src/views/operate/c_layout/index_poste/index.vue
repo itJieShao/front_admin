@@ -12,7 +12,7 @@
           :on-success="upLoadMainImg"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleMainImgRemove"
-          :data="{ token: $store.state.user.token }"
+          :data="{ token: $store.state.user.token, upload_type: 11 }"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -56,7 +56,7 @@ export default {
   },
   watch: {
     time(val) {
-        console.log(val)
+      console.log(val);
       this.start_time = val[0];
       this.end_time = val[1];
     },
@@ -70,8 +70,8 @@ export default {
         this.image = res.image;
         this.start_time = res.start_time;
         this.end_time = res.end_time;
-        this.$set(this.time,0,res.start_time)
-        this.$set(this.time,1,res.end_time)
+        this.$set(this.time, 0, res.start_time);
+        this.$set(this.time, 1, res.end_time);
         this.detailImgFile = [{ name: "detailImgFile", url: res.image }];
       });
     },

@@ -16,7 +16,7 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 4 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -31,7 +31,7 @@
             :on-success="upLoadBoxImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleBoxImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 4 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -392,7 +392,7 @@ export default {
       formData: {
         name: "",
         image: "",
-        box_image:"",
+        box_image: "",
         product_category_id: "",
         product_package_box_id: "",
         taste_id: "",

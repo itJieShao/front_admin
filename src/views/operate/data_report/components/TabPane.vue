@@ -538,129 +538,131 @@
           </el-card>
         </el-col>
       </el-row>
-      <div class="userDataTitle">
-        <h3>用户数据</h3>
-        <!-- <p @click="moreUserData">更多>></p> -->
-      </div>
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-card shadow="always">
-            <h4>新增用户</h4>
-            <div class="data_box">
-              <p class="data">{{ detail.gender_data.count }}</p>
-              <p class="unit">人</p>
-            </div>
-            <div class="sex_box">
-              <div>
-                <el-tag effect="dark"> 男 </el-tag>
-                <p>{{ detail.gender_data.man_count }}</p>
+      <template v-if="vendor_id == 0">
+        <div class="userDataTitle">
+          <h3>用户数据</h3>
+          <!-- <p @click="moreUserData">更多>></p> -->
+        </div>
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-card shadow="always">
+              <h4>新增用户</h4>
+              <div class="data_box">
+                <p class="data">{{ detail.gender_data.count }}</p>
+                <p class="unit">人</p>
               </div>
-              <div>
-                <el-tag type="danger" effect="dark"> 女 </el-tag>
-                <p>{{ detail.gender_data.women_count }}</p>
-              </div>
-              <div>
-                <el-tag type="warning" effect="dark"> 未知性别 </el-tag>
-                <p>{{ detail.gender_data.unknown_count }}</p>
-              </div>
-            </div>
-            <el-row :gutter="10">
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.compare_data.last_day.type == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.compare_data.last_day.type == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>昨日{{ detail.compare_data.last_day.rate }}</p>
-              </el-col>
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.compare_data.last_week.type == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.compare_data.last_week.type == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>上周{{ detail.compare_data.last_week.rate }}</p>
-              </el-col>
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.compare_data.last_month.type == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.compare_data.last_month.type == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>上月{{ detail.compare_data.last_month.rate }}</p>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <el-col :span="12">
-          <el-card shadow="always">
-            <h4>老用户下单数</h4>
-            <div class="data_box">
-              <p class="data">{{ detail.old }}</p>
-            </div>
-            <el-row :gutter="10">
-              <el-col :span="12">
-                <div class="flex" v-for="item in detail.old_first">
-                  <i class="el-icon-caret-top"></i>
-                  <p class="fontw">{{ item.vendor_name }}</p>
-                  <p>{{ item.count }}</p>
+              <div class="sex_box">
+                <div>
+                  <el-tag effect="dark"> 男 </el-tag>
+                  <p>{{ detail.gender_data.man_count }}</p>
                 </div>
-              </el-col>
-              <el-col :span="12">
-                <div class="flex" v-for="item in detail.old_last">
-                  <i class="el-icon-caret-bottom"></i>
-                  <p class="fontw">{{ item.vendor_name }}</p>
-                  <p>{{ item.count }}</p>
+                <div>
+                  <el-tag type="danger" effect="dark"> 女 </el-tag>
+                  <p>{{ detail.gender_data.women_count }}</p>
                 </div>
-              </el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.yesteday_old_trend == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.yesteday_old_trend == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>昨日{{ detail.yesteday_old_diff }}</p>
-              </el-col>
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.last_week_old_trend == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.last_week_old_trend == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>上周{{ detail.last_week_old_diff }}</p>
-              </el-col>
-              <el-col class="flex" :span="8">
-                <i
-                  v-if="detail.last_month_old_trend == 1"
-                  class="el-icon-top-right"
-                ></i>
-                <i
-                  v-else-if="detail.last_month_old_trend == 2"
-                  class="el-icon-bottom-left"
-                ></i>
-                <p>上月{{ detail.last_month_old_diff }}</p>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-      </el-row>
+                <div>
+                  <el-tag type="warning" effect="dark"> 未知性别 </el-tag>
+                  <p>{{ detail.gender_data.unknown_count }}</p>
+                </div>
+              </div>
+              <el-row :gutter="10">
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.compare_data.last_day.type == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.compare_data.last_day.type == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>昨日{{ detail.compare_data.last_day.rate }}</p>
+                </el-col>
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.compare_data.last_week.type == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.compare_data.last_week.type == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>上周{{ detail.compare_data.last_week.rate }}</p>
+                </el-col>
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.compare_data.last_month.type == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.compare_data.last_month.type == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>上月{{ detail.compare_data.last_month.rate }}</p>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+          <el-col :span="12">
+            <el-card shadow="always">
+              <h4>老用户下单数</h4>
+              <div class="data_box">
+                <p class="data">{{ detail.old }}</p>
+              </div>
+              <el-row :gutter="10">
+                <el-col :span="12">
+                  <div class="flex" v-for="item in detail.old_first">
+                    <i class="el-icon-caret-top"></i>
+                    <p class="fontw">{{ item.vendor_name }}</p>
+                    <p>{{ item.count }}</p>
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <div class="flex" v-for="item in detail.old_last">
+                    <i class="el-icon-caret-bottom"></i>
+                    <p class="fontw">{{ item.vendor_name }}</p>
+                    <p>{{ item.count }}</p>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.yesteday_old_trend == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.yesteday_old_trend == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>昨日{{ detail.yesteday_old_diff }}</p>
+                </el-col>
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.last_week_old_trend == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.last_week_old_trend == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>上周{{ detail.last_week_old_diff }}</p>
+                </el-col>
+                <el-col class="flex" :span="8">
+                  <i
+                    v-if="detail.last_month_old_trend == 1"
+                    class="el-icon-top-right"
+                  ></i>
+                  <i
+                    v-else-if="detail.last_month_old_trend == 2"
+                    class="el-icon-bottom-left"
+                  ></i>
+                  <p>上月{{ detail.last_month_old_diff }}</p>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+        </el-row>
+      </template>
     </el-card>
   </div>
 </template>
@@ -720,8 +722,8 @@ export default {
         aData.time_start = this.time[0];
         aData.time_end = this.time[1];
       }
-      if (this.vendor_id){
-          aData.vendor_id = this.vendor_id;
+      if (this.vendor_id) {
+        aData.vendor_id = this.vendor_id;
       }
       customerData(aData).then((res) => {
         this.detail = res;

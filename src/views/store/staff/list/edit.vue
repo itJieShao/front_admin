@@ -13,7 +13,7 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 9 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -43,7 +43,9 @@
           <el-select
             :key="timer"
             style="width: 100%"
-            :placeholder="formData.station_id != 1 ?'请选择门店，可多选':'请选择门店'"
+            :placeholder="
+              formData.station_id != 1 ? '请选择门店，可多选' : '请选择门店'
+            "
             v-model="formData.vendor_id"
             :multiple="formData.station_id != 1"
           >

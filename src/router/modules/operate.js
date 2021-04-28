@@ -207,6 +207,33 @@ const operateRouter = {
             meta: { title: '关于我们', activeMenu:'/operate/c_layout' },
         },
         {
+            path: 'c_active',
+            component: () => import('@/views/operate/c_active'),
+            name: 'cActive',
+            meta: { title: '运营活动', icon: 'el-icon-s-help', auth: "layout" },
+        },
+        {
+            path: 'c_active/pull_new',
+            component: () => import('@/views/operate/c_active/pull_new/index'),
+            name: 'pullNew',
+            hidden:true,
+            meta: { title: '拉新活动', activeMenu:'/operate/c_active' },
+        },
+        {
+            path: 'c_active/pull_new_add',
+            component: () => import('@/views/operate/c_active/pull_new/add'),
+            name: 'pullNewAdd',
+            hidden:true,
+            meta: { title: '拉新活动', activeMenu:'/operate/c_active' },
+        },
+        {
+            path: 'c_active/pull_new_detail',
+            component: () => import('@/views/operate/c_active/pull_new/detail'),
+            name: 'pullNewDetail',
+            hidden:true,
+            meta: { title: '拉新活动', activeMenu:'/operate/c_active' },
+        },
+        {
             path: 'data_report',
             component: () => import('@/views/operate/data_report'),
             name: 'DataReport',

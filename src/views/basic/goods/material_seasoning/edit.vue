@@ -14,7 +14,7 @@
           :on-success="upLoadMainImg"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleMainImgRemove"
-          :data="{ token: $store.state.user.token }"
+          :data="{ token: $store.state.user.token, upload_type }"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -131,6 +131,7 @@ export default {
   props: ["type", "type_name", "jumpId"],
   data() {
     return {
+      upload_type:Number(this.type) + 2,
       addApi: null,
       editApi: null,
       detailApi: null,

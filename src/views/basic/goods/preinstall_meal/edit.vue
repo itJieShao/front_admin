@@ -19,7 +19,7 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -34,7 +34,7 @@
             :on-success="upLoadMainPushImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainPushImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -48,6 +48,7 @@
             :on-success="upLoadImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -55,7 +56,10 @@
         <el-divider />
         <div style="display: flex">
           <el-form-item label="套餐单品" prop="product_data">
-            <el-button v-if="formData.product_can_edit" type="success" @click="dialogTableVisible = true"
+            <el-button
+              v-if="formData.product_can_edit"
+              type="success"
+              @click="dialogTableVisible = true"
               >添加套餐单品</el-button
             >
           </el-form-item>
@@ -78,11 +82,12 @@
               >
                 <p>{{ item.product_name }}</p>
                 <p>{{ item.package_box_name }}</p>
-                <el-input-number v-if="formData.product_can_edit"
+                <el-input-number
+                  v-if="formData.product_can_edit"
                   :min="1"
                   v-model="item.product_num"
                 ></el-input-number>
-                <p v-else>{{item.product_num}}</p>
+                <p v-else>{{ item.product_num }}</p>
                 <i
                   v-if="formData.product_can_edit"
                   @click="deleteProduct(index)"
@@ -202,15 +207,15 @@ export default {
       },
       formData: {
         name: "",
-        title:"",
+        title: "",
         main_image: "",
-        main_push_image:"",
+        main_push_image: "",
         image: [],
         product_data: [],
         package_label_id: "",
         sale_price: "",
         desc: "",
-        product_can_edit:1,
+        product_can_edit: 1,
       }, //表单提交数据
       checkedProductData: [],
       productListData: {
@@ -226,7 +231,7 @@ export default {
       dialogVisible: false,
       dialogTableVisible: false,
       detailMainImgFile: [],
-      detailMainPushImgFile:[],
+      detailMainPushImgFile: [],
       detailImagesFile: [],
     };
   },
