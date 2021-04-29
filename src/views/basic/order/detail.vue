@@ -119,7 +119,7 @@
     >
       <el-col :span="8" v-for="(it, idx) in item" :key="idx">
         <el-card shadow="hover">
-          <div class="goods_item">
+          <div class="goods_item1">
             <div class="goods_top">
               <img :src="it.image" alt="" />
               <div class="goods_info">
@@ -300,7 +300,7 @@ export default {
 p {
   margin: 0;
 }
-.goods_item {
+.goods_item1 {
   cursor: pointer;
   .goods_top {
     display: flex;
