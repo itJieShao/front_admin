@@ -703,8 +703,12 @@ export default {
       this.$router.push("/operate/data_report/user");
     },
     timeChange() {
-      this.time_type = "5";
-      this.getCustomerData();
+      if (this.time) {
+        this.time_type = "5";
+        this.getCustomerData();
+      } else {
+        this.time_type = "1";
+      }
     },
     tabClick(time_type) {
       if (this.time_type != time_type) {

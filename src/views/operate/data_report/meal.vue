@@ -116,7 +116,10 @@
               <el-row :gutter="10" class="rank">
                 <el-col :span="20">
                   <el-row :gutter="24" style="display: flex">
-                    <div class="rank_sth" style="margin:0 20px 0 50px;width:280px;">
+                    <div
+                      class="rank_sth"
+                      style="margin: 0 20px 0 50px; width: 280px"
+                    >
                       <p>{{ item.package_name }}</p>
                       <img :src="item.image" alt="" />
                     </div>
@@ -195,8 +198,12 @@ export default {
       });
     },
     timeChange() {
-      this.time_type = "5";
-      this.getMealData();
+      if (this.time) {
+        this.time_type = "5";
+        this.getMealData();
+      } else {
+        this.time_type = "1";
+      }
     },
     tabClick(time_type) {
       if (this.time_type != time_type) {

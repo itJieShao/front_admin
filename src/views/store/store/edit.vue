@@ -658,7 +658,7 @@ export default {
         if (this.formData.district_code) {
           this.formData.district_id = res.find(
             (item) => item.code == this.formData.district_code
-          );
+          ).id;
         }
       });
     },

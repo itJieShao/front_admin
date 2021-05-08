@@ -146,10 +146,16 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row v-for="(item,index) in repurchaseData.count_data" :key="index" style="margin-top:20px;" :gutter="10" v-if="repurchaseData.all_data">
-        <el-col :span="8" v-for="(it,idx) in item" :key="index">
+      <el-row
+        v-for="(item, index) in repurchaseData.count_data"
+        :key="index"
+        style="margin-top: 20px"
+        :gutter="10"
+        v-if="repurchaseData.all_data"
+      >
+        <el-col :span="8" v-for="(it, idx) in item" :key="index">
           <el-card shadow="always">
-            <h4>{{it.num}}次复购率</h4>
+            <h4>{{ it.num }}次复购率</h4>
             <div class="data_box_flex">
               <div class="data_box">
                 <p class="data">{{ it.count }}</p>
@@ -162,7 +168,7 @@
           </el-card>
         </el-col>
       </el-row>
-    </el-card> 
+    </el-card>
   </div>
 </template>
 
@@ -186,7 +192,7 @@ export default {
       ],
       time_type: "1",
       loading: false,
-      timer:"",
+      timer: "",
     };
   },
   created() {
@@ -194,8 +200,12 @@ export default {
   },
   methods: {
     timeChange() {
-      this.time_type = "5";
-      this.getData();
+      if (this.time) {
+        this.time_type = "5";
+        this.getData();
+      } else {
+        this.time_type = "1";
+      }
     },
     tabClick(time_type) {
       if (this.time_type != time_type) {
@@ -218,10 +228,10 @@ export default {
         this.loading = false;
       });
       repurchaseData(aData).then((res) => {
-        res.rate_data.forEach(item =>  {
+        res.rate_data.forEach((item) => {
           item.name = item.gender;
           item.value = item.count;
-        })
+        });
         let count_data = [];
         for (let i = 0; i < res.count_data.length; i += 3) {
           count_data.push(res.count_data.slice(i, i + 3));
