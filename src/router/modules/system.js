@@ -47,6 +47,12 @@ const systemRouter = {
             hidden: true,
             meta: { title: '审核编辑', icon: 'el-icon-s-help', activeMenu: '/system/examine' },
         },
+        {
+            path: 'personnel_edit',
+            component: () => import('@/views/system/personnel_edit'),
+            name: 'PersonnelEdit',
+            meta: { title: '设置QC/配送人员', icon: 'el-icon-s-help', auth: "examine_list" },
+        },
     ],
 }
 
