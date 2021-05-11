@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <h2>设置QC/配送人员</h2>
-    <el-row :gutter="20" style="margin-bottom: 20px">
+    <!-- <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
           v-model="listData.condition"
@@ -13,7 +13,7 @@
           >搜索</el-button
         >
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-table v-loading="loading" :data="list" style="width: 100%">
       <el-table-column align="center" label="门店">
         <template slot-scope="scope">
