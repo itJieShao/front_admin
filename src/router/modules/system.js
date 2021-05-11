@@ -51,7 +51,7 @@ const systemRouter = {
             path: 'personnel_edit',
             component: () => import('@/views/system/personnel_edit'),
             name: 'PersonnelEdit',
-            meta: { title: '设置QC/配送人员', icon: 'el-icon-s-help', auth: "examine_list" },
+            meta: { title: '设置检测/配送人员', icon: 'el-icon-s-help', auth: "change_supply_chain_employee" },
         },
     ],
 }

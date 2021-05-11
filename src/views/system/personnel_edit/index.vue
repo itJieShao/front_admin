@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>设置QC/配送人员</h2>
+    <h2>设置检测/配送人员</h2>
     <!-- <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
@@ -20,7 +20,7 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="QC人员">
+      <el-table-column align="center" label="检测人员">
         <template slot-scope="scope">
           <el-select
             v-model="scope.row.qc_user_id"
