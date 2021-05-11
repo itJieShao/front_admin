@@ -96,6 +96,7 @@ export default {
         page: 1,
         page_size: 999,
         condition: "",
+        status : 0,
       },
       loading: false,
       total: 0,
