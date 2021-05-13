@@ -80,6 +80,27 @@ const storeRouter = {
                     hidden: true,
                     meta: { title: '员工任务详情', icon: 'table', activeMenu: "/store/staff/staff_task" }
                 },
+
+                {
+                    path: 'task_template',
+                    name: 'TaskTemplate',
+                    component: () => import('@/views/store/staff/task_template'),
+                    meta: { title: '任务模板', icon: 'table', auth: "staff_task_list" }
+                },
+                {
+                    path: 'task_template_add',
+                    name: 'TaskTemplateAdd',
+                    component: () => import('@/views/store/staff/task_template/add'),
+                    hidden: true,
+                    meta: { title: '添加任务模板', icon: 'table', activeMenu: "/store/staff/task_template" }
+                },
+                {
+                    path: 'task_template_detail',
+                    name: 'TaskTemplateDetail',
+                    component: () => import('@/views/store/staff/task_template/detail'),
+                    hidden: true,
+                    meta: { title: '任务模板详情', icon: 'table', activeMenu: "/store/staff/task_template" }
+                },
             ]
         },
     ]

@@ -24,11 +24,17 @@
         >
       </el-col>
       <el-col :span="10" style="display: flex; justify-content: flex-end">
-        <el-button
+        <!-- <el-button
           @click="dialogFormVisible = true"
           type="success"
           icon="el-icon-plus"
           >新增任务</el-button
+        > -->
+        <el-button
+          @click="goTaskTemplate"
+          type="success"
+          icon="el-icon-plus"
+          >任务模板</el-button
         >
       </el-col>
     </el-row>
@@ -88,6 +94,9 @@ export default {
     this.getStoreList();
   },
   methods: {
+    goTaskTemplate(){
+      this.$router.push('/store/staff/task_template')
+    },
     addTask(){
       let aData = {
         title:this.title,
