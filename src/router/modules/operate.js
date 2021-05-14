@@ -14,6 +14,27 @@ const operateRouter = {
             meta: { title: '小程序菜单管理', icon: 'el-icon-s-help', auth: "front_menu_list" },
         },
         {
+            path: 'add_buy',
+            component: () => import('@/views/operate/add_buy'),
+            name: 'AddBuy',
+            hidden:true,
+            meta: { title: '套餐加购模板', icon: 'el-icon-s-help', auth: "front_menu_list" },
+        },
+        {
+            path: 'add_buy_add',
+            component: () => import('@/views/operate/add_buy/add'),
+            name: 'AddBuyAdd',
+            hidden:true,
+            meta: { title: '新增套餐加购模板', icon: 'el-icon-s-help', activeMenu:'/operate/add_buy' },
+        },
+        {
+            path: 'add_buy_detail',
+            component: () => import('@/views/operate/add_buy/detail'),
+            name: 'AddBuyDetail',
+            hidden:true,
+            meta: { title: '套餐加购模板详情', icon: 'el-icon-s-help', activeMenu:'/operate/add_buy' },
+        },
+        {
             path: 'questionnaire',
             component: () => import('@/views/operate/questionnaire'),
             name: 'Questionnaire',

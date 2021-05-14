@@ -14,26 +14,38 @@
       </el-col>
       <el-col :span="4" style="display: flex; justify-content: flex-end">
         <el-button type="success" icon="el-icon-plus" @click="goAdd"
-          >新增任务模板</el-button
+          >新增套餐加购模板</el-button
         >
       </el-col>
     </el-row>
     <el-table v-loading="loading" :data="list" style="width: 100%">
-      <el-table-column align="center" label="任务模版ID">
+      <el-table-column width="120" align="center" label="套餐加购模版ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="任务模版名称">
+      <el-table-column align="center" label="主套餐">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="引用数量">
+      <el-table-column align="center" label="搭配套餐">
         <template slot-scope="scope">
           <span>{{ scope.row.used_qty }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="引用门店">
+        <template slot-scope="scope">
+          <span>{{ scope.row.created_admin_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200" align="center" label="引用时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column>
 
@@ -43,7 +55,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="创建时间">
+      <el-table-column width="200" align="center" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.created_at }}</span>
         </template>
@@ -57,7 +69,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" align="center" label="操作">
+      <el-table-column width="200" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status"
@@ -66,9 +78,7 @@
             @click="updateStatus(scope.row.id, scope.$index)"
             >{{ scope.row.status ? "禁用" : "启用" }}</el-button
           >
-          <el-button
-            size="mini"
-            @click="goDetail(scope.row.id)"
+          <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
           >
         </template>
@@ -106,12 +116,10 @@ export default {
   },
   methods: {
     goDetail(id) {
-      this.$router.push(
-        `/store/staff/task_template_detail?id=${id}`
-      );
+      this.$router.push(`/operate/add_buy_add_detail?id=${id}`);
     },
     goAdd() {
-      this.$router.push("/store/staff/task_template_add");
+      this.$router.push("/operate/add_buy_add");
     },
     getList() {
       this.loading = true;
@@ -125,13 +133,13 @@ export default {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(template_id,index) {
+    updateStatus(template_id, index) {
       updateTaskTemplate({
         template_id,
-        status:0
+        status: 0,
       }).then((res) => {
         if (res) {
-          this.$set(this.list[index],"status",0)
+          this.$set(this.list[index], "status", 0);
           this.$notify({
             title: "成功",
             message: "操作成功",
@@ -144,4 +152,3 @@ export default {
   },
 };
 </script>
-
