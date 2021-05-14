@@ -185,6 +185,9 @@ export default {
             item.end_time = item.time[1];
             delete item.time;
           }
+          if (item.loop != 2){
+            delete item.loop_setup;
+          }
           if (item.loop_setup){
             item.loop_setup = JSON.stringify(item.loop_setup)
           }
