@@ -89,7 +89,7 @@
             v-if="
               scope.row.audit_status == 0 &&
               scope.row.first_audit &&
-              scope.row.can_audit == 1
+              detail.can_audit == 1
             "
           >
             <div style="display: flex">
