@@ -32,7 +32,8 @@
           <template slot-scope="scope">
             <el-time-picker
               is-range
-              value-format="HH:mm:ss"
+              value-format="HH:mm"
+              format="HH:mm"
               v-model="scope.row.time"
               range-separator="至"
               start-placeholder="开始时间"
