@@ -8,3 +8,12 @@ export function getList(data) {
         data
     })
 }
+
+//禁用/启用
+export function updateStatus(data) {
+    return request({
+        url: '/product/vendor-menu-purchased/update-status',
+        method: 'post',
+        data
+    })
+}

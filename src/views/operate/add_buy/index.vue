@@ -18,7 +18,7 @@
         >
       </el-col>
     </el-row>
-    <el-table v-loading="loading" :data="list" style="width: 100%">
+    <el-table v-loading="loading" border :data="list" style="width: 100%">
       <el-table-column width="140" align="center" label="套餐加购模版ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="创建人">
+      <el-table-column width="200" align="center" label="创建人">
         <template slot-scope="scope">
           <span>{{ scope.row.created_user_name }}</span>
         </template>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { getList, updateTaskTemplate } from "@/api/operate/add_buy";
+import { getList, updateStatus } from "@/api/operate/add_buy";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -133,9 +133,9 @@ export default {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(template_id, index) {
-      updateTaskTemplate({
-        template_id,
+    updateStatus(id, index) {
+      updateStatus({
+        id,
         status: 0,
       }).then((res) => {
         if (res) {
