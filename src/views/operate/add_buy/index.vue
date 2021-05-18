@@ -4,7 +4,7 @@
       <el-col :span="10">
         <el-input
           v-model="listData.keyword"
-          placeholder="请输入任务模板搜索"
+          placeholder="请输入套餐加购模板搜索"
         ></el-input>
       </el-col>
       <el-col :span="10">
@@ -19,39 +19,39 @@
       </el-col>
     </el-row>
     <el-table v-loading="loading" :data="list" style="width: 100%">
-      <el-table-column width="120" align="center" label="套餐加购模版ID">
+      <el-table-column width="140" align="center" label="套餐加购模版ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="主套餐">
+      <el-table-column width="200" align="center" label="主套餐">
         <template slot-scope="scope">
-          <span>{{ scope.row.title }}</span>
+          <span>{{ scope.row.package_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="搭配套餐">
+      <el-table-column width="240" align="center" label="搭配套餐">
         <template slot-scope="scope">
-          <span>{{ scope.row.used_qty }}</span>
+          <span v-if="scope.row.purchased_vendor_package_names">{{ scope.row.purchased_vendor_package_names.join(",") }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="引用门店">
+      <el-table-column width="200" align="center" label="引用门店">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_admin_name }}</span>
+          <span>{{ scope.row.vendor_names }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="200" align="center" label="引用时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span>{{ scope.row.valid_at }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="创建人">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_admin_name }}</span>
+          <span>{{ scope.row.created_user_name }}</span>
         </template>
       </el-table-column>
 
@@ -61,7 +61,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="状态">
+      <el-table-column width="160" align="center" label="状态">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{
             scope.row.status == 1 ? "启用中" : "禁用"
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { getTaskTemplateList, updateTaskTemplate } from "@/api/store";
+import { getList, updateTaskTemplate } from "@/api/operate/add_buy";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -123,7 +123,7 @@ export default {
     },
     getList() {
       this.loading = true;
-      getTaskTemplateList(this.listData).then((res) => {
+      getList(this.listData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;
