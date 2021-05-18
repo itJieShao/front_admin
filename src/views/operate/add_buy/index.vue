@@ -33,7 +33,9 @@
 
       <el-table-column width="240" align="center" label="搭配套餐">
         <template slot-scope="scope">
-          <span v-if="scope.row.purchased_vendor_package_names">{{ scope.row.purchased_vendor_package_names.join(",") }}</span>
+          <span v-if="scope.row.purchased_vendor_package_names">{{
+            scope.row.purchased_vendor_package_names.join(",")
+          }}</span>
         </template>
       </el-table-column>
 
@@ -63,21 +65,34 @@
 
       <el-table-column width="160" align="center" label="状态">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{
-            scope.row.status == 1 ? "启用中" : "禁用"
-          }}</el-tag>
+          <el-tag v-if="scope.row.status == -1" type="danger">
+            已禁用
+          </el-tag>
+          <el-tag v-if="scope.row.status == 0" type="warning">
+            待启用
+          </el-tag>
+          <el-tag v-else type="success">
+            已启用
+          </el-tag>
         </template>
       </el-table-column>
 
       <el-table-column width="200" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.status"
-            :type="scope.row.status ? 'danger' : 'success'"
+            v-if="scope.row.can_enable"
+            type="success"
             size="mini"
-            @click="updateStatus(scope.row.id, scope.$index)"
-            >{{ scope.row.status ? "禁用" : "启用" }}</el-button
+            @click="updateStatus(scope.row.id, 1, scope.$index)"
+            >启用</el-button
           >
+          <!-- <el-button
+            v-if="scope.row.can_disable"
+            type="danger"
+            size="mini"
+            @click="updateStatus(scope.row.id, -1, scope.$index)"
+            >禁用</el-button
+          > -->
           <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
           >
@@ -116,7 +131,7 @@ export default {
   },
   methods: {
     goDetail(id) {
-      this.$router.push(`/operate/add_buy_add_detail?id=${id}`);
+      this.$router.push(`/operate/add_buy_detail?id=${id}`);
     },
     goAdd() {
       this.$router.push("/operate/add_buy_add");
@@ -133,13 +148,13 @@ export default {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(id, index) {
+    updateStatus(id,status,index) {
       updateStatus({
         id,
-        status: 0,
+        status,
       }).then((res) => {
         if (res) {
-          this.$set(this.list[index], "status", 0);
+          this.$set(this.list[index], status == 1 ? "can_enable" : "can_disable", 0);
           this.$notify({
             title: "成功",
             message: "操作成功",
