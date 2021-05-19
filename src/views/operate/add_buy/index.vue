@@ -3,7 +3,7 @@
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-input
-          v-model="listData.keyword"
+          v-model="listData.package_name"
           placeholder="请输入套餐加购模板搜索"
         ></el-input>
       </el-col>
@@ -68,7 +68,7 @@
           <el-tag v-if="scope.row.status == -1" type="danger">
             已禁用
           </el-tag>
-          <el-tag v-if="scope.row.status == 0" type="warning">
+          <el-tag v-else-if="scope.row.status == 0" type="warning">
             待启用
           </el-tag>
           <el-tag v-else type="success">
@@ -120,7 +120,7 @@ export default {
       listData: {
         page: 1,
         page_size: 10,
-        keyword: "",
+        package_name: "",
       },
       loading: false,
       total: 0,

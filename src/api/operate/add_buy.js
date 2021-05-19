@@ -26,3 +26,12 @@ export function updateStatus(data) {
         data
     })
 }
+
+//新增/更新门店/有效期
+export function updateApi(data) {
+    return request({
+        url: '/product/vendor-menu-purchased/update',
+        method: 'post',
+        data
+    })
+}
