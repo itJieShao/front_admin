@@ -65,15 +65,11 @@
 
       <el-table-column width="160" align="center" label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == -1" type="danger">
-            已禁用
-          </el-tag>
+          <el-tag v-if="scope.row.status == -1" type="danger"> 已禁用 </el-tag>
           <el-tag v-else-if="scope.row.status == 0" type="warning">
             待启用
           </el-tag>
-          <el-tag v-else type="success">
-            已启用
-          </el-tag>
+          <el-tag v-else type="success"> 已启用 </el-tag>
         </template>
       </el-table-column>
 
@@ -148,13 +144,18 @@ export default {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(id,status,index) {
+    updateStatus(id, status, index) {
       updateStatus({
         id,
         status,
       }).then((res) => {
         if (res) {
-          this.$set(this.list[index], status == 1 ? "can_enable" : "can_disable", 0);
+          this.$set(this.list[index], "status", status);
+          this.$set(
+            this.list[index],
+            status == 1 ? "can_enable" : "can_disable",
+            0
+          );
           this.$notify({
             title: "成功",
             message: "操作成功",

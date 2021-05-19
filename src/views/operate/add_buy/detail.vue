@@ -226,6 +226,17 @@ export default {
     },
     getDetail() {
       getDetail({ id: this.$route.query.id }).then((res) => {
+        if (res.valid_at_start){
+          this.valid_at[0] = res.valid_at_start
+        }
+        if (res.valid_at_end){
+          this.valid_at[1] = res.valid_at_end
+        }
+        if (res.vendor_ids && res.vendor_ids.length){
+          res.vendor_ids.forEach(item => {
+            this.vendor_ids.push(Number(item))
+          })
+        }
         this.detail = res;
       });
     },
@@ -269,7 +280,7 @@ export default {
         if (res) {
           this.$notify({
             title: "成功",
-            message: "提交成功",
+            message: "保存成功",
             type: "success",
             duration: 1000,
           });
