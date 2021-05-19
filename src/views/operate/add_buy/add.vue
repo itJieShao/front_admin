@@ -351,7 +351,7 @@ export default {
 
 <style>
 .content-box {
-  width: 475px;
+  width: 520px;
   padding: 20px;
   border: 1px solid #ddd;
 }

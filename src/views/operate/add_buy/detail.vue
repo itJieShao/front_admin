@@ -79,13 +79,12 @@
             <p>
               <el-date-picker
                 v-model="valid_at"
-                type="datetimerange"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                format="yyyy-MM-dd HH:mm:ss"
+                type="daterange"
+                value-format="yyyy-MM-dd"
+                format="yyyy-MM-dd"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                :default-time="['', '23:59:59']"
               >
               </el-date-picker>
             </p>
@@ -285,8 +284,8 @@ export default {
 <style scoped>
 .content-box {
   margin: 20px 0;
-  width: 430px;
-  padding: 25px;
+  width: 530px;
+  padding: 20px;
   border: 1px solid #ddd;
 }
 .content-box-img {
@@ -318,6 +317,9 @@ export default {
 .feeding-item {
   width: 120px;
   margin: 0 20px 20px 0;
+}
+.feeding-item:nth-child(3n + 0) {
+  margin-right: 0;
 }
 .feeding-item-img {
   position: relative;
