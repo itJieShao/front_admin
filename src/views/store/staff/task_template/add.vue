@@ -64,9 +64,9 @@
         <el-table-column width="300" align="center" label="">
           <template slot-scope="scope">
             <el-checkbox-group
-              style="display: flex;flex-wrap:wrap;"
+              style="display: flex; flex-wrap: wrap"
               v-if="scope.row.loop == 2"
-              v-model="scope.row.loop_setup"
+              v-model="scope.row.loop_setup_week"
             >
               <el-checkbox
                 v-for="item in weekList"
@@ -76,16 +76,13 @@
               >
             </el-checkbox-group>
             <!-- <el-checkbox-group
-              style="display: flex;flex-wrap:wrap;"
+              style="display: flex; flex-wrap: wrap"
               v-else-if="scope.row.loop == 3"
-              v-model="scope.row.loop_setup"
+              v-model="scope.row.loop_setup_mon"
             >
-              <el-checkbox      
-                v-for="item in 31"
-                :key="item"
-                :label="item"
-                >{{ item + "号"}}</el-checkbox
-              >
+              <el-checkbox v-for="item in 31" :key="item" :label="item">{{
+                item + "号"
+              }}</el-checkbox>
             </el-checkbox-group> -->
           </template>
         </el-table-column>
@@ -174,16 +171,25 @@ export default {
           id: 0,
         },
       ],
+      monthList:[],
     };
   },
   created() {
+    for (let i = 1; i <= 31; i++) {
+      this.monthList.push(i);
+    }
     for (let i = 0; i < 3; i++) {
-      this.formData.template_detail.push({ loop_setup: [1, 2, 3, 4, 5, 6, 0] });
+      this.formData.template_detail.push(
+        { loop_setup_week: [1, 2, 3, 4, 5, 6, 0] },
+        { loop_setup_mon: this.monthList }
+      );
     }
   },
   methods: {
     addTemplate() {
-      this.formData.template_detail.push({ loop_setup: [1, 2, 3, 4, 5, 6, 0] });   
+      this.formData.template_detail.push({
+        loop_setup_week: [1, 2, 3, 4, 5, 6, 0],
+      });
     },
     delTemplate(index) {
       this.formData.template_detail.splice(index, 1);
@@ -198,20 +204,20 @@ export default {
             item.end_time = item.time[1];
             delete item.time;
           }
-          if (item.loop != 2){
+          if (item.loop != 2) {
             delete item.loop_setup;
           }
-          if (item.loop_setup){
-            item.loop_setup = JSON.stringify(item.loop_setup)
+          if (item.loop_setup) {
+            item.loop_setup = JSON.stringify(item.loop_setup);
           }
           template_detail.push(item);
         }
       });
       aData.template_detail = JSON.stringify(template_detail);
-      if (!aData.title){
+      if (!aData.title) {
         return this.$message.error("请输入模板名称");
       }
-      if (!template_detail.length){
+      if (!template_detail.length) {
         return this.$message.error("至少有一条任务");
       }
       updateTaskTemplate(aData).then((res) => {
@@ -233,10 +239,10 @@ export default {
 </script>
 
 <style scoped>
-.el-checkbox{
+.el-checkbox {
   margin-right: 10px;
 }
-.el-checkbox__label{
+.el-checkbox__label {
   margin-left: 5px;
 }
 </style>
