@@ -15,6 +15,9 @@
         <el-form-item label="套餐主推广告图" v-if="detail.main_push_image">
           <img :src="detail.main_push_image" alt="" />
         </el-form-item>
+        <el-form-item label="套餐加购图" v-if="detail.purchased_image">
+          <img :src="detail.purchased_image" alt="" />
+        </el-form-item>
         <el-form-item label="套餐轮播图">
           <div class="imgs_box">
             <img v-for="item in detail.image" :src="item" alt="" />

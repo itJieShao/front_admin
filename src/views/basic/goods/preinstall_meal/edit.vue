@@ -39,6 +39,21 @@
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
+        <el-form-item label="加购图">
+          <el-upload
+            :file-list="detailPurchasedImage"
+            :class="{ main_img_hide: formData.purchased_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadPurchasedImage"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handlePurchasedImageRemove"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="套餐轮播图" prop="images">
           <el-upload
             :file-list="detailImagesFile"
@@ -210,6 +225,7 @@ export default {
         title: "",
         main_image: "",
         main_push_image: "",
+        purchased_image:"",
         image: [],
         product_data: [],
         package_label_id: "",
@@ -223,7 +239,7 @@ export default {
         name: "",
         page: 1,
         page_size: 10,
-        status:1,
+        status: 1,
       },
       labelList: [],
       productList: [],
@@ -233,6 +249,7 @@ export default {
       dialogTableVisible: false,
       detailMainImgFile: [],
       detailMainPushImgFile: [],
+      detailPurchasedImage:[],
       detailImagesFile: [],
     };
   },
@@ -259,6 +276,11 @@ export default {
           if (res.main_push_image) {
             this.detailMainPushImgFile = [
               { name: "detailMainPushImgFile", url: res.main_push_image },
+            ];
+          }
+          if (res.purchased_image) {
+            this.detailPurchasedImage = [
+              { name: "detailPurchasedImage", url: res.purchased_image },
             ];
           }
           if (res.image.length > 0) {
@@ -338,6 +360,10 @@ export default {
     handleMainPushImgRemove(file, fileList) {
       this.formData.main_push_image = "";
     },
+    //删除加购图
+    handlePurchasedImageRemove(file, fileList) {
+      this.formData.purchased_image = "";
+    },
     //删除轮播图
     handleRemove(file, fileList) {
       const index = this.formData.image.findIndex((item) => item == file.url);
@@ -376,6 +402,12 @@ export default {
     upLoadMainPushImg(res, file) {
       if (res.status) {
         this.formData.main_push_image = res.data.image_url;
+      }
+    },
+    //上传加购图
+    upLoadPurchasedImage(res, file) {
+      if (res.status) {
+        this.formData.purchased_image = res.data.image_url;
       }
     },
     //上传轮播图
