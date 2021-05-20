@@ -49,7 +49,7 @@
               v-model="scope.row.loop"
               filterable
               clearable
-              placeholder="请选择任务循环周期"
+              placeholder="循环周期"
             >
               <el-option
                 v-for="item in loop"
@@ -61,20 +61,32 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="">
+        <el-table-column width="300" align="center" label="">
           <template slot-scope="scope">
             <el-checkbox-group
+              style="display: flex;flex-wrap:wrap;"
               v-if="scope.row.loop == 2"
               v-model="scope.row.loop_setup"
             >
               <el-checkbox
-                style="display: flex"
                 v-for="item in weekList"
                 :key="item.id"
                 :label="item.id"
                 >{{ item.name }}</el-checkbox
               >
             </el-checkbox-group>
+            <!-- <el-checkbox-group
+              style="display: flex;flex-wrap:wrap;"
+              v-else-if="scope.row.loop == 3"
+              v-model="scope.row.loop_setup"
+            >
+              <el-checkbox      
+                v-for="item in 31"
+                :key="item"
+                :label="item"
+                >{{ item + "号"}}</el-checkbox
+              >
+            </el-checkbox-group> -->
           </template>
         </el-table-column>
         <el-table-column align="center" label="">
@@ -171,7 +183,7 @@ export default {
   },
   methods: {
     addTemplate() {
-      this.formData.template_detail.push({ loop_setup: [1, 2, 3, 4, 5, 6, 0] });
+      this.formData.template_detail.push({ loop_setup: [1, 2, 3, 4, 5, 6, 0] });   
     },
     delTemplate(index) {
       this.formData.template_detail.splice(index, 1);
@@ -220,5 +232,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.el-checkbox{
+  margin-right: 10px;
+}
+.el-checkbox__label{
+  margin-left: 5px;
+}
 </style>

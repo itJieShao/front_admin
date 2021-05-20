@@ -131,12 +131,70 @@
                 <p style="margin-top: 10px">套餐组合：{{ it.product_name }}</p>
                 <div class="tab_item">
                   <div class="time_type_bg1">{{ it.time_type_name }}</div>
-                  <div style="background-color: #000;" v-if="detail.order_status == -1">不能取餐</div>
-                  <div style="background-color: #ccc;" v-else-if="detail.order_status == 0">待支付</div>
+                  <div
+                    style="background-color: #000"
+                    v-if="detail.order_status == -1"
+                  >
+                    不能取餐
+                  </div>
+                  <div
+                    style="background-color: #ccc"
+                    v-else-if="detail.order_status == 0"
+                  >
+                    待支付
+                  </div>
                   <template v-else-if="detail.order_status >= 1">
-                    <div style="background-color: #87a6de;" v-if="it.take_status">已取餐</div>
-                    <div style="background-color: #fbb959;" v-else>待取餐</div>
+                    <div
+                      style="background-color: #87a6de"
+                      v-if="it.take_status"
+                    >
+                      已取餐
+                    </div>
+                    <div style="background-color: #fbb959" v-else>待取餐</div>
                   </template>
+                </div>
+              </div>
+            </div>
+            <div style="width:90%;margin-left:10%;">
+              <p style="margin-bottom:10px;">搭配</p>
+              <div
+                class="goods_top"
+                style="margin-bottom:10px;"
+                v-for="(itd, itdx) in it.purchased_data"
+                :key="idx"
+              >
+                <img :src="it.image" alt="" />
+                <div class="goods_info">
+                  <div class="goods_sth">
+                    <p>{{ itd.vendor_package_id }}</p>
+                    <p>￥{{ itd.sale_price }}</p>
+                  </div>
+                  <p class="goods_title">{{ itd.vendor_package_name }}</p>
+                  <!-- <p style="margin-top: 10px">套餐组合：{{ it.product_name }}</p> -->
+                  <div class="tab_item">
+                    <div class="time_type_bg1">{{ itd.time_type_name }}</div>
+                    <div
+                      style="background-color: #000"
+                      v-if="detail.order_status == -1"
+                    >
+                      不能取餐
+                    </div>
+                    <div
+                      style="background-color: #ccc"
+                      v-else-if="detail.order_status == 0"
+                    >
+                      待支付
+                    </div>
+                    <template v-else-if="detail.order_status >= 1">
+                      <div
+                        style="background-color: #87a6de"
+                        v-if="itd.take_status"
+                      >
+                        已取餐
+                      </div>
+                      <div style="background-color: #fbb959" v-else>待取餐</div>
+                    </template>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,7 +215,7 @@
             <div class="time_info">
               <p>下单时间：{{ detail.created_at }}</p>
               <p>付款时间：{{ detail.pay_at }}</p>
-              <p>取餐时间：{{ detail.take_at.join(',') }}</p>
+              <p>取餐时间：{{ detail.take_at.join(",") }}</p>
             </div>
           </div>
         </el-card>
