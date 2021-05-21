@@ -58,7 +58,7 @@
                     placeholder="搭配描述"
                   ></el-input>
                   <el-input
-                    v-model="it.sale_price"
+                    v-model="it.discount_price"
                     style="margin: 10px auto; width: 90%; display: block"
                     placeholder="加购价格"
                   ></el-input>
@@ -214,7 +214,7 @@ export default {
       if (this.dialogType == 1) {
         this.checkedMainData = item;
       } else {
-        item.sale_price = "";
+        item.discount_price = "";
         item.desc = "";
         this.checkedPurchasedData = item;
       }
@@ -307,7 +307,7 @@ export default {
             });
             return (returnFunFlag = true);
           }
-          if (!it.sale_price) {
+          if (!it.discount_price) {
             this.$message({
               message: "请填写加购价格",
               type: "error",
@@ -319,7 +319,7 @@ export default {
             time_type_id: it.time_type_id,
             package_id: it.package_id,
             package_name: it.name,
-            sale_price: it.sale_price,
+            discount_price: it.discount_price,
             desc: it.desc,
           });
         });

@@ -191,7 +191,7 @@
                 </div>
                 <p class="package_name">{{ it.package_name }}</p>
                 <p class="desc">{{ it.desc }}</p>
-                <p class="price">加购价￥{{ it.sale_price }}</p>
+                <p class="price">加购价￥{{ it.discount_price }}</p>
               </div>
             </div>
           </el-card>
@@ -329,6 +329,9 @@ export default {
   width: 120px;
   margin: 0 20px 20px 0;
 }
+.feeding-item p{
+  text-align: center;
+}
 .feeding-item:nth-child(3n + 0) {
   margin-right: 0;
 }
@@ -359,7 +362,8 @@ export default {
 }
 .desc {
   font-size: 12px;
-  margin: 3px 0;
+  margin: 5px 0;
+  color: #888;
 }
 .price {
   font-size: 14px;

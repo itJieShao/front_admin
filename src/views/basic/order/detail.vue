@@ -155,7 +155,7 @@
                 </div>
               </div>
             </div>
-            <div style="width:90%;margin-left:10%;">
+            <div style="width:90%;margin-left:10%;" v-if="it.purchased_data && it.purchased_data.length">
               <p style="margin-bottom:10px;">搭配</p>
               <div
                 class="goods_top"
@@ -167,7 +167,7 @@
                 <div class="goods_info">
                   <div class="goods_sth">
                     <p>{{ itd.vendor_package_id }}</p>
-                    <p>￥{{ itd.sale_price }}</p>
+                    <p>￥{{ itd.discount_price }}</p>
                   </div>
                   <p class="goods_title">{{ itd.vendor_package_name }}</p>
                   <!-- <p style="margin-top: 10px">套餐组合：{{ it.product_name }}</p> -->
