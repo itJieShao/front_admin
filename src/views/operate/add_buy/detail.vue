@@ -226,6 +226,7 @@ export default {
     },
     getDetail() {
       getDetail({ id: this.$route.query.id }).then((res) => {
+        this.vendor_ids = [];
         if (res.valid_at_start){
           this.valid_at[0] = res.valid_at_start
         }

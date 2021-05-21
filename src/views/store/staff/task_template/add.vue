@@ -171,7 +171,7 @@ export default {
           id: 0,
         },
       ],
-      monthList:[],
+      monthList: [],
     };
   },
   created() {
@@ -179,16 +179,17 @@ export default {
       this.monthList.push(i);
     }
     for (let i = 0; i < 3; i++) {
-      this.formData.template_detail.push(
-        { loop_setup_week: [1, 2, 3, 4, 5, 6, 0] },
-        { loop_setup_mon: this.monthList }
-      );
+      this.formData.template_detail.push({
+        loop_setup_week: [1, 2, 3, 4, 5, 6, 0],
+        loop_setup_mon: this.monthList,
+      });
     }
   },
   methods: {
     addTemplate() {
       this.formData.template_detail.push({
         loop_setup_week: [1, 2, 3, 4, 5, 6, 0],
+        loop_setup_mon: this.monthList,
       });
     },
     delTemplate(index) {
