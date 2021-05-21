@@ -214,7 +214,7 @@ export default {
       if (this.dialogType == 1) {
         this.checkedMainData = item;
       } else {
-        item.discount_price = "";
+        item.sale_price = "";
         item.desc = "";
         this.checkedPurchasedData = item;
       }
