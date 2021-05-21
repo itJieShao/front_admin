@@ -94,14 +94,18 @@
           <template slot-scope="scope">
             <span
               >{{ scope.row.loop
-              }}<span v-if="scope.row.loop_setup_name"
+              }}<span v-if="scope.row.loop == '每周' && scope.row.loop_setup_name"
                 >（{{
                   scope.row.loop_setup_name.slice(
                     0,
                     scope.row.loop_setup_name.length - 1
                   )
                 }}）</span
-              ></span
+              >
+              <span v-else-if="scope.row.loop == '每月'">
+                （{{JSON.parse(scope.row.loop_setup).join("号,") + "号"}}）
+              </span>
+              </span
             >
           </template>
         </el-table-column>
@@ -141,7 +145,7 @@ export default {
                 break;
             }
             item.loop_setup_name = "";
-            if (item.loop_setup) {
+            if (item.loop == "每周" && item.loop_setup) {
               JSON.parse(item.loop_setup).forEach((it) => {
                 switch (it) {
                   case 1:

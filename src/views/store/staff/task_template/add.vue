@@ -75,15 +75,23 @@
                 >{{ item.name }}</el-checkbox
               >
             </el-checkbox-group>
-            <!-- <el-checkbox-group
-              style="display: flex; flex-wrap: wrap"
-              v-else-if="scope.row.loop == 3"
-              v-model="scope.row.loop_setup_mon"
-            >
-              <el-checkbox v-for="item in 31" :key="item" :label="item">{{
-                item + "号"
-              }}</el-checkbox>
-            </el-checkbox-group> -->
+            <template v-else-if="scope.row.loop == 3">
+              <el-checkbox
+                :indeterminate="scope.row.isIndeterminate"
+                v-model="scope.row.checkAll"
+                @change="(val) => handleCheckAllChange(val, scope.$index)"
+                >全选</el-checkbox
+              >
+              <el-checkbox-group
+                @change="(val) => handleCheckedItemsChange(val, scope.$index)"
+                style="display: flex; flex-wrap: wrap"
+                v-model="scope.row.loop_setup_mon"
+              >
+                <el-checkbox v-for="item in 31" :key="item" :label="item">{{
+                  item + "号"
+                }}</el-checkbox>
+              </el-checkbox-group>
+            </template>
           </template>
         </el-table-column>
         <el-table-column align="center" label="">
@@ -181,15 +189,32 @@ export default {
     for (let i = 0; i < 3; i++) {
       this.formData.template_detail.push({
         loop_setup_week: [1, 2, 3, 4, 5, 6, 0],
-        loop_setup_mon: this.monthList,
+        loop_setup_mon: [],
+        checkAll: false,
+        isIndeterminate: false,
       });
     }
   },
   methods: {
+    handleCheckAllChange(val, index) {
+      this.formData.template_detail[index].loop_setup_mon = val
+        ? this.monthList
+        : [];
+      this.formData.template_detail[index].isIndeterminate = false;
+    },
+    handleCheckedItemsChange(value, index) {
+      let checkedCount = value.length;
+      this.formData.template_detail[index].checkAll =
+        checkedCount === this.monthList.length;
+      this.formData.template_detail[index].isIndeterminate =
+        checkedCount > 0 && checkedCount < this.monthList.length;
+    },
     addTemplate() {
       this.formData.template_detail.push({
         loop_setup_week: [1, 2, 3, 4, 5, 6, 0],
-        loop_setup_mon: this.monthList,
+        loop_setup_mon: [],
+        checkAll: false,
+        isIndeterminate: false,
       });
     },
     delTemplate(index) {
@@ -205,9 +230,13 @@ export default {
             item.end_time = item.time[1];
             delete item.time;
           }
-          if (item.loop != 2) {
-            delete item.loop_setup;
+          if (item.loop == 2) {
+            item.loop_setup = item.loop_setup_week;
+          } else if (item.loop == 3) {
+            item.loop_setup = item.loop_setup_mon;
           }
+          delete item.loop_setup_week;
+          delete item.loop_setup_mon;
           if (item.loop_setup) {
             item.loop_setup = JSON.stringify(item.loop_setup);
           }
