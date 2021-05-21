@@ -17,7 +17,7 @@ const operateRouter = {
             path: 'add_buy',
             component: () => import('@/views/operate/add_buy'),
             name: 'AddBuy',
-            meta: { title: '套餐加购模板', icon: 'el-icon-s-help', auth: "front_menu_list" },
+            meta: { title: '套餐加购模板', icon: 'el-icon-s-help', auth: "purchased_list" },
         },
         {
             path: 'add_buy_add',
