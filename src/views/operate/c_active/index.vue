@@ -1,9 +1,14 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20">
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <div @click="jumpUrl(1)">
           <el-card shadow="hover"> 拉新活动 </el-card>
+        </div>
+      </el-col> -->
+      <el-col :span="6">
+        <div @click="jumpUrl(2)">
+          <el-card shadow="hover"> 打赏活动 </el-card>
         </div>
       </el-col>
     </el-row>
@@ -17,6 +22,9 @@ export default {
       switch (type) {
         case 1:
           this.$router.push("/operate/c_active/pull_new");
+          break;
+        case 2:
+          this.$router.push("/operate/c_active/reward");
           break;
       }
     },

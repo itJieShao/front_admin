@@ -85,7 +85,7 @@ const storeRouter = {
                     path: 'task_template',
                     name: 'TaskTemplate',
                     component: () => import('@/views/store/staff/task_template'),
-                    meta: { title: '任务模板', icon: 'table', auth: "staff_task_list" }
+                    meta: { title: '任务模板', icon: 'table', auth: "staff_task_template_list" }
                 },
                 {
                     path: 'task_template_add',
