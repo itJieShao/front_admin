@@ -230,7 +230,6 @@ const operateRouter = {
             path: 'c_active',
             component: () => import('@/views/operate/c_active'),
             name: 'cActive',
-            hidden:true,
             meta: { title: '运营活动', icon: 'el-icon-s-help', auth: "layout" },
         },
         {

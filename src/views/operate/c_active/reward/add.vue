@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item label="活动奖励">
           <el-radio-group
-            v-model="formData.type"
+            v-model="type"
             @change="formData.coupon_id = ''"
           >
             <el-radio label="1">红包</el-radio>
@@ -44,11 +44,11 @@
             <el-radio label="2">次数卡</el-radio>
           </el-radio-group>
           <el-select
-            v-if="formData.type == 1"
+            v-if="type == 1"
             style="width: 100%"
             placeholder="请选择红包"
             v-model="formData.coupon_id"
-            @change="(id) => rewardChange(id, formData.type)"
+            @change="(id) => rewardChange(id, type)"
           >
             <el-option
               v-for="it in redEnvelopesData"
@@ -57,11 +57,11 @@
             ></el-option>
           </el-select>
           <el-select
-            v-else-if="formData.type == 2"
+            v-else-if="type == 2"
             style="width: 100%"
             placeholder="请选择次数卡"
             v-model="formData.coupon_id"
-            @change="(id) => rewardChange(id, formData.type)"
+            @change="(id) => rewardChange(id, type)"
           >
             <el-option
               v-for="it in timeCardData"
@@ -74,7 +74,7 @@
             style="width: 100%"
             placeholder="请选择优惠券"
             v-model="formData.coupon_id"
-            @change="(id) => rewardChange(id, formData.type)"
+            @change="(id) => rewardChange(id, type)"
           >
             <el-option
               v-for="it in couponData"
@@ -91,8 +91,7 @@
             <div class="up-box">
               <p>邀请文案</p>
               <el-upload
-                :file-list="detailSendMainImage"
-                :class="{ img_hide: formData.send_main_image }"
+                :class="{ img_hide: formData.check_invite_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
@@ -107,8 +106,7 @@
             <div class="up-box">
               <p>邀请中/邀请成功文案</p>
               <el-upload
-                :file-list="detailSendSuccessImage"
-                :class="{ img_hide: formData.send_success_image }"
+                :class="{ img_hide: formData.detail_invite_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
@@ -124,13 +122,13 @@
               <p>活动邀请失败</p>
               <el-upload
                 :file-list="detailSendSuccessImage"
-                :class="{ img_hide: formData.send_success_image }"
+                :class="{ img_hide: formData.invite_failure_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
-                :on-success="(value) => upLoadImage(value, 2)"
+                :on-success="(value) => upLoadImage(value, 3)"
                 :on-preview="handlePictureCardPreview"
-                :on-remove="(value) => handleImageRemove(2)"
+                :on-remove="(value) => handleImageRemove(3)"
                 :data="{ token: $store.state.user.token }"
               >
                 <i class="el-icon-plus"></i>
@@ -144,13 +142,13 @@
               <p>打赏订单邀请</p>
               <el-upload
                 :file-list="detailSendMainImage"
-                :class="{ img_hide: formData.send_main_image }"
+                :class="{ img_hide: formData.exceptional_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
-                :on-success="(value) => upLoadImage(value, 1)"
+                :on-success="(value) => upLoadImage(value, 4)"
                 :on-preview="handlePictureCardPreview"
-                :on-remove="(value) => handleImageRemove(1)"
+                :on-remove="(value) => handleImageRemove(4)"
                 :data="{ token: $store.state.user.token }"
               >
                 <i class="el-icon-plus"></i>
@@ -160,13 +158,13 @@
               <p>打赏订单已打赏</p>
               <el-upload
                 :file-list="detailSendSuccessImage"
-                :class="{ img_hide: formData.send_success_image }"
+                :class="{ img_hide: formData.exceptional_success_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
-                :on-success="(value) => upLoadImage(value, 2)"
+                :on-success="(value) => upLoadImage(value, 5)"
                 :on-preview="handlePictureCardPreview"
-                :on-remove="(value) => handleImageRemove(2)"
+                :on-remove="(value) => handleImageRemove(5)"
                 :data="{ token: $store.state.user.token }"
               >
                 <i class="el-icon-plus"></i>
@@ -175,14 +173,13 @@
             <div class="up-box">
               <p>打赏失效</p>
               <el-upload
-                :file-list="detailSendSuccessImage"
-                :class="{ img_hide: formData.send_success_image }"
+                :class="{ img_hide: formData.exceptional_failure_image }"
                 :limit="1"
                 :action="$upLoadImgApi"
                 list-type="picture-card"
-                :on-success="(value) => upLoadImage(value, 2)"
+                :on-success="(value) => upLoadImage(value, 6)"
                 :on-preview="handlePictureCardPreview"
-                :on-remove="(value) => handleImageRemove(2)"
+                :on-remove="(value) => handleImageRemove(6)"
                 :data="{ token: $store.state.user.token }"
               >
                 <i class="el-icon-plus"></i>
@@ -202,7 +199,7 @@
 </template>
 
 <script>
-import { addApi } from "@/api/operate/c_active/pull_new";
+import { addApi } from "@/api/operate/c_active/reward";
 import { couponData } from "@/api/operate/questionnaire";
 export default {
   data() {
@@ -210,20 +207,18 @@ export default {
       formData: {
         name: "",
         people_num: "",
+        price:"",
         valid_at_start: "",
         valid_at_end: "",
-        send_main_image: "",
-        send_success_image: "",
-        send_rule_image: "",
-        receive_main_image: "",
-        receive_rule_image: "",
-        older_image: "",
-        reward_data: [],
-        type: "1",
-        coupon_id: "",
-        coupon_name: "",
-        reward_valid_at: "",
+        coupon_id:"",
+        check_invite_image:"",
+        detail_invite_image:"",
+        invite_failure_image:"",
+        exceptional_image:"",
+        exceptional_success_image:"",
+        exceptional_failure_image:"",
       },
+      type: "1",
       effective_date: "",
       dialogImageUrl: "",
       dialogVisible: false,
@@ -267,22 +262,22 @@ export default {
       if (res.status) {
         switch (type) {
           case 1:
-            this.formData.send_main_image = res.data.image_url;
+            this.formData.check_invite_image = res.data.image_url;
             break;
           case 2:
-            this.formData.send_success_image = res.data.image_url;
+            this.formData.detail_invite_image = res.data.image_url;
             break;
           case 3:
-            this.formData.send_rule_image = res.data.image_url;
+            this.formData.invite_failure_image = res.data.image_url;
             break;
           case 4:
-            this.formData.receive_main_image = res.data.image_url;
+            this.formData.exceptional_image = res.data.image_url;
             break;
           case 5:
-            this.formData.receive_rule_image = res.data.image_url;
+            this.formData.exceptional_success_image = res.data.image_url;
             break;
           case 6:
-            this.formData.older_image = res.data.image_url;
+            this.formData.exceptional_failure_image = res.data.image_url;
             break;
         }
       }
@@ -291,52 +286,29 @@ export default {
     handleImageRemove(type) {
       switch (type) {
         case 1:
-          this.formData.send_main_image = "";
+          this.formData.check_invite_image = "";
           break;
         case 2:
-          this.formData.send_success_image = "";
+          this.formData.detail_invite_image = "";
           break;
         case 3:
-          this.formData.send_rule_image = "";
+          this.formData.invite_failure_image = "";
           break;
         case 4:
-          this.formData.receive_main_image = "";
+          this.formData.exceptional_image = "";
           break;
         case 5:
-          this.formData.receive_rule_image = "";
+          this.formData.exceptional_image = "";
           break;
         case 6:
-          this.formData.older_image = "";
+          this.formData.exceptional_failure_image = "";
           break;
       }
-    },
-    //上传奖励图
-    upLoadRewardImage(index, res) {
-      if (res.status) {
-        this.formData.reward_data[index].image = res.data.image_url;
-      }
-    },
-    //删除奖励图
-    handleRewardImageRemove(index) {
-      this.formData.reward_data[index].image = "";
     },
     //查看图片
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
-    },
-    //新增奖励
-    addReward() {
-      this.formData.reward_data.push({
-        type: "1",
-        coupon_id: "",
-        coupon_name: "",
-        image: "",
-      });
-    },
-    //删除奖励
-    deleteReward(index) {
-      this.formData.reward_data.splice(index, 1);
     },
     //提交
     onSubmit() {
@@ -345,7 +317,6 @@ export default {
         this.formData.valid_at_end = this.effective_date[1];
       }
       let aData = JSON.parse(JSON.stringify(this.formData));
-      aData.reward_data = JSON.stringify(aData.reward_data);
       addApi(aData).then((res) => {
         if (res) {
           this.$notify({

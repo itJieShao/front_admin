@@ -29,61 +29,49 @@
 
       <el-table-column width="120" align="center" label="发起用户">
         <template slot-scope="scope">
-          <span>{{ scope.row.send_people_num }}</span>
+          <span>{{ scope.row.send_customer_num }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" width="160" label="打赏土豪用户">
         <template slot-scope="scope">
-          <span>{{ scope.row.receive_people_num }}</span>
+          <span>{{ scope.row.receive_customer_num }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="200" align="center" label="发起次数">
         <template slot-scope="scope">
-          <span>{{ scope.row.reward_num }}</span>
+          <span>{{ scope.row.send_count }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="120" align="center" label="打赏次数">
         <template slot-scope="scope">
-          <span>{{ scope.row.people_num }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" width="200" label="奖励规则">
-        <template slot-scope="scope">
-          <span>{{ scope.row.valid_at_start }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" width="200" label="活动奖励">
-        <template slot-scope="scope">
-          <span>{{ scope.row.valid_at_end }}</span>
+          <span>{{ scope.row.receive_count }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="160" align="center" label="打赏金额">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_user_name }}</span>
+          <span>{{ scope.row.price }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" width="200" label="开始时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span>{{ scope.row.valid_at_start }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" width="200" label="结束时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span>{{ scope.row.valid_at_end }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" width="200" label="创建人">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span>{{ scope.row.created_user_name }}</span>
         </template>
       </el-table-column>
 
@@ -117,7 +105,7 @@
 </template>
 
 <script>
-import { getList } from "@/api/operate/c_active/pull_new";
+import { getList } from "@/api/operate/c_active/reward";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },

@@ -22,7 +22,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>开始时间</p>
-            <p>{{ detail.name }}</p>
+            <p>{{ detail.valid_at_start }}</p>
           </div>
         </el-card>
       </el-col>
@@ -30,7 +30,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>结束时间</p>
-            <p>{{ detail.name }}</p>
+            <p>{{ detail.valid_at_end }}</p>
           </div>
         </el-card>
       </el-col>
@@ -38,7 +38,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>发起用户</p>
-            <p>{{ detail.send_people_num }}</p>
+            <p>{{ detail.send_customer_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -46,7 +46,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>打赏土豪用户</p>
-            <p>{{ detail.receive_people_num }}</p>
+            <p>{{ detail.receive_customer_num }}</p>
           </div>
         </el-card>
       </el-col>
@@ -56,7 +56,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>发起次数</p>
-            <p>{{ detail.reward_num }}</p>
+            <p>{{ detail.send_count }}</p>
           </div>
         </el-card>
       </el-col>
@@ -64,7 +64,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>打赏次数</p>
-            <p>{{ detail.valid_at_start }}</p>
+            <p>{{ detail.receive_count }}</p>
           </div>
         </el-card>
       </el-col>
@@ -88,19 +88,19 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>活动状态</p>
-            <p>
-              <el-tag type="success" v-if="detail.status == 0">启用</el-tag>
-              <el-tag type="danger" v-else>禁用</el-tag>
-            </p>
+            <p>{{ detail.status_name }}</p>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" v-if="detail.can_disable">
         <el-card shadow="always">
           <div class="item_flex">
             <p>操作</p>
             <p>
-              <el-button type="danger" v-if="detail.status == 1" @click="disable" size="mini"
+              <el-button
+                type="danger"
+                @click="disable"
+                size="mini"
                 >禁用</el-button
               >
             </p>
@@ -109,28 +109,80 @@
       </el-col>
     </el-row>
     <el-divider />
+    <el-row :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>打赏金额</p>
+            <p>{{ detail.price }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>奖励名称</p>
+            <p>{{ detail.coupon_name }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>奖励类型</p>
+            <p>{{ detail.coupon_type_name }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>奖励有效期</p>
+            <p>{{ detail.coupon_valid_at }}</p>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-divider />
     <el-form label-width="150px">
-      <el-form-item label="订单邀请文案">
-        <img :src="detail.main_image" alt="" />
+      <el-form-item label="发起打赏邀请用户">
+        <el-card class="up-card" shadow="always">
+          <div class="up-box">
+            <p>邀请文案</p>
+            <img :src="detail.check_invite_image" alt="" />
+          </div>
+          <div class="up-box">
+            <p>邀请中/邀请成功文案</p>
+            <img :src="detail.detail_invite_image" alt="" />
+          </div>
+          <div class="up-box">
+            <p>活动邀请失败</p>
+            <img :src="detail.invite_failure_image" alt="" />
+          </div>
+        </el-card>
       </el-form-item>
-      <el-form-item label="订单邀请失败文案">
-        <img :src="detail.main_image" alt="" />
-      </el-form-item>
-      <el-form-item label="打赏页面文案">
-        <img :src="detail.main_image" alt="" />
-      </el-form-item>
-      <el-form-item label="已打赏页面文案">
-        <img :src="detail.main_image" alt="" />
-      </el-form-item>
-      <el-form-item label="打赏失效页面文案">
-        <img :src="detail.main_image" alt="" />
+      <el-form-item label="土豪打赏用户">
+        <el-card class="up-card" shadow="always">
+          <div class="up-box">
+            <p>打赏订单邀请</p>
+            <img :src="detail.exceptional_image" alt="" />
+          </div>
+          <div class="up-box">
+            <p>打赏订单已打赏</p>
+            <img :src="detail.exceptional_success_image" alt="" />
+          </div>
+          <div class="up-box">
+            <p>打赏失效</p>
+            <img :src="detail.exceptional_failure_image" alt="" />
+          </div>
+        </el-card>
       </el-form-item>
     </el-form>
     <el-divider />
     <el-card shadow="always">
       <el-table
         v-loading="loading"
-        :data="detail.send_data"
+        :data="detail.exceptional_send_list"
         stripe
         style="width: 100%"
       >
@@ -139,55 +191,47 @@
             <span>{{ scope.$index + 1 }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="发起人及手机" width="180">
+        <el-table-column align="center" label="发起人及手机" width="200">
           <template slot-scope="scope">
             <span
-              >{{ scope.row.sender_name }} {{ scope.row.sender_phone }}</span
+              >{{ scope.row.send_user_name }} {{ scope.row.send_phone }}</span
             >
           </template>
         </el-table-column>
-        <el-table-column align="center" label="打赏土豪用户及手机" width="180">
+        <el-table-column align="center" label="打赏土豪用户及手机" width="200">
           <template slot-scope="scope">
-            <div v-for="(item, index) in scope.row.receive_data" :key="index">
-              <span>{{ item.name }} {{ item.phone }}</span>
+            <div
+              v-for="(item, index) in scope.row.exceptional_data"
+              :key="index"
+            >
+              <span>{{ item.receive_user_name }} {{ item.receive_phone }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          prop="created_at"
-          label="打赏金额"
-          width="180"
-        >
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="finish_at"
-          label="获得奖励"
-          width="180"
-        >
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="finish_at"
-          label="打赏时间"
-          width="180"
-        >
+        <el-table-column align="center" label="打赏时间" width="200">
+          <template slot-scope="scope">
+            <div
+              v-for="(item, index) in scope.row.exceptional_data"
+              :key="index"
+            >
+              <span>{{ item.receive_at }}</span>
+            </div>
+          </template>
         </el-table-column>
       </el-table>
       <pagination
-        v-show="total > 0"
-        :total="total"
+        v-show="detail.exceptional_send_count > 0"
+        :total="detail.exceptional_send_count"
         :page.sync="listData.page"
         :limit.sync="listData.page_size"
-        @pagination="getList"
+        @pagination="getDetail"
       />
     </el-card>
   </div>
 </template>
 
 <script>
-import { getDetail } from "@/api/operate/c_active/pull_new";
+import { getDetail,disableApi } from "@/api/operate/c_active/reward";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -207,12 +251,39 @@ export default {
   methods: {
     getDetail() {
       getDetail({
-        pull_new_id: this.$route.query.id,
+        id: this.$route.query.id,
         ...this.listData,
       }).then((res) => {
         this.detail = res;
       });
     },
+    disable(){
+      disableApi({id: this.$route.query.id}).then(res => {
+        if (res){
+          this.detail.can_disable = 0;
+          this.$notify({
+            title: "成功",
+            message: "提交成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      })
+    },
   },
 };
 </script>
+
+<style>
+.up-card .el-card__body {
+  display: flex;
+}
+.up-box {
+  text-align: center;
+  margin-right: 20px;
+}
+.up-box img {
+  width: 150px;
+  height: 150px;
+}
+</style>
