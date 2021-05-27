@@ -394,8 +394,8 @@
           </el-table-column>
         </el-table>
         <pagination
-          v-show="total > 0"
-          :total="total"
+          v-show="count > 0"
+          :total="count"
           :page.sync="page"
           :limit.sync="page_size"
           @pagination="getTaskTemplateList"
@@ -431,6 +431,7 @@ export default {
       page_size: 10,
       loading: false,
       total: 0,
+      count:0,
       dialogVisible: false,
       templateDialogVisible: false,
       formData: {
@@ -558,7 +559,7 @@ export default {
       this.loading = true;
       getTaskTemplateList({ page: this.page, page_size: this.page_size }).then(
         (res) => {
-          this.total = res.count;
+          this.count = res.count;
           this.list = res.list;
           this.loading = false;
         }
