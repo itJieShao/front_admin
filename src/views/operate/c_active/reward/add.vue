@@ -35,10 +35,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="活动奖励">
-          <el-radio-group
-            v-model="type"
-            @change="formData.coupon_id = ''"
-          >
+          <el-radio-group v-model="type" @change="formData.coupon_id = ''">
             <el-radio label="1">红包</el-radio>
             <el-radio label="3">优惠券</el-radio>
             <el-radio label="2">次数卡</el-radio>
@@ -98,6 +95,21 @@
                 :on-success="(value) => upLoadImage(value, 1)"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="(value) => handleImageRemove(1)"
+                :data="{ token: $store.state.user.token }"
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+            <div class="up-box">
+              <p>订单详情邀请弹窗图片</p>
+              <el-upload
+                :class="{ img_hide: formData.first_invite_image }"
+                :limit="1"
+                :action="$upLoadImgApi"
+                list-type="picture-card"
+                :on-success="(value) => upLoadImage(value, 7)"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="(value) => handleImageRemove(7)"
                 :data="{ token: $store.state.user.token }"
               >
                 <i class="el-icon-plus"></i>
@@ -207,16 +219,17 @@ export default {
       formData: {
         name: "",
         people_num: "",
-        price:"",
+        price: "",
         valid_at_start: "",
         valid_at_end: "",
-        coupon_id:"",
-        check_invite_image:"",
-        detail_invite_image:"",
-        invite_failure_image:"",
-        exceptional_image:"",
-        exceptional_success_image:"",
-        exceptional_failure_image:"",
+        coupon_id: "",
+        check_invite_image: "",
+        detail_invite_image: "",
+        invite_failure_image: "",
+        exceptional_image: "",
+        exceptional_success_image: "",
+        exceptional_failure_image: "",
+        first_invite_image: "",
       },
       type: "1",
       effective_date: "",
@@ -279,6 +292,9 @@ export default {
           case 6:
             this.formData.exceptional_failure_image = res.data.image_url;
             break;
+          case 7:
+            this.formData.first_invite_image = res.data.image_url;
+            break;
         }
       }
     },
@@ -302,6 +318,9 @@ export default {
           break;
         case 6:
           this.formData.exceptional_failure_image = "";
+          break;
+        case 7:
+          this.formData.first_invite_image = "";
           break;
       }
     },
@@ -336,10 +355,10 @@ export default {
 </script>
 
 <style>
-.up-card .el-card__body{
+.up-card .el-card__body {
   display: flex;
 }
-.up-box{
+.up-box {
   text-align: center;
   margin-right: 20px;
 }

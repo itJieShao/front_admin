@@ -97,10 +97,7 @@
           <div class="item_flex">
             <p>操作</p>
             <p>
-              <el-button
-                type="danger"
-                @click="disable"
-                size="mini"
+              <el-button type="danger" @click="disable" size="mini"
                 >禁用</el-button
               >
             </p>
@@ -150,6 +147,10 @@
           <div class="up-box">
             <p>邀请文案</p>
             <img :src="detail.check_invite_image" alt="" />
+          </div>
+          <div class="up-box">
+            <p>订单详情邀请弹窗图片</p>
+            <img :src="detail.first_invite_image" alt="" />
           </div>
           <div class="up-box">
             <p>邀请中/邀请成功文案</p>
@@ -231,7 +232,7 @@
 </template>
 
 <script>
-import { getDetail,disableApi } from "@/api/operate/c_active/reward";
+import { getDetail, disableApi } from "@/api/operate/c_active/reward";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -257,9 +258,9 @@ export default {
         this.detail = res;
       });
     },
-    disable(){
-      disableApi({id: this.$route.query.id}).then(res => {
-        if (res){
+    disable() {
+      disableApi({ id: this.$route.query.id }).then((res) => {
+        if (res) {
           this.detail.can_disable = 0;
           this.$notify({
             title: "成功",
@@ -268,7 +269,7 @@ export default {
             duration: 1000,
           });
         }
-      })
+      });
     },
   },
 };
