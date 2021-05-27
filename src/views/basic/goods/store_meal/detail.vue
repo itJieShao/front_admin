@@ -77,6 +77,22 @@
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
+                  <p>折后价格</p>
+                  <p>￥{{ detail.discount_price }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>用餐时段</p>
+                  <p>{{ detail.time_type_names }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
                   <p>套餐号</p>
                   <p>{{ detail.take_code }}</p>
                 </div>
@@ -98,6 +114,8 @@
                 </div>
               </el-card>
             </el-col>
+          </el-row>
+          <el-row style="margin-top: 15px" :gutter="12">
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
@@ -111,7 +129,12 @@
                 <div class="item_flex">
                   <p>操作</p>
                   <p>
-                    <el-tag @click="updateStatus" style="cursor: pointer;" :type="detail.status == 1 ? 'danger':'success'" effect="dark">
+                    <el-tag
+                      @click="updateStatus"
+                      style="cursor: pointer"
+                      :type="detail.status == 1 ? 'danger' : 'success'"
+                      effect="dark"
+                    >
                       {{ detail.status == 1 ? "下架" : "上架" }}
                     </el-tag>
                   </p>
@@ -125,7 +148,11 @@
             <el-table :data="detail.product_data">
               <el-table-column align="center" prop="product_name" label="单品">
               </el-table-column>
-              <el-table-column align="center" prop="product_package_box_name" label="包装规格">
+              <el-table-column
+                align="center"
+                prop="product_package_box_name"
+                label="包装规格"
+              >
               </el-table-column>
               <el-table-column align="center" prop="product_num" label="数量">
               </el-table-column>
@@ -143,7 +170,7 @@
 </template>
 
 <script>
-import { vendorPackageDetail,vendorPackageUpdateStatus } from "@/api/basic";
+import { vendorPackageDetail, vendorPackageUpdateStatus } from "@/api/basic";
 export default {
   data() {
     return {
@@ -164,7 +191,7 @@ export default {
     },
     updateStatus() {
       vendorPackageUpdateStatus({
-        vendor_package_ids:[this.detail.vendor_package_id],
+        vendor_package_ids: [this.detail.vendor_package_id],
         status: this.detail.status ? 0 : 1,
       }).then((res) => {
         this.detail.status = this.detail.status ? 0 : 1;

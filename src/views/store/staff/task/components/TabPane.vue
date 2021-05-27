@@ -26,23 +26,23 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="任务标题">
+      <el-table-column width="200" align="center" label="任务日期">
         <template slot-scope="scope">
-          <span>{{ scope.row.title }}</span>
+          <span>{{ scope.row.date }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="规定完成时间">
+      <el-table-column width="200" align="center" label="任务数量">
         <template slot-scope="scope">
-          <span>{{ scope.row.stipulate_start_time }}至{{ scope.row.stipulate_end_time }}</span>
+          <span>{{ scope.row.task_qty }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="实际完成时间">
+      <!-- <el-table-column width="200" align="center" label="实际完成时间">
         <template slot-scope="scope">
           <span>{{ scope.row.end_time }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="200" align="center" label="完成情况">
         <template slot-scope="scope">
@@ -86,7 +86,7 @@ export default {
       listData: {
         page: 1,
         page_size: 10,
-        vendor_ids: this.vendor_ids
+        vendor_ids: JSON.stringify(this.vendor_ids)
       },
       loading: false,
       total: 0,

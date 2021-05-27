@@ -64,23 +64,31 @@
       </el-col>
     </el-row>
     <el-row :gutter="12" style="margin-top: 10px">
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>创建时间</p>
-            <p>{{ detail.id }}</p>
+            <p>{{ detail.created_at }}</p>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <el-card shadow="always">
           <div class="item_flex">
             <p>有效期</p>
-            <p>{{ detail.valid_at_start }}至{{ detail.valid_at_end }}</p>
+            <p>{{ detail.valid_at }}</p>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>小程序问卷</p>
+            <p>{{ detail.show_position_name }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>状态</p>
@@ -92,7 +100,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6" v-if="detail.status">
+      <el-col :span="4" v-if="detail.status">
         <el-card shadow="always">
           <div class="item_flex">
             <p>操作</p>
@@ -118,7 +126,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>奖励类型</p>
@@ -127,6 +135,14 @@
         </el-card>
       </el-col>
       <el-col :span="6">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>奖励有效期</p>
+            <p>{{ item.valid_at }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
         <img style="height: 110px" :src="item.image" alt="" />
       </el-col>
     </el-row>
@@ -151,7 +167,12 @@
     </el-row>
     <el-divider></el-divider>
     <el-card shadow="always">
-      <el-table v-loading="loading" :data="detail.customer_data" stripe style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="detail.customer_data"
+        stripe
+        style="width: 100%"
+      >
         <el-table-column prop="customer_name" label="用户昵称">
         </el-table-column>
         <el-table-column prop="phone" label="手机号码"> </el-table-column>
@@ -278,6 +299,17 @@ export default {
       total: 0,
     };
   },
+  watch:{
+    dialogFlag(flag){
+      if (!flag){
+        this.detail.questionnaire_data.forEach(item => {
+          item.answer_data.forEach(it => {
+            it.active = false
+          })
+        })
+      }
+    }
+  },
   components: {
     Echart,
     Pagination,
@@ -337,9 +369,11 @@ export default {
         } else {
           item.answer_data.forEach((it) => {
             userItem.questionnaire_data.forEach((itd) => {
-              if (itd.answer == it.id) {
-                it.active = true;
-              }
+              itd.answer.forEach((itdc) => {
+                if (itdc == it.id) {
+                  it.active = true;
+                }
+              });
             });
           });
         }

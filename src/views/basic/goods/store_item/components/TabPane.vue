@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="4">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -36,6 +36,12 @@
       <el-table-column width="200" align="center" label="单品名称">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="200" align="center" label="餐盒">
+        <template slot-scope="scope">
+          <img style="max-width:100px;max-height:100px;" :src="scope.row.box_image" alt="" />
         </template>
       </el-table-column>
 
@@ -181,6 +187,10 @@ export default {
         this.loading = false;
       });
     },
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
+    }
   },
 };
 </script>

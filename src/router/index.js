@@ -14,6 +14,7 @@ import financeRouter from './modules/finance'
 import operateRouter from './modules/operate'
 import systemRouter from './modules/system'
 import messageRouter from './modules/message'
+import logRouter from './modules/log'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -73,6 +74,7 @@ export const constantRoutes = [
   operateRouter,
   systemRouter,
   messageRouter,
+  logRouter,
   
   { path: '*', redirect: '/404', hidden: true }
 ]
@@ -85,6 +87,7 @@ export const asyncRoutes = [
   operateRouter,
   systemRouter,
   messageRouter,
+  logRouter,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

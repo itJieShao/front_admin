@@ -80,6 +80,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="200" align="center" label="售卖日期">
+        <template slot-scope="scope">
+          <span>{{ scope.row.saled_at }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="180" align="center" label="配货状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="warning" effect="dark">待分配</el-tag>

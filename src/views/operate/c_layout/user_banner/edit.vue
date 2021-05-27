@@ -2,6 +2,17 @@
   <div class="app-container">
     <h2>{{ $route.query.id ? "编辑个人中心banner" : "新增个人中心banner" }}</h2>
     <el-form label-width="80px">
+      <el-form-item label="使用环境">
+        <el-select
+          :disabled="$route.query.id"
+          style="width: 100%"
+          v-model="formData.env"
+          placeholder="请选择使用环境"
+        >
+          <el-option label="一合拾盒小程序" :value="1"></el-option>
+          <el-option label="盒小饭堂小程序" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="图片">
         <el-upload
           :file-list="detailImgFile"
@@ -12,7 +23,7 @@
           :on-success="upLoadMainImg"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleMainImgRemove"
-          :data="{ token: $store.state.user.token }"
+          :data="{ token: $store.state.user.token, upload_type: 11 }"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -48,6 +59,7 @@ export default {
   data() {
     return {
       formData: {
+        env: "",
         type: 2,
         id: "",
         image: "",
@@ -56,7 +68,7 @@ export default {
       },
       dialogVisible: false,
       dialogImageUrl: "",
-      detailImgFile:[],
+      detailImgFile: [],
     };
   },
   created() {
@@ -68,7 +80,7 @@ export default {
   methods: {
     getDetail() {
       bannerDetail({ id: this.formData.id }).then((res) => {
-        this.formData.image = res.url;
+        (this.formData.env = res.env), (this.formData.image = res.url);
         this.formData.order = res.order;
         this.formData.address = res.address;
         this.detailImgFile = [{ name: "detailImgFile", url: res.url }];

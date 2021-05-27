@@ -36,3 +36,21 @@ export function releaseMenu(data) {
         data
     })
 }
+
+//小程序菜单时段
+export function getVendorTimeTypeData(data) {
+    return request({
+        url: '/vendor/time-type/get-business-data',
+        method: 'post',
+        data
+    })
+}
+
+//跨门店复制小程序菜单
+export function copyVendorMenu(data) {
+    return request({
+        url: '/product/vendor-menu/import',
+        method: 'post',
+        data
+    })
+}

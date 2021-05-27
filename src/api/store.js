@@ -179,3 +179,39 @@ export function getTimeTypeData(data) {
         data
     })
 }
+
+//获取任务模板列表
+export function getTaskTemplateList(data) {
+    return request({
+        url: '/vendor/task/get-template-list',
+        method: 'post',
+        data
+    })
+}
+
+//获取任务模板
+export function getTaskTemplate(data) {
+    return request({
+        url: '/vendor/task/get-template',
+        method: 'post',
+        data
+    })
+}
+
+//新增/编辑/启用/禁用任务模板
+export function updateTaskTemplate(data) {
+    return request({
+        url: '/vendor/task/update-template',
+        method: 'post',
+        data
+    })
+}
+
+//删除/修改员工任务模板
+export function updateEmployeeTaskTemplate(data) {
+    return request({
+        url: '/vendor/task/update-employee-task-template',
+        method: 'post',
+        data
+    })
+}

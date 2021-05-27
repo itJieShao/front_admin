@@ -107,7 +107,7 @@
     </el-row>
     <el-divider />
     <el-row :gutter="12">
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>应配烹饪盘</p>
@@ -115,7 +115,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>核对烹饪盘</p>
@@ -123,7 +123,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>实配单品</p>
@@ -131,11 +131,19 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
             <p>应配总份数</p>
             <p>{{ detail.product_num }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>实配总份数</p>
+            <p>{{ detail.real_product_num }}</p>
           </div>
         </el-card>
       </el-col>

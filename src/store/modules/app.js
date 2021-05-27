@@ -5,10 +5,18 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop'
+  device: 'desktop',
+  copy_vendor_menu_id:"",
+  copy_vendor_id:"",
+  copy_day:"",
 }
 
 const mutations = {
+  COPYMENUPARM: (state,param) => {
+    state.copy_vendor_menu_id = param.copy_vendor_menu_id;
+    state.copy_vendor_id = param.copy_vendor_id;
+    state.copy_day = param.copy_day;
+  },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false

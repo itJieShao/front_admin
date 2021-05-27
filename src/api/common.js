@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //审核接口
 export function audit(data) {
     return request({
-        url: '/product/audit/audit',
+        url: '/other/audit/audit',
         method: 'post',
         data
     })
@@ -49,6 +49,15 @@ export function adminList(data) {
 export function vendorList(data) {
     return request({
         url: '/vendor/vendor/vendor-list',
+        method: 'post',
+        data
+    })
+}
+
+//导出Excle
+export function exportExcle(data) {
+    return request({
+        url: '/other/export/excel',
         method: 'post',
         data
     })

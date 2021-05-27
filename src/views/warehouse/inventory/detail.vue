@@ -83,6 +83,14 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
+            <p>售卖日期</p>
+            <p>{{ detail.saled_at }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
             <p>入库总份数</p>
             <p>{{ detail.qty }}</p>
           </div>
@@ -104,6 +112,9 @@
           </div>
         </el-card>
       </el-col>
+    </el-row>
+    <el-divider />
+    <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -112,9 +123,6 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-divider />
-    <el-row :gutter="12">
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
@@ -163,8 +171,37 @@
           <template slot-scope="scope">
             <span v-if="scope.row.diff_qty == 0">库存一致</span>
             <span v-else-if="scope.row.diff_qty > 0">库存增加</span>
-            <span v-else>库存减少</span>
+            <span v-else-if="scope.row.diff_qty < 0">库存减少</span>
+            <span v-else>{{ scope.row.diff_qty }}</span>
           </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <el-card shadow="always" style="margin-top:15px;">
+      <p class="item_title">盘货商品列表</p>
+      <el-table :data="detail.eims_data" stripe style="width: 100%">
+        <el-table-column align="center" prop="good_id" label="商品ID">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="good_name"
+          label="商品名称"
+          width="200"
+        >
+        </el-table-column>
+        <!-- <el-table-column align="center" prop="take_code" label="配货员报损数量">
+        </el-table-column>
+        <el-table-column align="center" prop="qty" label="店员报损数量">
+        </el-table-column> -->
+        <el-table-column align="center" prop="last_in_store_num" label="上次入库">
+        </el-table-column>
+        <el-table-column align="center" prop="num" label="应存库存">
+        </el-table-column>
+        <el-table-column align="center" prop="real_num" label="实际库存">
+        </el-table-column>
+        <el-table-column align="center" prop="diff" label="盘货差额">
+        </el-table-column>
+        <el-table-column align="center" prop="diff_name" label="盘货差额">
         </el-table-column>
       </el-table>
     </el-card>

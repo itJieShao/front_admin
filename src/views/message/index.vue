@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -40,7 +40,14 @@
 
       <el-table-column align="center" label="状态">
         <template slot-scope="scope">
-          <span>{{ scope.row.status_name }}</span>
+          <span
+            style="color: green; font-weight: 600"
+            v-if="scope.row.status_name == '已读'"
+            >{{ scope.row.status_name }}</span
+          >
+          <span style="color: red; font-weight: 600" v-else>{{
+            scope.row.status_name
+          }}</span>
         </template>
       </el-table-column>
 
@@ -52,7 +59,9 @@
 
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button @click="goDetail(scope.row.id)" size="mini">详情</el-button>
+          <el-button @click="goDetail(scope.row.id)" size="mini"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -77,14 +86,26 @@ export default {
         page: 1,
         page_size: 10,
         title: "",
+        status: "",
       },
       loading: false,
       total: 0,
     };
   },
   components: { Pagination },
-  created() {
-    this.getList();
+  created() {},
+  watch: {
+    "$route.query.type": {
+      handler(type) {
+        if (type) {
+          this.listData.status = 2;
+        } else {
+          this.listData.status = "";
+        }
+        this.getList();
+      },
+      immediate: true,
+    },
   },
   methods: {
     goDetail(id) {
@@ -97,6 +118,10 @@ export default {
         this.list = res.list;
         this.loading = false;
       });
+    },
+    searchBtn() {
+      this.listData.page = 1;
+      this.getList();
     },
   },
 };

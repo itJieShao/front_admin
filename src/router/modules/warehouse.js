@@ -5,7 +5,7 @@ const warehouseRouter = {
     component: Layout,
     name: 'Warehouse',
     alwaysShow: true,
-    meta: { title: '仓库管理', icon: 'el-icon-s-help' },
+    meta: { title: '供应链管理', icon: 'el-icon-s-help' },
     children: [
         {
             path: 'purchase',
@@ -13,6 +13,12 @@ const warehouseRouter = {
             component: () => import('@/views/warehouse/purchase'),
             meta: { title: '进货管理', icon: 'table' },
             children: [
+                {
+                    path: 'mealBox',
+                    name: 'mealBox',
+                    component: () => import('@/views/warehouse/purchase/mealBox'),
+                    meta: { title: '餐盒', auth: "mealBox" }
+                },
                 {
                     path: 'purchase_list',
                     name: 'PurchaseList',

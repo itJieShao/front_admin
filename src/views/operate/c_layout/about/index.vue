@@ -1,31 +1,39 @@
 <template>
   <div class="app-container">
     <h2>关于我们</h2>
-    <el-form label-width="50px">
-      <el-form-item label="标题">
-        <el-input v-model="title" />
-      </el-form-item>
-      <el-form-item label="内容">
-        <Editor @getNewHtml="getNewHtml" />
-      </el-form-item>
-    </el-form>
+    <el-tabs v-model="tabActive" style="margin-top: 15px" type="border-card">
+      <el-tab-pane
+        v-for="item in tabCon"
+        :key="item.key"
+        :label="item.name"
+        :name="item.key"
+      >
+        <keep-alive>
+          <tab-pane v-if="tabActive == item.key" :type="item.key" />
+        </keep-alive>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import Editor from "@/components/Editor";
+import TabPane from "./components/TabPane";
 export default {
-  components: { Editor },
+  components: { TabPane },
   data() {
     return {
-      title: "",
-      newHtml: "",
+      tabActive: "1",
+      tabCon: [
+        {
+          key: "1",
+          name: "一合拾盒小程序",
+        },
+        {
+          key: "0",
+          name: "盒小饭堂小程序",
+        },
+      ],
     };
-  },
-  methods: {
-    getNewHtml(newHtml) {
-      this.newHtml = newHtml;
-    },
   },
 };
 </script>

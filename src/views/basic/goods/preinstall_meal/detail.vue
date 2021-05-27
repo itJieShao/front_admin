@@ -2,12 +2,21 @@
   <div class="app-container">
     <h2>预设套餐详情</h2>
     <el-card shadow="always">
-      <el-form label-width="100px">
+      <el-form label-width="110px">
         <el-form-item label="套餐标题">
           <p>{{ detail.name }}</p>
         </el-form-item>
+        <el-form-item label="副标题">
+          <p>{{ detail.title }}</p>
+        </el-form-item>
         <el-form-item label="套餐主图">
           <img :src="detail.main_image" alt="" />
+        </el-form-item>
+        <el-form-item label="套餐主推广告图" v-if="detail.main_push_image">
+          <img :src="detail.main_push_image" alt="" />
+        </el-form-item>
+        <el-form-item label="套餐加购图" v-if="detail.purchased_image">
+          <img :src="detail.purchased_image" alt="" />
         </el-form-item>
         <el-form-item label="套餐轮播图">
           <div class="imgs_box">

@@ -8,8 +8,10 @@
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </el-col> -->
       <el-col :span="24" style="display: flex; justify-content: flex-end">
+        <!-- <el-button type="success" @click="mealBox">餐盒</el-button> -->
         <el-button type="success" @click="addPurchase">新增进货</el-button>
-        <el-button type="warning" @click="addSummary">生成进货汇总</el-button>
+        <el-button type="primary" @click="addSummary">生成进货汇总</el-button>
+        <el-button type="warning" @click="exportBtn">导出 Excel</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -126,7 +128,8 @@
 </template>
 
 <script>
-import { purchaseList,purchaseTotalAdd } from "@/api/warehouse";
+import { purchaseList, purchaseTotalAdd } from "@/api/warehouse";
+import { exportExcle } from "@/api/common";
 import Pagination from "@/components/Pagination";
 export default {
   components: { Pagination },
@@ -148,6 +151,9 @@ export default {
     this.getList();
   },
   methods: {
+    mealBox(){
+      this.$router.push("/warehouse/purchase/mealBox");
+    },
     goDetail(purchase_id) {
       this.$router.push(
         `/warehouse/purchase/purchase_detail?purchase_id=${purchase_id}`
@@ -177,17 +183,43 @@ export default {
         return this.$message.error('请选中记录状态为"审核通过"的门店');
       }
       let purchase_ids = [];
-      list.forEach(item => purchase_ids.push(item.id));
+      list.forEach((item) => purchase_ids.push(item.id));
       this.$confirm("是否生成进货汇总", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       }).then(() => {
-        purchaseTotalAdd({purchase_ids}).then(res => {
-          if (res){
-            console.log(res)
-            this.$router.push(`/warehouse/purchase/summary_detail?purchase_total_id=${res.purchast_total_id}`)
+        purchaseTotalAdd({ purchase_ids }).then((res) => {
+          if (res) {
+            console.log(res);
+            this.$router.push(
+              `/warehouse/purchase/summary_detail?purchase_total_id=${res.purchast_total_id}`
+            );
           }
-        })
+        });
+      });
+    },
+     //导出
+    exportBtn() {
+      if (!this.checkedSummaryList.length) {
+        return this.$message.error("请先选中要导出的行");
+      }
+      let ids = [];
+      this.checkedSummaryList.forEach((item) => ids.push(item.id));
+      const notify = this.$notify({
+        title: "正在导出",
+        message: "正在导出Excel表",
+        position: "bottom-right",
+        duration: 0,
+      });
+      exportExcle({
+        module: "PURCHASE_DETAIL",
+        type: 1,
+        ids: ids.join(","),
+      }).then((res) => {
+        notify.close();
+        if (res) {
+          window.open(res.path);
+        }
       });
     },
   },

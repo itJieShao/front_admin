@@ -126,7 +126,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-if="detail.business_days_name">
         <el-card shadow="always">
           <div class="item_flex">
             <p>营业天数</p>
@@ -151,13 +151,95 @@
         </el-card>
       </el-col> -->
     </el-row>
-    <el-divider />
-    <el-row :gutter="12">
-      <el-col :span="4" v-for="item in detail.cook_finish_time">
+    <el-row style="margin-top: 15px" :gutter="12">
+      <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>{{ item.name }}</p>
-            <p>{{ item.time }}</p>
+            <p>所属小程序环境</p>
+            <p>
+              {{ detail.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>外卖功能</p>
+            <p>
+              {{ detail.need_distribution ? "开放外卖配送" : "关闭外卖配送" }}
+            </p>
+          </div>
+        </el-card>
+      </el-col>
+      <template v-if="detail.need_distribution">
+        <el-col :span="12">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>外卖时段</p>
+              <p>
+                {{ detail.distribution_time_type_names }}
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>配送范围</p>
+              <p>
+                {{ detail.distribution_distance }}
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+      </template>
+    </el-row>
+    <template v-if="detail.need_distribution">
+      <el-divider />
+      <el-table :data="detail.distribution_rule_data" style="width: 100%">
+        <el-table-column align="center" prop="distance" label="距离(单位/米)">
+        </el-table-column>
+        <el-table-column align="center" prop="fee" label="配送费(单位/元)">
+        </el-table-column>
+        <el-table-column align="center" prop="time" label="配送时间(单位/分钟)">
+        </el-table-column>
+      </el-table>
+    </template>
+    <el-divider />
+    <el-row :gutter="12">
+      <el-col :span="24">
+        <el-card shadow="always">
+          <div>
+            <div class="item_title">
+              <p>用餐时段</p>
+              <p>结束烹饪时间</p>
+              <p>开始营业时间</p>
+              <p>结束营业时间</p>
+              <p>催餐时间</p>
+            </div>
+            <el-divider />
+            <div
+              class="item_content"
+              v-for="item in detail.cook_finish_time"
+              :key="item.time_type_id"
+            >
+              <div class="item_sth">
+                <p>{{ item.time_type_name }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.time }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.business_start }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.business_end }}</p>
+              </div>
+              <div class="item_sth">
+                <p>{{ item.un_take_remind }}</p>
+              </div>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -345,13 +427,15 @@ export default {
     },
     getDetail() {
       vendorDetail({ vendor_id: this.$route.query.vendor_id }).then((res) => {
-        res.cook_finish_time.forEach((item) => {
-          this.timeList.forEach((it) => {
-            if (item.time_type_id == it.id) {
-              item.name = it.name;
-            }
+        if (res.cook_finish_time && res.cook_finish_time.length) {
+          res.cook_finish_time.forEach((item) => {
+            this.timeList.forEach((it) => {
+              if (item.time_type_id == it.id) {
+                item.name = it.name;
+              }
+            });
           });
-        });
+        }
         this.detail = res;
       });
     },
@@ -441,7 +525,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .i_title {
   text-align: center;
   margin-bottom: 10px;
@@ -451,5 +535,24 @@ export default {
   color: red;
   text-align: center;
   padding: 20px 0;
+}
+.item_title,
+.item_content {
+  width: 100%;
+  display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  align-items: center;
+  p {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+  }
+  .item_sth {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 </style>

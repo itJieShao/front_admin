@@ -30,67 +30,33 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>所属门店</p>
-            <p>{{ detail.vendor_name.join(",") }}</p>
+            <p>{{ detail.vendor_name }}</p>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <el-row style="margin-top: 15px" :gutter="12">
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <el-card shadow="always">
           <div class="item_flex">
             <p>岗位</p>
             <p>{{ detail.employee_station }}</p>
           </div>
         </el-card>
-      </el-col>
+      </el-col> -->
       <el-col :span="6">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>任务ID</p>
-            <p>{{ detail.employee_task_id }}</p>
+            <p>任务日期</p>
+            <p>{{ detail.date }}</p>
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="always">
           <div class="item_flex">
-            <p>任务标题</p>
-            <p>{{ detail.title }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>任务内容</p>
-            <p>{{ detail.content }}</p>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row style="margin-top: 15px" :gutter="12">
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>规定开始时间</p>
-            <p>{{ detail.stipulate_start_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>规定结束时间</p>
-            <p>{{ detail.stipulate_end_time }}</p>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="always">
-          <div class="item_flex">
-            <p>实际完成时间</p>
-            <p>{{ detail.start_time }}</p>
+            <p>任务数量</p>
+            <p>{{ detail.task_qty }}</p>
           </div>
         </el-card>
       </el-col>
@@ -108,6 +74,45 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-card style="margin-top: 15px" shadow="always">
+      <el-table :data="detail.list" style="width: 100%">
+        <el-table-column width="80" align="center" label="排序">
+          <template slot-scope="scope">
+            <span>{{ scope.$index + 1 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="任务标题">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="任务内容">
+          <template slot-scope="scope">
+            <span>{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="规定开始时间">
+          <template slot-scope="scope">
+            <span>{{ scope.row.stipulate_start_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="规定结束时间">
+          <template slot-scope="scope">
+            <span>{{ scope.row.stipulate_end_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="实际完成时间">
+          <template slot-scope="scope">
+            <span>{{ scope.row.start_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="图片">
+          <template slot-scope="scope">
+            <img style="width:50px;height:50px;" :src="scope.row.success_images" alt="">
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
@@ -116,18 +121,18 @@ import { vendorTaskDetail } from "@/api/store";
 export default {
   data() {
     return {
-      employee_today_task_id: "",
+      today_task_id: "",
       detail: {},
     };
   },
   created() {
-    this.employee_today_task_id = this.$route.query.id;
+    this.today_task_id = this.$route.query.id;
     this.getDetail();
   },
   methods: {
     getDetail() {
       vendorTaskDetail({
-        employee_today_task_id: this.employee_today_task_id,
+        today_task_id: this.today_task_id,
       }).then((res) => {
         this.detail = res;
       });

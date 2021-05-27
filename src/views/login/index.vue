@@ -83,8 +83,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "admin",
-        password: "admin",
+        username: localStorage.getItem("username") || "",
+        password: localStorage.getItem("password") || "",
       },
       loginRules: {
         username: [
@@ -157,6 +157,9 @@ export default {
                   item_1.hidden = item_1.children.every(item => item.hidden);
                 }
               });
+              localStorage.setItem("username",this.loginForm.username);
+              localStorage.setItem("password",this.loginForm.password);
+              localStorage.setItem("userId",res.admin_data.id);
               localStorage.setItem("userName",res.admin_data.name);
               localStorage.setItem("router", JSON.stringify(router));
               this.$router.push({ path: this.redirect || "/" });

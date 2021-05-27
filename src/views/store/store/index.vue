@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -36,6 +36,12 @@
         <template slot-scope="scope">
           <img :src="scope.row.main_image" alt="" />
           <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="160" label="所属小程序环境">
+        <template slot-scope="scope">
+          <span>{{ scope.row.env ? "一合拾盒小程序" : "盒小饭堂小程序" }}</span>
         </template>
       </el-table-column>
 
@@ -76,6 +82,30 @@
               scope.row.business_time_end
             }}</span
           >
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140" align="center" label="外卖功能">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.need_distribution_name }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="160" align="center" label="外卖时段">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.distribution_time_type_names }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140" align="center" label="配送范围">
+        <template slot-scope="scope">
+          <span type="success" effect="dark">
+            {{ scope.row.distribution_distance }}
+          </span>
         </template>
       </el-table-column>
 
@@ -175,6 +205,10 @@ export default {
         this.list = res.list;
         this.loading = false;
       });
+    },
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
     },
   },
 };

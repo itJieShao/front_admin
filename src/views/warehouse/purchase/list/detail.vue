@@ -171,6 +171,13 @@
             </el-table-column>
             <el-table-column
               align="center"
+              prop="time_type_name"
+              label="用餐时段"
+              width="100"
+            >
+            </el-table-column>
+            <el-table-column
+              align="center"
               prop="warn_cost_price"
               label="成本预警价"
               width="180"

@@ -6,6 +6,9 @@
         <el-form-item label="套餐标题" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
+        <el-form-item label="副标题">
+          <el-input v-model="formData.title"></el-input>
+        </el-form-item>
         <el-form-item label="套餐主图" prop="main_image">
           <el-upload
             :file-list="detailMainImgFile"
@@ -16,7 +19,37 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="主推广告图">
+          <el-upload
+            :file-list="detailMainPushImgFile"
+            :class="{ main_img_hide: formData.main_push_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadMainPushImg"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleMainPushImgRemove"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="加购图">
+          <el-upload
+            :file-list="detailPurchasedImage"
+            :class="{ main_img_hide: formData.purchased_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadPurchasedImage"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handlePurchasedImageRemove"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -30,6 +63,7 @@
             :on-success="upLoadImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :data="{ token: $store.state.user.token, upload_type: 2 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -37,7 +71,10 @@
         <el-divider />
         <div style="display: flex">
           <el-form-item label="套餐单品" prop="product_data">
-            <el-button type="success" @click="dialogTableVisible = true"
+            <el-button
+              v-if="formData.product_can_edit"
+              type="success"
+              @click="dialogTableVisible = true"
               >添加套餐单品</el-button
             >
           </el-form-item>
@@ -61,10 +98,13 @@
                 <p>{{ item.product_name }}</p>
                 <p>{{ item.package_box_name }}</p>
                 <el-input-number
+                  v-if="formData.product_can_edit"
                   :min="1"
                   v-model="item.product_num"
                 ></el-input-number>
+                <p v-else>{{ item.product_num }}</p>
                 <i
+                  v-if="formData.product_can_edit"
                   @click="deleteProduct(index)"
                   class="el-icon-delete del_btn"
                 ></i>
@@ -182,19 +222,24 @@ export default {
       },
       formData: {
         name: "",
+        title: "",
         main_image: "",
+        main_push_image: "",
+        purchased_image:"",
         image: [],
         product_data: [],
         package_label_id: "",
         sale_price: "",
         desc: "",
+        product_can_edit: 1,
       }, //表单提交数据
       checkedProductData: [],
       productListData: {
         export: "",
         name: "",
         page: 1,
-        page_size: 5,
+        page_size: 10,
+        status: 1,
       },
       labelList: [],
       productList: [],
@@ -203,6 +248,8 @@ export default {
       dialogVisible: false,
       dialogTableVisible: false,
       detailMainImgFile: [],
+      detailMainPushImgFile: [],
+      detailPurchasedImage:[],
       detailImagesFile: [],
     };
   },
@@ -224,6 +271,16 @@ export default {
           if (res.main_image) {
             this.detailMainImgFile = [
               { name: "detailMainImgFile", url: res.main_image },
+            ];
+          }
+          if (res.main_push_image) {
+            this.detailMainPushImgFile = [
+              { name: "detailMainPushImgFile", url: res.main_push_image },
+            ];
+          }
+          if (res.purchased_image) {
+            this.detailPurchasedImage = [
+              { name: "detailPurchasedImage", url: res.purchased_image },
             ];
           }
           if (res.image.length > 0) {
@@ -299,6 +356,14 @@ export default {
     handleMainImgRemove(file, fileList) {
       this.formData.main_image = "";
     },
+    //删除主推广告图
+    handleMainPushImgRemove(file, fileList) {
+      this.formData.main_push_image = "";
+    },
+    //删除加购图
+    handlePurchasedImageRemove(file, fileList) {
+      this.formData.purchased_image = "";
+    },
     //删除轮播图
     handleRemove(file, fileList) {
       const index = this.formData.image.findIndex((item) => item == file.url);
@@ -331,6 +396,18 @@ export default {
     upLoadMainImg(res, file) {
       if (res.status) {
         this.formData.main_image = res.data.image_url;
+      }
+    },
+    //上传主推广告图
+    upLoadMainPushImg(res, file) {
+      if (res.status) {
+        this.formData.main_push_image = res.data.image_url;
+      }
+    },
+    //上传加购图
+    upLoadPurchasedImage(res, file) {
+      if (res.status) {
+        this.formData.purchased_image = res.data.image_url;
       }
     },
     //上传轮播图

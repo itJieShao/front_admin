@@ -7,6 +7,28 @@
         </div>
       </el-col>
       <el-col :span="6">
+        <div @click="jumpUrl(1.4)">
+          <el-card shadow="hover"> 首页海报推广图 </el-card>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div @click="jumpUrl(1.1)">
+          <el-card shadow="hover"> 首页中部广告图 </el-card>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div @click="jumpUrl(1.3)">
+          <el-card shadow="hover"> 首页中部宣传图 </el-card>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <div @click="jumpUrl(1.2)">
+          <el-card shadow="hover"> 首页底部广告图 </el-card>
+        </div>
+      </el-col>
+      <el-col :span="6">
         <div @click="jumpUrl(2)">
           <el-card shadow="hover"> 个人中心banner图 </el-card>
         </div>
@@ -38,16 +60,28 @@ export default {
     jumpUrl(type) {
       switch (type) {
         case 1:
-          this.$router.push("/operate/c_layout/index_bar");
+          this.$router.push("/operate/c_layout/index_banner");
           break;
         case 2:
-          this.$router.push("/operate/c_layout/store_notice");
+          this.$router.push("/operate/c_layout/user_banner");
+          break;
+        case 1.1:
+          this.$router.push("/operate/c_layout/index_md_banner");
+          break;
+        case 1.3:
+          this.$router.push("/operate/c_layout/index_md1_banner");
+          break;
+        case 1.2:
+          this.$router.push("/operate/c_layout/index_bot_banner");
+          break;
+        case 1.4:
+          this.$router.push("/operate/c_layout/index_poste");
           break;
         case 3:
           this.$router.push("/operate/c_layout/store_notice");
           break;
         case 4:
-          this.$router.push("/operate/c_layout/store_notice");
+          this.$router.push("/operate/c_layout/customer_service");
           break;
         case 5:
           this.$router.push("/operate/c_layout/about");

@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -44,12 +44,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="200" align="center" label="有效期">
+      <el-table-column width="100" align="center" label="问卷类型">
         <template slot-scope="scope">
-          <span
-            >{{ scope.row.valid_at_start }} 至
-            {{ scope.row.valid_at_end }}</span
-          >
+          <span>{{ scope.row.type_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180" align="center" label="小程序问卷">
+        <template slot-scope="scope">
+          <span>{{ scope.row.show_position_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="300" align="center" label="有效期">
+        <template slot-scope="scope">
+          <span>{{ scope.row.valid_at }}</span>
         </template>
       </el-table-column>
 
@@ -59,9 +68,21 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="180" align="center" label="奖励类型">
+        <template slot-scope="scope">
+          <p v-for="item in scope.row.reward_type">{{ item }}</p>
+        </template>
+      </el-table-column>
+
       <el-table-column width="180" align="center" label="奖励">
         <template slot-scope="scope">
-          <p v-for="item in scope.row.reward">{{ item }}</p>
+          <p v-for="item in scope.row.reward_name">{{ item }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180" align="center" label="奖励有效期">
+        <template slot-scope="scope">
+          <p v-for="item in scope.row.reward_valid_at">{{ item }}</p>
         </template>
       </el-table-column>
 
@@ -100,7 +121,10 @@
 </template>
 
 <script>
-import { questionnaireList,questionnaireDisable } from "@/api/operate/questionnaire";
+import {
+  questionnaireList,
+  questionnaireDisable,
+} from "@/api/operate/questionnaire";
 import Pagination from "@/components/Pagination";
 export default {
   data() {
@@ -134,7 +158,11 @@ export default {
         this.loading = false;
       });
     },
-    updateStatus(id,index) {
+    searchBtn() {
+      this.listData.page = 1;
+      this.getList();
+    },
+    updateStatus(id, index) {
       questionnaireDisable({ id }).then((res) => {
         if (res) {
           this.list[index].status = 0;

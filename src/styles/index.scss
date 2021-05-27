@@ -4,6 +4,10 @@
 @import "./element-ui.scss";
 @import "./sidebar.scss";
 
+body .el-table th.gutter {
+  display: table-cell !important;
+}
+
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
@@ -98,7 +102,10 @@ img:not([src]) {
     color: #999;
   }
 }
-.form_tip{
-  color: #777;
+.form_tip {
+  color: #999;
   font-size: 14px;
+  display: block;
+  line-height: 20px;
+  margin-top: 5px;
 }

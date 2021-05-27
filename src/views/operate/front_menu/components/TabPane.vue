@@ -2,21 +2,6 @@
   <div>
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="4">
-        <el-select
-          style="width: 100%"
-          v-model="formData.time_type"
-          placeholder="请选择就餐时段"
-        >
-          <el-option
-            v-for="item in timeList"
-            :key="item.type"
-            :label="item.name"
-            :value="item.type"
-          >
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4">
         <el-select style="width: 100%" v-model="formData.menu_type">
           <el-option
             v-for="item in MenuType"
@@ -27,13 +12,19 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="8" style="display: flex; align-items: center">
         <el-button icon="el-icon-check" @click="saveMenuClick" type="primary"
           >保存</el-button
         >
         <el-button icon="el-icon-plus" @click="openReleaseMenu" type="success"
           >发布</el-button
         >
+        <p
+          style="color: red; margin-left: 10px; font-size: 12px"
+          v-if="!releaseStatus"
+        >
+          菜单还未发布哦
+        </p>
       </el-col>
       <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button @click="historyMenuListDialog = true" type="warning"
@@ -48,95 +39,170 @@
           {{ day_tip + upNumCase(index + 1) }}
         </p>
         <p class="day_tip" v-else>{{ index + 1 + day_tip }}</p>
-        <div class="menu">
-          <div class="type_list">
-            <div
-              @click="typeClick(index, idx)"
-              class="type_item"
-              :style="it.checked ? 'background-color: #fff' : ''"
-              v-for="(it, idx) in item"
-            >
-              <img style="width: 50%" :src="it.label_image" alt="" />
-              <div>
-                <p>{{ it.label }}</p>
-                <i
-                  @click="
-                    openTypeDialog(index, 1, it.label, it.label_image, idx)
-                  "
-                  class="el-icon-edit"
-                ></i>
-                <i @click="delType(index, idx)" class="el-icon-error"></i>
+        <div class="menu_con" style="border: 1px solid #ddd; width: 440px">
+          <!-- <div
+            class="goods_item"
+            v-if="mainPushData[index] && mainPushData[index].vendor_package_id"
+          >
+            <div class="goods_info" style="width: 90%; margin: 20px auto">
+              <i class="el-icon-error" @click="delMainPush(index)"></i>
+              <p class="time_type_font">
+                {{
+                  mainPushData[index].time_type_id
+                    | time_type_name(vendorTimeList)
+                }}
+              </p>
+              <img
+                style="width: 100%"
+                class="goods_img"
+                :src="mainPushData[index].main_push_image"
+                alt=""
+              />
+              <div class="goods_sth">
+                <p class="goods_title">
+                  {{ mainPushData[index].name }}
+                </p>
+                <div class="goods_price">
+                  <p
+                    v-if="mainPushData[index].discount_price"
+                    style="text-decoration: line-through"
+                  >
+                    ￥{{ mainPushData[index].sale_price }}
+                  </p>
+                  <p style="color: red">
+                    ￥{{
+                      mainPushData[index].discount_price
+                        ? mainPushData[index].discount_price
+                        : mainPushData[index].sale_price
+                    }}
+                  </p>
+                </div>
               </div>
             </div>
-            <el-button
-              @click="openTypeDialog(index, 0)"
-              class="add_type"
-              icon="el-icon-plus"
-              type="success"
-              size="mini"
-              >添加分类</el-button
-            >
           </div>
-          <div class="goods_list">
-            <template v-for="(it, idx) in item">
+          <div class="no_main_push" v-else>暂无主推套餐</div> -->
+          <div class="menu">
+            <div class="type_list">
               <div
-                class="goods_item"
-                v-for="(itc, idxc) in it.vendor_package_data"
-                v-if="it.checked"
+                @click="typeClick(index, idx)"
+                class="type_item"
+                :style="it.checked ? 'background-color: #fff' : ''"
+                v-for="(it, idx) in item"
               >
-                <div class="goods_info">
-                  <i
-                    class="el-icon-error"
-                    @click="delGoods(index, idx, idxc)"
-                  ></i>
-                  <img class="goods_img" :src="itc.main_image" alt="" />
-                  <div class="goods_sth">
-                    <p class="goods_title">
-                      {{ itc.name }}
-                    </p>
-                    <div class="goods_price">
-                      <p
-                        v-if="itc.discount_price"
-                        style="text-decoration: line-through"
-                      >
-                        ￥{{ itc.sale_price }}
-                      </p>
-                      <p style="color: red">
-                        ￥{{
-                          itc.discount_price
-                            ? itc.discount_price
-                            : itc.sale_price
-                        }}
-                      </p>
-                    </div>
+                <img style="width: 50%" :src="it.label_image" alt="" />
+                <div style="align-items: center">
+                  <div v-if="it.time_type_id" style="flex-direction: column">
+                    <p>{{ it.label }}</p>
+                    <p>({{ it.time_type_name }})</p>
                   </div>
-                </div>
-                <div class="opt_goods">
+                  <p v-else>{{ it.label }}</p>
                   <i
-                    class="el-icon-top"
-                    @click="changePackageIndex(1, index, idx, idxc)"
-                    v-show="idxc != 0"
+                    @click.stop="
+                      openTypeDialog(
+                        index,
+                        1,
+                        it.label,
+                        it.label_image,
+                        it.time_type_id,
+                        idx
+                      )
+                    "
+                    class="el-icon-edit"
                   ></i>
                   <i
-                    class="el-icon-bottom"
-                    @click="changePackageIndex(2, index, idx, idxc)"
-                    v-show="idxc != it.vendor_package_data.length - 1"
+                    @click.stop="delType(index, idx)"
+                    class="el-icon-error"
                   ></i>
                 </div>
               </div>
-            </template>
-            <el-button
-              v-show="formData.menu_data[index].length"
-              @click="openPackageList(index)"
-              class="add_goods"
-              icon="el-icon-plus"
-              type="success"
-              size="mini"
-              >添加</el-button
-            >
+              <el-button
+                @click="openTypeDialog(index, 0)"
+                class="add_type"
+                icon="el-icon-plus"
+                type="success"
+                size="mini"
+                >添加分类</el-button
+              >
+            </div>
+            <div class="goods_list">
+              <template v-for="(it, idx) in item">
+                <div
+                  class="goods_item"
+                  v-for="(itc, idxc) in it.vendor_package_data"
+                  v-if="it.checked"
+                >
+                  <div class="goods_info">
+                    <i
+                      class="el-icon-error"
+                      @click="delGoods(index, idx, idxc)"
+                    ></i>
+                    <p class="time_type_font">
+                      {{ itc.time_type_id | time_type_name(vendorTimeList) }}
+                    </p>
+                    <img class="goods_img" :src="itc.main_image" alt="" />
+                    <div class="goods_sth">
+                      <p class="goods_title">
+                        {{ itc.name }}
+                      </p>
+                      <div class="goods_price">
+                        <p
+                          v-if="itc.discount_price"
+                          style="text-decoration: line-through"
+                        >
+                          ￥{{ itc.sale_price }}
+                        </p>
+                        <p style="color: red">
+                          ￥{{
+                            itc.discount_price
+                              ? itc.discount_price
+                              : itc.sale_price
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="opt_goods">
+                    <i
+                      class="el-icon-top"
+                      @click="changePackageIndex(1, index, idx, idxc)"
+                      v-show="idxc != 0"
+                    ></i>
+                    <i
+                      class="el-icon-bottom"
+                      @click="changePackageIndex(2, index, idx, idxc)"
+                      v-show="idxc != it.vendor_package_data.length - 1"
+                    ></i>
+                  </div>
+                  <div
+                    :class="itc.type_id == 2 ? 'main_push_act' : ''"
+                    class="opt_main_btn"
+                    @click="
+                      editMainPush(
+                        it.vendor_package_data[idxc],
+                        index,
+                        idx,
+                        idxc
+                      )
+                    "
+                  >
+                    设为主推套餐
+                  </div>
+                </div>
+              </template>
+              <el-button
+                v-show="formData.menu_data[index].length"
+                @click="openPackageList(index)"
+                class="add_goods"
+                icon="el-icon-plus"
+                type="success"
+                size="mini"
+                >添加</el-button
+              >
+            </div>
           </div>
         </div>
-        <div style="display: flex; margin-right: 15px">
+        <div style="display: flex; margin-top: 15px">
           <el-button @click="copyMenu(index)" type="success" size="mini"
             >拷贝</el-button
           >
@@ -194,6 +260,22 @@
             v-model="type_name"
           ></el-input>
         </el-form-item>
+        <el-form-item label="分类时段">
+          <el-select
+            placeholder="请选择标签时段"
+            clearable
+            style="width: 100%"
+            v-model="label_time_type_id"
+          >
+            <el-option
+              v-for="item in timeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTypeVisible = false">取 消</el-button>
@@ -201,19 +283,22 @@
       </span>
     </el-dialog>
     <el-dialog
+      :close-on-click-modal="false"
       width="60%"
       title="门店套餐列表"
       :visible.sync="dialogTableVisible"
     >
-      <el-row :gutter="20" style="margin-bottom: 20px">
-        <el-col :span="20">
+      <el-row
+        :gutter="20"
+        style="margin-bottom: 20px; display: flex; justify-content: flex-end"
+      >
+        <el-col :span="15" style="display: flex">
           <el-input
             v-model="listData.name"
             :placeholder="`请输入套餐名称搜索`"
           ></el-input>
-        </el-col>
-        <el-col :span="4">
           <el-button
+            style="margin-left: 20px"
             @click="getVendorPackageList"
             type="primary"
             icon="el-icon-search"
@@ -221,43 +306,59 @@
           >
         </el-col>
       </el-row>
-      <el-table
-        ref="multipleTable"
-        :data="packageList"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
+      <el-tabs
+        v-model="timeTabActive"
+        style="margin-top: 15px"
+        type="border-card"
+        :key="timer"
       >
-        <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column label="套餐ID" align="center">
-          <template slot-scope="scope">{{
-            scope.row.vendor_package_id
-          }}</template>
-        </el-table-column>
-        <el-table-column width="200" label="套餐图片" align="center">
-          <template slot-scope="scope">
-            <img style="width: 150px" :src="scope.row.main_image" alt="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="套餐名称" align="center">
-          <template slot-scope="scope">{{ scope.row.name }}</template>
-        </el-table-column>
-        <el-table-column label="标签" align="center">
-          <template slot-scope="scope">{{
-            scope.row.package_label_name
-          }}</template>
-        </el-table-column>
-        <el-table-column label="进货价" align="center">
-          <template slot-scope="scope">{{ scope.row.purchase_price }}</template>
-        </el-table-column>
-      </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        :page.sync="listData.page"
-        :limit.sync="listData.page_size"
-        @pagination="getVendorPackageList"
-      />
+        <el-tab-pane
+          v-for="(item, index) in vendorTimeList"
+          :key="item.time_type_id"
+          :label="item.time_type_name"
+          :name="item.time_type_id"
+        >
+          <el-table
+            ref="multipleTable"
+            :data="packageList"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="55"> </el-table-column>
+            <el-table-column label="套餐ID" align="center">
+              <template slot-scope="scope">{{
+                scope.row.vendor_package_id
+              }}</template>
+            </el-table-column>
+            <el-table-column width="200" label="套餐图片" align="center">
+              <template slot-scope="scope">
+                <img style="width: 150px" :src="scope.row.main_image" alt="" />
+              </template>
+            </el-table-column>
+            <el-table-column label="套餐名称" align="center">
+              <template slot-scope="scope">{{ scope.row.name }}</template>
+            </el-table-column>
+            <el-table-column label="标签" align="center">
+              <template slot-scope="scope">{{
+                scope.row.package_label_name
+              }}</template>
+            </el-table-column>
+            <el-table-column label="进货价" align="center">
+              <template slot-scope="scope">{{
+                scope.row.purchase_price
+              }}</template>
+            </el-table-column>
+          </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="listData.page"
+            :limit.sync="listData.page_size"
+            @pagination="getVendorPackageList"
+          />
+        </el-tab-pane>
+      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">返回</el-button>
         <el-button type="primary" @click="addMenu">添加到菜单</el-button>
@@ -291,20 +392,45 @@
         >
       </span>
     </el-dialog>
+    <el-dialog title="提示" :visible.sync="StoreMenuDialog" width="30%" center>
+      <div ref="context">
+        <p v-for="(item, index) in defect_package_names" :key="index">
+          {{ vendor_name }}没有预设套餐"{{ item }}"对应的门店套餐
+        </p>
+        <p v-for="(item, index) in defect_time_type" :key="index">
+          "{{ item.vendor_package_name_a }}"在本店没有{{
+            item.time_type_name
+          }}时段数据,请修改"{{ item.vendor_package_name_b }}"套餐
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="StoreMenuDialog = false">取 消</el-button>
+        <el-button type="primary" @click="copyTipFont">好的，复制</el-button>
+      </span>
+    </el-dialog>
+    <textarea id="copyTxt" cols="30" rows="10"></textarea>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { vendorPackageList } from "@/api/basic";
+import { getVendorTimeTypeData } from "@/api/operate/front_menu";
+import { getTimeTypeData } from "@/api/store";
 import {
   menuDetail,
   saveMenu,
   releaseMenu,
   historyMenu,
+  copyVendorMenu,
 } from "@/api/operate/front_menu";
 import Pagination from "@/components/Pagination";
 export default {
   props: {
     vendor_id: {
+      type: String,
+      default: "",
+    },
+    vendor_name: {
       type: String,
       default: "",
     },
@@ -316,33 +442,11 @@ export default {
   components: { Pagination },
   data() {
     return {
+      releaseStatus: 1,
       pageLoading: false,
-      timeList: [
-        {
-          type: 1,
-          name: "早餐",
-        },
-        {
-          type: 2,
-          name: "早茶",
-        },
-        {
-          type: 3,
-          name: "午餐",
-        },
-        {
-          type: 4,
-          name: "下午茶",
-        },
-        {
-          type: 5,
-          name: "晚餐",
-        },
-        {
-          type: 6,
-          name: "宵夜",
-        },
-      ],
+      vendorTimeList: [],
+      timeList: [],
+      timeTabActive: "",
       MenuType: [
         {
           type: 1,
@@ -360,9 +464,10 @@ export default {
       formData: {
         vendor_menu_id: "",
         time_type: 1,
-        menu_type: 1,
+        menu_type: 2,
         menu_data: [],
       },
+      // mainPushData: [],
       dialogTypeVisible: false, //分类弹窗
       menu_data_index: 0,
       menu_data_c_index: 0,
@@ -395,9 +500,17 @@ export default {
       pasteIndex: 0, //拷贝菜单下标
       clearMenuDialog: false,
       clearIndex: 0, //清除菜单下标
+      postVendorMenuIdFlag: false,
+      label_time_type_id: "",
+      label_time_type_name: "",
+      StoreMenuDialog: false,
+      defect_package_names: [],
+      defect_time_type: [],
+      timer: "",
     };
   },
   computed: {
+    ...mapState(["app"]), //拷贝的菜单数据
     day_tip() {
       let day_tip = "";
       switch (this.formData.menu_type) {
@@ -415,6 +528,25 @@ export default {
     },
   },
   watch: {
+    dialogTableVisible(flag) {
+      if (!flag) {
+        this.timer = new Date().getTime();
+      }
+    },
+    timeTabActive(val) {
+      if (val) {
+        this.getVendorPackageList();
+      }
+    },
+    label_time_type_id(val) {
+      if (val) {
+        this.label_time_type_name = this.timeList.find(
+          (item) => item.id == val
+        ).name;
+      } else {
+        this.label_time_type_name = "";
+      }
+    },
     "formData.time_type"() {
       this.getMenuDetail();
     },
@@ -426,6 +558,17 @@ export default {
         this.type_name = "";
         this.label_image = "";
         this.label_image_file = [];
+        this.label_time_type_id = "";
+      }
+    },
+  },
+  filters: {
+    time_type_name(time_type_id, vendorTimeList) {
+      if (time_type_id && vendorTimeList.length) {
+        return vendorTimeList.find((item) => item.time_type_id == time_type_id)
+          ? vendorTimeList.find((item) => item.time_type_id == time_type_id)
+              .time_type_name
+          : "";
       }
     },
   },
@@ -433,11 +576,63 @@ export default {
     this.getVendorPackageList();
     this.getMenuDetail();
     this.getHistoryMenu();
+    this.getVendorTimeTypeData();
+    this.getTimeTypeData();
   },
   methods: {
+    //删除主推套餐
+    delMainPush(index) {
+      // this.$set(this.mainPushData, index, {});
+    },
+    //设为主推套餐
+    editMainPush(item, index, idx, idxc) {
+      if (!item.main_push_image) {
+        return this.$message({
+          message: "请先为该套餐设置套餐主推图",
+          type: "error",
+          duration: 1500,
+        });
+      }
+      item.type_id == 1 ? (item.type_id = 2) : (item.type_id = 1);
+      // this.$set(
+      //   this.formData.menu_data[index][idx].vendor_package_data[idxc],
+      //   "type_id",
+      //   2
+      // );
+      // this.$set(this.mainPushData, index, item);
+    },
+    copyTipFont() {
+      let str = this.$refs.context.innerHTML;
+      let resultTxt = str.replace(/<.*?>/gi, "");
+      copyTxt.value = resultTxt;
+      copyTxt.select();
+      document.execCommand("copy");
+      this.StoreMenuDialog = false;
+    },
+    getTimeTypeData() {
+      getTimeTypeData().then((res) => {
+        this.timeList = res;
+      });
+    },
+    //获取门店用餐时段列表
+    getVendorTimeTypeData() {
+      getVendorTimeTypeData({ vendor_id: this.vendor_ids[0] }).then((res) => {
+        if (res.length) {
+          this.timeTabActive = res[0].time_type_id || "";
+          this.vendorTimeList = res;
+        }
+      });
+    },
     //复制菜单
     copyMenu(index) {
-      this.copyMenuItem = JSON.parse(JSON.stringify(this.formData.menu_data[index]));
+      this.copyMenuItem = JSON.parse(
+        JSON.stringify(this.formData.menu_data[index])
+      );
+      this.$store.commit("app/COPYMENUPARM", {
+        copy_vendor_menu_id: this.formData.vendor_menu_id,
+        copy_vendor_id: this.vendor_id,
+        copy_day: index + 1,
+      });
       this.$notify({
         title: "成功",
         message: "复制成功",
@@ -455,17 +650,54 @@ export default {
       }
     },
     pasteBtn(index) {
-      this.$set(this.formData.menu_data, index, this.copyMenuItem);
+      if (this.app.copy_vendor_id == this.vendor_id) {
+        this.$set(
+          this.formData.menu_data,
+          index,
+          JSON.parse(JSON.stringify(this.copyMenuItem))
+        );
+      } else {
+        copyVendorMenu({
+          vendor_menu_id: this.app.copy_vendor_menu_id,
+          day: this.app.copy_day,
+          vendor_id: this.vendor_id,
+        }).then((res) => {
+          if (res.defect_package_names.length) {
+            this.defect_package_names = res.defect_package_names;
+          }
+          if (res.defect_time_type.length) {
+            this.defect_time_type = res.defect_time_type;
+          }
+          if (res.defect_package_names.length || res.defect_time_type.length) {
+            this.StoreMenuDialog = true;
+          }
+          if (res.vendor_menu_data && res.vendor_menu_data.length) {
+            res.vendor_menu_data.forEach((item, index) => {
+              if (index == 0) {
+                item.checked = true;
+              } else {
+                item.checked = false;
+              }
+            });
+            this.$set(
+              this.formData.menu_data,
+              index,
+              JSON.parse(JSON.stringify(res.vendor_menu_data))
+            );
+          }
+        });
+      }
       this.pasteMenuDialog = false;
     },
     //清空菜单
     clearMenu(index) {
-      if(!this.formData.menu_data[index].length) return
+      if (!this.formData.menu_data[index].length) return;
       this.clearMenuDialog = true;
       this.clearIndex = index;
     },
     clearBtn() {
-      this.formData.menu_data[this.clearIndex] = [];
+      this.$set(this.formData.menu_data, [this.clearIndex], []);
+      // this.$set(this.mainPushData, [this.clearIndex], {});
       this.clearMenuDialog = false;
     },
     upNumCase(num) {
@@ -505,12 +737,19 @@ export default {
     getMenuDetail() {
       this.pageLoading = true;
       let { time_type, menu_type } = this.formData;
-      menuDetail({
-        //vendor_menu_id: this.formData.vendor_menu_id,
+      let aData = {
         time_type,
         menu_type,
         vendor_id: this.vendor_id,
-      }).then((res) => {
+      };
+      if (this.postVendorMenuIdFlag) {
+        aData.vendor_menu_id = this.formData.vendor_menu_id;
+      }
+      menuDetail(aData).then((res) => {
+        this.releaseStatus = res.status;
+        if (this.postVendorMenuIdFlag) {
+          this.postVendorMenuIdFlag = false;
+        }
         this.formData.menu_data = [];
         switch (menu_type) {
           case 1:
@@ -531,6 +770,14 @@ export default {
           this.formData.vendor_menu_id = res.vendor_menu_id;
           res.vendor_menu_data.forEach((item) => {
             this.$set(this.formData.menu_data, item.day, item.list);
+            // item.list.forEach((it) => {
+            //   let itdMainPush = it.vendor_package_data.find(
+            //     (itd) => itd.type_id == 2
+            //   );
+            //   if (itdMainPush) {
+            //     this.$set(this.mainPushData, item.day, itdMainPush);
+            //   }
+            // });
           });
           this.formData.menu_data.forEach((item, index) => {
             if (item.length) {
@@ -551,14 +798,17 @@ export default {
       this.formData.menu_data[index].forEach((item, idx) => {
         item.checked = false;
       });
-      this.formData.menu_data[index][idx].checked = true;
+      if (this.formData.menu_data[index][idx]) {
+        this.formData.menu_data[index][idx].checked = true;
+      }
     },
     //打开分类弹窗
-    openTypeDialog(index, type, type_name, label_image, idx) {
+    openTypeDialog(index, type, type_name, label_image, time_type_id, idx) {
       if (type) {
         this.type_name = type_name;
         this.label_image = label_image;
         this.label_image_file = [{ name: "labelImageFile", url: label_image }];
+        this.label_time_type_id = time_type_id;
         this.menu_data_c_index = idx;
       }
       this.typeEdit = type;
@@ -615,10 +865,18 @@ export default {
         this.formData.menu_data[this.menu_data_index][
           this.menu_data_c_index
         ].label_image = this.label_image;
+        this.formData.menu_data[this.menu_data_index][
+          this.menu_data_c_index
+        ].time_type_id = this.label_time_type_id;
+        this.formData.menu_data[this.menu_data_index][
+          this.menu_data_c_index
+        ].time_type_name = this.label_time_type_name;
       } else {
         this.formData.menu_data[this.menu_data_index].push({
           label: this.type_name,
           label_image: this.label_image,
+          time_type_id: this.label_time_type_id,
+          time_type_name: this.label_time_type_name,
           vendor_package_data: [],
           checked: !this.formData.menu_data[this.menu_data_index].length
             ? true
@@ -629,6 +887,21 @@ export default {
     },
     //删除分类
     delType(index, idx) {
+      // if (
+      //   this.formData.menu_data[index][idx].vendor_package_data.length &&
+      //   this.mainPushData[index].vendor_package_id
+      // ) {
+      //   let mainPushItem = this.mainPushData[index];
+      //   if (
+      //     this.formData.menu_data[index][idx].vendor_package_data.findIndex(
+      //       (item) =>
+      //         item.vendor_package_id == mainPushItem.vendor_package_id &&
+      //         item.time_type_id == mainPushItem.time_type_id
+      //     ) != -1
+      //   ) {
+      //     this.$set(this.mainPushData, index, {});
+      //   }
+      // }
       this.formData.menu_data[index].splice(idx, 1);
     },
     //打开门店套餐列表弹窗
@@ -642,6 +915,7 @@ export default {
     //门店套餐列表
     getVendorPackageList() {
       this.loading = true;
+      this.listData.time_type_id = this.timeTabActive;
       vendorPackageList(this.listData).then((res) => {
         this.total = res.count;
         this.packageList = res.list;
@@ -650,27 +924,50 @@ export default {
     },
     //选择门店套餐
     handleSelectionChange(val) {
+      val.forEach((item) => {
+        item.time_type_id = this.timeTabActive;
+        item.type_id = 1;
+      });
       this.vendorpackageChecked = val;
     },
     //添加门店套餐到菜单
     addMenu() {
       let obj = {};
+      let cache = [];
       let arr = this.formData.menu_data[this.menu_index][
         this.vendor_package_index
       ].vendor_package_data.concat(this.vendorpackageChecked);
+      // for (const t of arr) {
+      //   if (
+      //     cache.find(
+      //       (c) =>
+      //         c.time_type_id === t.time_type_id &&
+      //         c.vendor_package_id === t.vendor_package_id
+      //     )
+      //   ) {
+      //     continue;
+      //   }
+      //   cache.push(t);
+      // }
       this.formData.menu_data[this.menu_index][
         this.vendor_package_index
-      ].vendor_package_data = arr.reduce((cur, next) => {
-        obj[next.vendor_package_id]
-          ? ""
-          : (obj[next.vendor_package_id] = true && cur.push(next));
-        return cur;
-      }, []);
+      ].vendor_package_data = JSON.parse(JSON.stringify(arr)); //cache
       this.dialogTableVisible = false;
-      this.$refs.multipleTable.clearSelection();
     },
     //删除门店套餐
     delGoods(index, idx, idxc) {
+      // if (this.mainPushData[index].vendor_package_id) {
+      //   let mainPushItem = this.mainPushData[index];
+      //   let delGood = this.formData.menu_data[index][idx].vendor_package_data[
+      //     idxc
+      //   ];
+      //   if (
+      //     delGood.vendor_package_id == mainPushItem.vendor_package_id &&
+      //     delGood.time_type_id == mainPushItem.time_type_id
+      //   ) {
+      //     this.$set(this.mainPushData, index, {});
+      //   }
+      // }
       this.formData.menu_data[index][idx].vendor_package_data.splice(idxc, 1);
     },
     //门店套餐向上或向下调整位置
@@ -699,14 +996,19 @@ export default {
       aData.menu_data.forEach((item, index) => {
         menu_data.push([]);
         item.forEach((it, idx) => {
-          let vendor_package_ids = [];
+          let vendor_package_data = [];
           it.vendor_package_data.forEach((itd) => {
-            vendor_package_ids.push(itd.vendor_package_id);
+            vendor_package_data.push({
+              time_type_id: itd.time_type_id,
+              vendor_package_id: itd.vendor_package_id,
+              type_id: itd.type_id,
+            });
           });
           menu_data[index].push({
             label: it.label,
             label_image: it.label_image,
-            vendor_package_ids: vendor_package_ids.join(","),
+            time_type_id: it.time_type_id,
+            vendor_package_data,
           });
         });
       });
@@ -714,12 +1016,17 @@ export default {
       saveMenu(aData).then((res) => {
         if (res) {
           this.formData.vendor_menu_id = res.vendor_menu_id;
-          this.$notify({
-            title: "成功",
-            message: "保存成功",
-            type: "success",
-            duration: 1000,
-          });
+          this.$confirm("已保存当前菜单，是否一并发布到小程序菜单？", "提示", {
+            confirmButtonText: "发布",
+            cancelButtonText: "不用了",
+            type: "warning",
+          })
+            .then(() => {
+              this.openReleaseMenu();
+            })
+            .catch(() => {
+              this.releaseStatus = 0;
+            });
         }
       });
     },
@@ -743,6 +1050,7 @@ export default {
         if (res) {
           this.getHistoryMenu();
           this.releaseMenuDialog = false;
+          this.releaseStatus = 1;
           this.$notify({
             title: "成功",
             message: "发布成功",
@@ -754,6 +1062,7 @@ export default {
     },
     //查看历史版本
     seeMenu(item) {
+      this.postVendorMenuIdFlag = true;
       this.formData.vendor_menu_id = item.vendor_menu_id;
       this.formData.vendor_id = item.vendor_id;
       this.formData.menu_type = item.menu_type;
@@ -765,6 +1074,39 @@ export default {
 };
 </script>
 <style lang="scss">
+.no_main_push {
+  width: 90%;
+  height: 232px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main_push_act {
+  background-color: rgba(18, 204, 33, 0.849);
+  color: #fff;
+  border: 1px solid transparent !important;
+}
+.opt_main_btn {
+  width: 10px;
+  font-size: 12px;
+  margin: 0 20px 0 10px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+#copyTxt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: -20;
+}
 .main_img_hide .el-upload--picture-card {
   display: none;
 }
@@ -777,22 +1119,22 @@ img:not([src]) {
   display: flex;
   flex-wrap: wrap;
   .menu_box_content {
+    margin: 0 15px 15px 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-end;
     .day_tip {
-      margin: 15px 20px 10px 0;
+      margin: 15px 0 10px 0;
       font-size: 14px;
       color: #666;
     }
     .menu {
       display: flex;
-      border: 1px solid #ddd;
-      width: 380px;
-      margin: 0 15px 15px 0;
+      width: 100%;
+      border-top: 1px solid #ddd;
       .type_list {
-        width: 40%;
+        width: 38%;
         height: 600px;
         overflow-y: auto;
         background-color: #eee;
@@ -833,68 +1175,77 @@ img:not([src]) {
         }
       }
       .goods_list {
-        width: 60%;
+        width: 62%;
         height: 600px;
         overflow-y: auto;
-        .goods_item {
-          margin-top: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          i {
-            cursor: pointer;
-          }
-          .goods_info {
-            width: 150px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            .el-icon-error {
-              font-size: 20px;
-              position: absolute;
-              right: -10px;
-              top: -10px;
-              color: red;
-            }
-            .goods_img {
-              width: 150px;
-              height: 150px;
-            }
-            .goods_sth {
-              padding: 10px;
-              background-color: #eee;
-              .goods_title {
-                font-size: 14px;
-                color: #666;
-              }
-              .goods_price {
-                display: flex;
-                margin-top: 10px;
-                font-size: 14px;
-                p {
-                  margin-right: 10px;
-                }
-              }
-            }
-          }
-          .opt_goods {
-            margin-left: 15px;
-            display: flex;
-            flex-direction: column;
-            i {
-              font-size: 20px;
-              margin-bottom: 15px;
-            }
-          }
-        }
-        .add_goods {
-          display: flex;
-          justify-content: center;
-          margin: 20px auto;
-        }
       }
     }
   }
 }
+.goods_item {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  i {
+    cursor: pointer;
+  }
+  .goods_info {
+    width: 150px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    .el-icon-error {
+      font-size: 20px;
+      position: absolute;
+      right: -10px;
+      top: -10px;
+      color: red;
+    }
+    .time_type_font {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      font-size: 14px;
+      color: #666;
+      padding: 5px 15px;
+      border: 1px solid #ddd;
+    }
+    .goods_img {
+      width: 150px;
+      height: 150px;
+    }
+    .goods_sth {
+      padding: 10px;
+      background-color: #eee;
+      .goods_title {
+        font-size: 14px;
+        color: #666;
+      }
+      .goods_price {
+        display: flex;
+        margin-top: 10px;
+        font-size: 14px;
+        p {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  .opt_goods {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    i {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+  }
+}
+.add_goods {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}
 </style>
-

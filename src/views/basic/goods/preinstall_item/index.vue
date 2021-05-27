@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -57,6 +57,16 @@
       <el-table-column width="130" align="center" label="包装规格">
         <template slot-scope="scope">
           <span>{{ scope.row.package_box_name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180" align="center" label="餐盒">
+        <template slot-scope="scope">
+          <img
+            style="width: 100px; height: 100px"
+            :src="scope.row.box_image"
+            alt=""
+          />
         </template>
       </el-table-column>
 
@@ -190,6 +200,10 @@ export default {
         this.list = res.list;
         this.loading = false;
       });
+    },
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
     },
     updateStatus(product_id, status, index) {
       productUpdateStatus({

@@ -16,7 +16,22 @@
             :on-success="upLoadMainImg"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleMainImgRemove"
-            :data="{ token: $store.state.user.token }"
+            :data="{ token: $store.state.user.token, upload_type: 4 }"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="餐盒图片">
+          <el-upload
+            :file-list="detailBoxImgFile"
+            :class="{ main_img_hide: formData.box_image }"
+            :limit="1"
+            :action="$upLoadImgApi"
+            list-type="picture-card"
+            :on-success="upLoadBoxImg"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleBoxImgRemove"
+            :data="{ token: $store.state.user.token, upload_type: 4 }"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -196,8 +211,9 @@
                   <div class="i_right">
                     <p>{{ item.num }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteMaterial(item.material_id)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -223,7 +239,7 @@
                     </p>
                   </div>
                   <div>
-                      <el-input type="number" v-model="materialNum"></el-input>
+                    <el-input type="number" v-model="materialNum"></el-input>
                   </div>
                 </div>
               </div>
@@ -259,8 +275,9 @@
                   <div class="i_right">
                     <p>{{ item.num }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteSeasoning(item.seasoning_id)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -319,8 +336,9 @@
                   <div class="i_right">
                     <p>{{ item.temperature }}</p>
                     <i
+                      style="position: absolute; right: 0"
                       @click="deleteTemperatureCorve(index)"
-                      class="el-icon-delete del_btn"
+                      class="el-icon-delete"
                     ></i>
                   </div>
                 </div>
@@ -374,6 +392,7 @@ export default {
       formData: {
         name: "",
         image: "",
+        box_image: "",
         product_category_id: "",
         product_package_box_id: "",
         taste_id: "",
@@ -415,6 +434,7 @@ export default {
       time: "",
       temperature: "",
       detailMainImgFile: [],
+      detailBoxImgFile: [],
       heatingRateList: [],
       temperatureCurveSensitive: [
         { name: "最不敏感", id: 1 },
@@ -527,6 +547,11 @@ export default {
             { name: "detailMainImgFile", url: res.image },
           ];
         }
+        if (res.box_image) {
+          this.detailBoxImgFile = [
+            { name: "detailBoxImgFile", url: res.box_image },
+          ];
+        }
         this.$set(this.formData, "material", res.material_data);
         this.$set(this.formData, "seasoning", res.seasoning_data);
         this.$set(this.formData, "temperature_corve", res.temperature_curve);
@@ -594,6 +619,10 @@ export default {
     handleMainImgRemove(file, fileList) {
       this.formData.image = "";
     },
+    //删除餐盒图片
+    handleBoxImgRemove(file, fileList) {
+      this.formData.box_image = "";
+    },
     //查看图片
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -603,6 +632,12 @@ export default {
     upLoadMainImg(res, file) {
       if (res.status) {
         this.formData.image = res.data.image_url;
+      }
+    },
+    //上传餐盒图片
+    upLoadBoxImg(res, file) {
+      if (res.status) {
+        this.formData.box_image = res.data.image_url;
       }
     },
   },
@@ -632,8 +667,7 @@ p {
 .el-input-number {
   flex: 1;
 }
-.del_btn {
-  margin-left: 20px;
+.el-icon-delete {
   cursor: pointer;
 }
 .i_position {

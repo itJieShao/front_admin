@@ -1,10 +1,18 @@
 <template>
   <div>
-    <el-row>
-      <el-col
-        :span="24"
-        style="margin-bottom: 20px; display: flex; justify-content: flex-end"
-      >
+    <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-col :span="8">
+        <el-input
+          v-model="listData.condition"
+          placeholder="请输入搜索内容"
+        ></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
+      </el-col>
+      <el-col :span="12" style="display: flex; justify-content: flex-end">
         <el-button type="success" @click="orderDialog = true">筛选</el-button>
       </el-col>
     </el-row>
@@ -31,7 +39,34 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="用户">
+      <el-table-column width="300" align="center" label="套餐名称">
+        <template slot-scope="scope">
+          <p
+            v-for="(item, index) in scope.row.vendor_package_names"
+            :key="index"
+          >
+            {{ item }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="150" align="center" label="用餐时段">
+        <template slot-scope="scope">
+          <p v-for="(item, index) in scope.row.time_types" :key="index">
+            {{ item.time_type_name }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="150" align="center" label="套餐状态">
+        <template slot-scope="scope">
+          <p v-for="(item, index) in scope.row.take_statuss" :key="index">
+            {{ item.take_status_name }}
+          </p>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="100" align="center" label="用户">
         <template slot-scope="scope">
           <span>{{ scope.row.customer_name }}</span>
         </template>
@@ -43,18 +78,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="250" align="center" label="商品名称">
+      <!-- <el-table-column width="250" align="center" label="商品名称">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.vendor_package_name }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="份数">
         <template slot-scope="scope">
-          <p v-for="(item, index) in scope.row.package_data" :key="index">
-            {{ item.vendor_package_num }}
+          <p
+            v-for="(item, index) in scope.row.vendor_package_nums"
+            :key="index"
+          >
+            {{ item }}
           </p>
         </template>
       </el-table-column>
@@ -65,13 +103,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100" align="center" label="单价">
+      <!-- <el-table-column width="100" align="center" label="单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.sale_price }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="100" align="center" label="应付总价">
         <template slot-scope="scope">
@@ -85,13 +123,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100" align="center" label="实付单价">
+      <!-- <el-table-column width="100" align="center" label="实付单价">
         <template slot-scope="scope">
           <p v-for="(item, index) in scope.row.package_data" :key="index">
             {{ item.discount_price }}
           </p>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="100" align="center" label="实付总价">
         <template slot-scope="scope">
@@ -99,9 +137,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="160" align="center" label="预约日期">
+      <el-table-column width="240" align="center" label="取餐时间">
         <template slot-scope="scope">
-          <span>{{ scope.row.book_at ? scope.row.book_at : "无" }}</span>
+          <p v-for="(item, index) in scope.row.take_ats" :key="index">
+            {{ item }}
+          </p>
         </template>
       </el-table-column>
 
@@ -111,7 +151,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" align="center" label="订单状态">
+      <el-table-column
+        width="120"
+        class-name="status-col"
+        align="center"
+        label="订单状态"
+      >
         <template slot-scope="scope">
           <span v-if="scope.row.order_status == -2">报损取消</span>
           <span v-else-if="scope.row.order_status == -1">已取消</span>
@@ -124,10 +169,17 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180" fixed="right" align="center" label="操作">
+      <el-table-column width="200" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
+          >
+          <el-button
+            v-if="scope.row.can_cancel"
+            size="mini"
+            type="danger"
+            @click="cancelOrder(scope.row.id, scope.$index)"
+            >取消订单</el-button
           >
         </template>
       </el-table-column>
@@ -141,10 +193,20 @@
     />
     <el-dialog title="订单筛选" :visible.sync="orderDialog">
       <el-form label-width="80px">
-        <el-form-item label="订单状态">
+        <el-form-item label="订单状态" style="margin-bottom: 10px">
           <el-checkbox-group v-model="listData.order_status">
             <el-checkbox
               v-for="item in orderStatusList"
+              :key="item.type"
+              :label="item.type"
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="套餐状态">
+          <el-checkbox-group v-model="listData.take_status">
+            <el-checkbox
+              v-for="item in takeStatusList"
               :key="item.type"
               :label="item.type"
               >{{ item.name }}</el-checkbox
@@ -182,16 +244,16 @@
           >
           </el-date-picker> -->
         </el-form-item>
-        <!-- <el-form-item label="用餐时段">
-          <el-checkbox-group v-model="listData.order_status">
+        <el-form-item label="用餐时段">
+          <el-checkbox-group v-model="listData.dinner_time_ids">
             <el-checkbox
-              v-for="item in orderStatusList"
-              :key="item.type"
-              :label="item.type"
+              v-for="item in timeList"
+              :key="item.id"
+              :label="item.id"
               >{{ item.name }}</el-checkbox
             >
           </el-checkbox-group>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="下单时间">
           <el-date-picker
             v-model="created_at_date"
@@ -244,7 +306,8 @@
 </template>
 
 <script>
-import { orderList } from "@/api/basic";
+import { orderList, cancelOrder } from "@/api/basic";
+import { getTimeTypeData } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
   props: {
@@ -258,11 +321,14 @@ export default {
     return {
       list: [],
       listData: {
+        condition: "",
+        dinner_time_ids: [],
         page: 1,
         page_size: 10,
         vendor_ids: this.vendor_ids,
         export: "",
         order_status: [],
+        take_status: [],
         has_favourable: "",
         discounts: [],
         discount_price_start: "",
@@ -272,19 +338,24 @@ export default {
         created_at_start: "",
         created_at_end: "",
       },
-      take_at_date:"",
+      take_at_date: "",
       created_at_date: "",
       // startDatePicker: this.beginDate(),
       // endDatePicker: this.processDate(),
       orderStatusList: [
         { name: "未付款", type: 0 },
         { name: "待取餐", type: 1 },
-        { name: "部分取餐", type: 2 },
         { name: "已完成", type: 3 },
         { name: "申请退款", type: 4 },
         { name: "驳回退款", type: 6 },
         { name: "退款成功", type: 5 },
+        { name: "已取消", type: -1 },
       ],
+      takeStatusList: [
+        { name: "未取餐", type: 0 },
+        { name: "已取餐", type: 1 },
+      ],
+      timeList: [],
       discountsList: [
         { name: "折扣", type: 1 },
         { name: "满减", type: 2 },
@@ -305,16 +376,17 @@ export default {
       this.listData.created_at_start = val[0];
       this.listData.created_at_end = val[1];
     },
-    "listData.has_favourable"(val){
-      if (val == 2){
+    "listData.has_favourable"(val) {
+      if (val == 2) {
         this.listData.discounts = [];
         this.listData.discount_price_start = "";
         this.listData.discount_price_end = "";
       }
-    }
+    },
   },
   created() {
     this.getList();
+    this.getTimeTypeData();
   },
   methods: {
     // beginDate() {
@@ -339,6 +411,34 @@ export default {
     //     },
     //   };
     // },
+
+    //取消订单
+    cancelOrder(order_id, index) {
+      this.$confirm("是否确定取消该订单", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        cancelOrder({ order_id, type: 2 }).then((res) => {
+          if (res) {
+            this.$notify({
+              title: "成功",
+              message: "取消订单成功",
+              type: "success",
+              duration: 1000,
+              onClose: () => {
+                this.$set(this.list[index], "can_cancel", 0);
+              },
+            });
+          }
+        });
+      });
+    },
+    getTimeTypeData() {
+      getTimeTypeData().then((res) => {
+        this.timeList = res;
+      });
+    },
     searchBtn() {
       this.page = 1;
       this.getList();

@@ -9,6 +9,9 @@
         <el-form-item label="单品图">
           <img :src="detail.image" alt="" />
         </el-form-item>
+        <el-form-item v-if="detail.box_image" label="餐盒图片">
+          <img :src="detail.box_image" alt="" />
+        </el-form-item>
         <el-form-item label="单品信息">
           <el-row :gutter="12">
             <el-col :span="3">
@@ -46,12 +49,22 @@
             <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
-                  <p>厨师</p>
-                  <p>{{ detail.created_user_name }}</p>
+                  <p>重量</p>
+                  <p>{{ detail.weight }}</p>
                 </div>
               </el-card>
             </el-col>
             <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>厨师</p>
+                  <p>{{ detail.created_user_name }}</p>
+                </div>
+              </el-card>
+            </el-col>  
+          </el-row>
+          <el-row style="margin-top: 15px" :gutter="12">
+            <el-col :span="6">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>供应商</p>
@@ -59,8 +72,6 @@
                 </div>
               </el-card>
             </el-col>
-          </el-row>
-          <el-row style="margin-top: 15px" :gutter="12">
             <el-col :span="6">
               <el-card shadow="always">
                 <div class="item_flex">
@@ -69,7 +80,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>成本预警价</p>
@@ -77,7 +88,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>基础成本价</p>
@@ -85,11 +96,39 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-card shadow="always">
                 <div class="item_flex">
                   <p>毛利率</p>
                   <p>{{ detail.profit_rate }}</p>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="单品要求">
+          <el-row :gutter="12">
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>加热速率</p>
+                  <p>{{ detail.heating_rate }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>敏感度</p>
+                  <p>{{ detail.temperature_curve_sensitive_name }}</p>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="4">
+              <el-card shadow="always">
+                <div class="item_flex">
+                  <p>单元格位置</p>
+                  <p>{{ detail.cell_location_name }}</p>
                 </div>
               </el-card>
             </el-col>

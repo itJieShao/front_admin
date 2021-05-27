@@ -8,7 +8,7 @@
         ></el-input>
       </el-col>
       <el-col :span="10">
-        <el-button @click="getList" type="primary" icon="el-icon-search"
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
@@ -293,6 +293,10 @@ export default {
         this.total = res.count;
         this.loading = false;
       });
+    },
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
     },
     updateStatus(member_card_id, status, index) {
       updateMemberCard({

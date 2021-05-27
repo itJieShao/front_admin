@@ -1,5 +1,32 @@
 import request from '@/utils/request'
 
+// //添加餐盒模板
+// export function purchaseList(data) {
+//   return request({
+//     url: '/product/purchase/list',
+//     method: 'post',
+//     data
+//   })
+// }
+
+// //删除餐盒模板
+// export function purchaseList(data) {
+//   return request({
+//     url: '/product/purchase/list',
+//     method: 'post',
+//     data
+//   })
+// }
+
+// //餐盒模板列表
+// export function purchaseList(data) {
+//   return request({
+//     url: '/product/purchase/list',
+//     method: 'post',
+//     data
+//   })
+// }
+
 //进货列表
 export function purchaseList(data) {
   return request({
