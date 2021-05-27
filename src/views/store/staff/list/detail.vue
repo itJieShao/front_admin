@@ -121,7 +121,7 @@
             </el-card>
           </el-col>
           <el-col :span="4">
-            <el-card shadow="always" style="width:200px;height:200px;">
+            <el-card shadow="always" style="width: 200px; height: 200px">
               <vue-qr :text="detail.qr_code" :size="150"></vue-qr>
             </el-card>
           </el-col>
@@ -145,52 +145,50 @@
     <template v-if="station_id == 1">
       <el-divider />
       <div class="task_top">
-        <h4>员工今日任务表</h4>
-        <el-button @click="dialogVisible = true">新增员工任务</el-button>
+        <h4>员工任务</h4>
+        <div>
+          <el-button type="success" @click="templateDialogVisible = true"
+            >导入任务模板</el-button
+          >
+          <el-button
+            v-if="templateData.length"
+            type="danger"
+            @click="clearTemplate"
+            >清空</el-button
+          >
+        </div>
+        <!-- <el-button @click="dialogVisible = true">新增员工任务</el-button> -->
       </div>
       <el-card shadow="always">
-        <el-table :data="taskList" style="width: 100%">
+        <el-table :data="templateData" style="width: 100%">
           <el-table-column align="center" prop="title" label="任务">
           </el-table-column>
           <el-table-column align="center" prop="content" label="任务内容">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="stipulate_start_time"
-            label="开始时间"
-          >
+          <el-table-column align="center" prop="start_time" label="开始时间">
           </el-table-column>
-          <el-table-column
-            align="center"
-            prop="stipulate_end_time"
-            label="结束时间"
-          >
+          <el-table-column align="center" prop="end_time" label="结束时间">
           </el-table-column>
           <el-table-column align="center" label="循环">
             <template slot-scope="scope">
-              <span v-if="scope.row.period == 1">每天</span>
-              <span v-else-if="scope.row.period == 2">每周</span>
-              <span v-else>每月</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="操作">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="delTask(scope.row.id, scope.$index)"
-                type="danger"
-                >删除</el-button
-              >
+              <span
+                >{{ scope.row.loop
+                }}<span
+                  v-if="scope.row.loop == '每周' && scope.row.loop_setup_name"
+                  >（{{
+                    scope.row.loop_setup_name.slice(
+                      0,
+                      scope.row.loop_setup_name.length - 1
+                    )
+                  }}）</span
+                >
+                <span v-else-if="scope.row.loop == '每月'">
+                  （{{ JSON.parse(scope.row.loop_setup).join("号,") + "号" }}）
+                </span>
+              </span>
             </template>
           </el-table-column>
         </el-table>
-        <pagination
-          v-show="total > 0"
-          :total="total"
-          :page.sync="page"
-          :limit.sync="page_size"
-          @pagination="getTaskList"
-        />
       </el-card>
     </template>
     <el-dialog title="新增员工任务" :visible.sync="dialogVisible">
@@ -286,17 +284,138 @@
         <el-button type="primary" @click="addTask">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      width="70%"
+      title="任务模板"
+      :visible.sync="templateDialogVisible"
+    >
+      <template v-if="import_template_id">
+        <el-table :data="templateDetail.detail_list" style="width: 100%">
+          <el-table-column align="center" label="任务标题">
+            <template slot-scope="scope">
+              <span>{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="任务内容">
+            <template slot-scope="scope">
+              <span>{{ scope.row.content }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="开始时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.start_time }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="结束时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.end_time }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="循环">
+            <template slot-scope="scope">
+              <span
+                >{{ scope.row.loop
+                }}<span
+                  v-if="scope.row.loop == '每周' && scope.row.loop_setup_name"
+                  >（{{
+                    scope.row.loop_setup_name.slice(
+                      0,
+                      scope.row.loop_setup_name.length - 1
+                    )
+                  }}）</span
+                >
+                <span v-else-if="scope.row.loop == '每月'">
+                  （{{ JSON.parse(scope.row.loop_setup).join("号,") + "号" }}）
+                </span>
+              </span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-row
+          style="margin-top: 15px"
+          type="flex"
+          class="row-bg"
+          justify="end"
+        >
+          <el-button type="success" @click="importTemplate(import_template_id)"
+            >导入</el-button
+          >
+        </el-row>
+      </template>
+      <template v-else>
+        <el-table v-loading="loading" :data="list" style="width: 100%">
+          <el-table-column align="center" label="任务模版ID">
+            <template slot-scope="scope">
+              <span>{{ scope.row.id }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" label="任务模版名称">
+            <template slot-scope="scope">
+              <span>{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" label="引用数量">
+            <template slot-scope="scope">
+              <span>{{ scope.row.used_qty }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" label="创建人">
+            <template slot-scope="scope">
+              <span>{{ scope.row.created_admin_name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="200" align="center" label="创建时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.created_at }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            width="200"
+            fixed="right"
+            align="center"
+            label="操作"
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="success"
+                size="mini"
+                @click="importTemplate(scope.row.id)"
+                >导入</el-button
+              >
+              <el-button size="mini" @click="seeTemplate(scope.row.id)"
+                >预览</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination
+          v-show="count > 0"
+          :total="count"
+          :page.sync="page"
+          :limit.sync="page_size"
+          @pagination="getTaskTemplateList"
+        />
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {
+  getTaskTemplate,
+  getTaskTemplateList,
   vendorEmployeeDetail,
   employeeTaskList,
   disableEmployee,
   vendorTaskData,
   addEmployeeTask,
   delEmployeeTask,
+  updateEmployeeTaskTemplate,
 } from "@/api/store";
 import Pagination from "@/components/Pagination";
 import vueQr from "vue-qr";
@@ -312,7 +431,9 @@ export default {
       page_size: 10,
       loading: false,
       total: 0,
+      count: 0,
       dialogVisible: false,
+      templateDialogVisible: false,
       formData: {
         task_id: "",
         title: "",
@@ -339,6 +460,9 @@ export default {
         { type: 6, name: "星期六" },
       ],
       vendorTaskList: [],
+      import_template_id: "",
+      templateDetail: {},
+      templateData: [],
     };
   },
   components: {
@@ -349,6 +473,11 @@ export default {
     time(val) {
       this.formData.stipulate_start_time = val[0];
       this.formData.stipulate_end_time = val[1];
+    },
+    templateDialogVisible(isOpen) {
+      if (!isOpen) {
+        this.import_template_id = "";
+      }
     },
   },
   async created() {
@@ -367,11 +496,166 @@ export default {
         this.pageTitle = "QC人员";
         break;
     }
+    this.getTaskTemplateList();
     this.getVendorTaskData();
     await this.getDetail();
+    this.getTaskTemplate();
     this.getTaskList();
   },
   methods: {
+    getTaskTemplate() {
+      getTaskTemplate({ employee_id: this.detail.id }).then((res) => {
+        if (res.detail_list.length) {
+          res.detail_list.forEach((item) => {
+            switch (item.loop) {
+              case 1:
+                item.loop = "每天";
+                break;
+              case 2:
+                item.loop = "每周";
+                break;
+              case 3:
+                item.loop = "每月";
+                break;
+              case 4:
+                item.loop = "工作日";
+                break;
+            }
+            item.loop_setup_name = "";
+            if (item.loop == "每周" && item.loop_setup) {
+              JSON.parse(item.loop_setup).forEach((it) => {
+                switch (it) {
+                  case 1:
+                    item.loop_setup_name += "星期一,";
+                    break;
+                  case 2:
+                    item.loop_setup_name += "星期二,";
+                    break;
+                  case 3:
+                    item.loop_setup_name += "星期三,";
+                    break;
+                  case 4:
+                    item.loop_setup_name += "星期四,";
+                    break;
+                  case 5:
+                    item.loop_setup_name += "星期五,";
+                    break;
+                  case 6:
+                    item.loop_setup_name += "星期六,";
+                    break;
+                  case 0:
+                    item.loop_setup_name += "星期日,";
+                    break;
+                }
+              });
+            }
+          });
+        }
+        this.templateData = res.detail_list;
+      });
+    },
+    //获取任务模板列表
+    getTaskTemplateList() {
+      this.loading = true;
+      getTaskTemplateList({
+        page: this.page,
+        page_size: this.page_size,
+        filter: 1,
+      }).then((res) => {
+        this.count = res.count;
+        this.list = res.list;
+        this.loading = false;
+      });
+    },
+    //预览任务模板
+    seeTemplate(id) {
+      this.import_template_id = id;
+      getTaskTemplate({ template_id: id }).then((res) => {
+        if (res.detail_list.length) {
+          res.detail_list.forEach((item) => {
+            switch (item.loop) {
+              case 1:
+                item.loop = "每天";
+                break;
+              case 2:
+                item.loop = "每周";
+                break;
+              case 3:
+                item.loop = "每月";
+                break;
+              case 4:
+                item.loop = "工作日";
+                break;
+            }
+            item.loop_setup_name = "";
+            if (item.loop_setup) {
+              JSON.parse(item.loop_setup).forEach((it) => {
+                switch (it) {
+                  case 1:
+                    item.loop_setup_name += "星期一,";
+                    break;
+                  case 2:
+                    item.loop_setup_name += "星期二,";
+                    break;
+                  case 3:
+                    item.loop_setup_name += "星期三,";
+                    break;
+                  case 4:
+                    item.loop_setup_name += "星期四,";
+                    break;
+                  case 5:
+                    item.loop_setup_name += "星期五,";
+                    break;
+                  case 6:
+                    item.loop_setup_name += "星期六,";
+                    break;
+                  case 0:
+                    item.loop_setup_name += "星期日,";
+                    break;
+                }
+              });
+            }
+          });
+        }
+        this.templateDetail = res;
+      });
+    },
+    //导入任务模板
+    importTemplate(id) {
+      updateEmployeeTaskTemplate({
+        employee_id: this.detail.id,
+        template_id: id,
+      }).then((res) => {
+        if (res) {
+          this.templateDialogVisible = false;
+          this.import_template_id = "";
+          this.getTaskTemplate();
+          this.$notify({
+            title: "成功",
+            message: "导入成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
+    //清空任务模板
+    clearTemplate() {
+      updateEmployeeTaskTemplate({
+        employee_id: this.detail.id,
+        is_delete: 1,
+      }).then((res) => {
+        if (res) {
+          this.templateData = [];
+          this.$notify({
+            title: "成功",
+            message: "删除成功",
+            type: "success",
+            duration: 1000,
+          });
+        }
+      });
+    },
     //任务标题切换
     taskChange() {
       let item = this.vendorTaskList.find(
