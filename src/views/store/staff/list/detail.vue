@@ -431,7 +431,7 @@ export default {
       page_size: 10,
       loading: false,
       total: 0,
-      count:0,
+      count: 0,
       dialogVisible: false,
       templateDialogVisible: false,
       formData: {
@@ -557,13 +557,15 @@ export default {
     //获取任务模板列表
     getTaskTemplateList() {
       this.loading = true;
-      getTaskTemplateList({ page: this.page, page_size: this.page_size }).then(
-        (res) => {
-          this.count = res.count;
-          this.list = res.list;
-          this.loading = false;
-        }
-      );
+      getTaskTemplateList({
+        page: this.page,
+        page_size: this.page_size,
+        filter: 1,
+      }).then((res) => {
+        this.count = res.count;
+        this.list = res.list;
+        this.loading = false;
+      });
     },
     //预览任务模板
     seeTemplate(id) {
