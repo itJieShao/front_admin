@@ -25,7 +25,10 @@
               <img :src="checkedPackageData.main_image" alt="" />
             </div>
           </el-form-item>
-          <el-form-item label="套餐主推广告图" v-if="checkedPackageData.main_push_image">
+          <el-form-item
+            label="套餐主推广告图"
+            v-if="checkedPackageData.main_push_image"
+          >
             <div class="main_img_box">
               <img :src="checkedPackageData.main_push_image" alt="" />
             </div>
@@ -157,6 +160,19 @@
       title="预设套餐列表"
       :visible.sync="dialogTableVisible"
     >
+      <el-row :gutter="20" style="margin-bottom: 20px">
+        <el-col :span="20">
+          <el-input
+            v-model="packageListData.name"
+            placeholder="请输入预设套餐名称搜索"
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+            >搜索</el-button
+          >
+        </el-col>
+      </el-row>
       <el-table :data="packageList">
         <el-table-column
           align="center"
@@ -234,6 +250,7 @@ export default {
         name: "",
         page: 1,
         page_size: 10,
+        status: 1,
       },
       storeList: [],
       labelList: [],
@@ -266,6 +283,10 @@ export default {
     this.getLabelList();
   },
   methods: {
+    searchBtn() {
+      this.packageListData.page = 1;
+      this.getpackageList();
+    },
     getTimeTypeData() {
       getTimeTypeData().then((res) => {
         this.timeList = res;
