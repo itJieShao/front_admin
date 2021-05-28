@@ -157,6 +157,19 @@
       title="预设单品列表"
       :visible.sync="dialogTableVisible"
     >
+      <!-- <el-row :gutter="20" style="margin-bottom: 20px">
+        <el-col :span="20">
+          <el-input
+            v-model="productListData.name"
+            placeholder="请输入单品名称搜索"
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+            >搜索</el-button
+          >
+        </el-col>
+      </el-row> -->
       <el-table
         ref="multipleTable"
         :data="productList"
@@ -225,7 +238,7 @@ export default {
         title: "",
         main_image: "",
         main_push_image: "",
-        purchased_image:"",
+        purchased_image: "",
         image: [],
         product_data: [],
         package_label_id: "",
@@ -249,7 +262,7 @@ export default {
       dialogTableVisible: false,
       detailMainImgFile: [],
       detailMainPushImgFile: [],
-      detailPurchasedImage:[],
+      detailPurchasedImage: [],
       detailImagesFile: [],
     };
   },
@@ -263,6 +276,10 @@ export default {
     this.getLabelList();
   },
   methods: {
+    searchBtn(){
+      this.productListData.page = 1;
+      this.getProductList();
+    },
     //预设套餐详情
     getDetail() {
       packageDetail({ package_id: this.$route.query.package_id }).then(

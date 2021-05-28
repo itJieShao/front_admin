@@ -88,6 +88,19 @@
       title="预设套餐列表"
       :visible.sync="dialogTableVisible"
     >
+      <el-row :gutter="20" style="margin-bottom: 20px">
+        <el-col :span="20">
+          <el-input
+            v-model="packageListData.name"
+            placeholder="请输入预设套餐名称搜索"
+          ></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+            >搜索</el-button
+          >
+        </el-col>
+      </el-row>
       <el-table :data="packageList">
         <el-table-column
           align="center"
@@ -170,6 +183,7 @@ export default {
         name: "",
         page: 1,
         page_size: 10,
+        status: 1,
       },
       checkedMainData: {},
       checkedPurchasedData: {},
@@ -197,6 +211,10 @@ export default {
     },
   },
   methods: {
+    searchBtn() {
+      this.packageListData.page = 1;
+      this.getpackageList();
+    },
     getTimeTypeData() {
       getTimeTypeData().then((res) => {
         this.timeList = res;
