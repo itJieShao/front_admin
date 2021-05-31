@@ -187,9 +187,9 @@
         stripe
         style="width: 100%"
       >
-        <el-table-column align="center" label="序号" width="120">
+        <el-table-column align="center" label="打赏ID" width="120">
           <template slot-scope="scope">
-            <span>{{ scope.$index + 1 }}</span>
+            <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="发起人及手机" width="200">
