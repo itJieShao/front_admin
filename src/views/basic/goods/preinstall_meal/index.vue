@@ -1,13 +1,55 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20" style="margin-bottom: 20px">
-      <el-col :span="10">
+    <el-row :gutter="10" style="margin-bottom: 20px">
+      <el-col :span="3">
+        <el-select
+          style="width: 100%"
+          v-model="listData.status"
+          filterable
+          clearable
+          placeholder="请选择套餐状态"
+        >
+          <el-option label="启用" :value="1"> </el-option>
+          <el-option label="禁用" :value="0"> </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="3">
+        <el-select
+          style="width: 100%"
+          v-model="listData.package_label_id"
+          filterable
+          clearable
+          placeholder="请选择套餐标签"
+        >
+          <el-option
+            v-for="item in labelList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="8">
+        <el-date-picker
+          v-model="effective_date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="创建开始时间"
+          end-placeholder="创建结束时间"
+          :default-time="['', '23:59:59']"
+        >
+        </el-date-picker>
+      </el-col>
+      <el-col :span="4">
         <el-input
           placeholder="请输入套餐名称搜索"
           v-model="listData.name"
         ></el-input>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="2">
         <el-button @click="searchBtn" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
@@ -114,7 +156,8 @@
 </template>
 
 <script>
-import { packageList,packageUpdateStatus } from "@/api/basic";
+import { packageList, packageUpdateStatus } from "@/api/basic";
+import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
   name: "preinstall_meal",
@@ -127,15 +170,36 @@ export default {
         page_size: 10,
         name: "",
         export: "",
+        package_label_id:"",
+        created_at_start:"",
+        created_at_end:"",
+        status:"",
       },
       loading: false,
       total: 0,
+      labelList: [],
+      effective_date: "",
     };
+  },
+  watch:{
+    effective_date(val){
+      if (val && val.length == 2){
+        this.listData.created_at_start = val[0];
+        this.listData.created_at_end = val[1];
+      }
+    }
   },
   created() {
     this.getList();
+    this.getLabelList();
   },
   methods: {
+    //预设套餐标签列表
+    getLabelList() {
+      categoryData({ type: 1 }).then((res) => {
+        this.labelList = res;
+      });
+    },
     addMeal() {
       this.$router.push("/basic/goods/preinstall_meal_add");
     },
@@ -157,7 +221,7 @@ export default {
         this.loading = false;
       });
     },
-    searchBtn(){
+    searchBtn() {
       this.listData.page = 1;
       this.getList();
     },

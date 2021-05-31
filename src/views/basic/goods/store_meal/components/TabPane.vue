@@ -169,6 +169,22 @@ export default {
       type: String,
       default: "",
     },
+    package_label_id: {
+      type: String,
+      default: "",
+    },
+    created_at_start: {
+      type: String,
+      default: "",
+    },
+    created_at_end: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      default: "",
+    },
   },
   components: { Pagination },
   data() {
@@ -180,6 +196,10 @@ export default {
         name: this.name,
         vendor_ids: this.vendor_ids,
         export: "",
+        package_label_id:this.package_label_id,
+        created_at_start:this.created_at_start,
+        created_at_end:this.created_at_end,
+        status:this.status,
       },
       loading: false,
       total: 0,
