@@ -19,14 +19,14 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="4">
+        <!-- <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
               <p>共存</p>
               <p>{{ detail.coextence_name }}</p>
             </div>
           </el-card>
-        </el-col>
+        </el-col> -->
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
@@ -51,25 +51,16 @@
             </div>
           </el-card>
         </el-col>
-      </el-row>
-      <el-row style="margin-top: 15px" :gutter="12">
-        <el-col :span="8">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>有效期</p>
-              <p>{{ detail.valid_at }}</p>
-            </div>
-          </el-card>
-        </el-col>
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>创建时间</p>
-              <p>{{ detail.created_at }}</p>
+              <p>每人限领数量</p>
+              <p>{{ detail.receive_num_limit }}</p>
             </div>
           </el-card>
         </el-col>
-
+      </el-row>
+      <el-row style="margin-top: 15px" :gutter="12">
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
@@ -81,8 +72,8 @@
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">
-              <p>每人限领数量</p>
-              <p>{{ detail.receive_num_limit }}</p>
+              <p>创建时间</p>
+              <p>{{ detail.created_at }}</p>
             </div>
           </el-card>
         </el-col>
@@ -94,8 +85,29 @@
             </div>
           </el-card>
         </el-col>
-      </el-row>
-      <el-row style="margin-top: 15px" :gutter="12">
+        <el-col :span="8">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>有效期</p>
+              <p>{{ detail.valid_at }}</p>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="4">
+          <el-card shadow="always">
+            <div class="item_flex">
+              <p>状态</p>
+              <p>
+                <el-tag effect="dark" type="danger" v-if="detail.status == 0"
+                  >已禁用</el-tag
+                >
+                <el-tag effect="dark" type="success" v-else>已启用</el-tag>
+              </p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>     
+      <!-- <el-row style="margin-top: 15px" :gutter="12">
         <el-col :span="8">
           <el-card shadow="always">
             <div class="item_flex">
@@ -126,21 +138,9 @@
             </div>
           </el-card>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row style="margin-top: 15px" :gutter="12">
-        <el-col :span="4">
-          <el-card shadow="always">
-            <div class="item_flex">
-              <p>状态</p>
-              <p>
-                <el-tag effect="dark" type="danger" v-if="detail.status == 0"
-                  >已禁用</el-tag
-                >
-                <el-tag effect="dark" type="success" v-else>已启用</el-tag>
-              </p>
-            </div>
-          </el-card>
-        </el-col>
+        
         <el-col :span="4">
           <el-card shadow="always">
             <div class="item_flex">

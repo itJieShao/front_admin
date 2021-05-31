@@ -609,7 +609,7 @@
             v-model="formData.name"
           ></el-input>
         </el-form-item>
-        <el-form-item label="使用门店">
+        <!-- <el-form-item label="使用门店">
           <el-select
             style="width: 100%"
             v-model="formData.vendor_ids"
@@ -662,7 +662,7 @@
           <span class="form_tip"
             >（注：这里的串联时段，如选择早餐、午餐，则需要用户同时下单早餐、午餐才可用；并联时段反之，如选择早餐、午餐，则用户在早餐、午餐均可使用）</span
           >
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="金额">
           <el-input
             placeholder="请输入红包的金额"

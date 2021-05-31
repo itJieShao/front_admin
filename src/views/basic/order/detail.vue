@@ -2,7 +2,7 @@
   <div class="app-container" v-if="JSON.stringify(detail) != '{}'">
     <div style="display: flex; align-items: center">
       <h2>订单详情</h2>
-      <span class="y_tip" v-if="detail.book_at">预</span>
+      <span class="y_tip" v-if="detail.book_at">预</span> 
     </div>
     <el-row :gutter="12">
       <el-col :span="4">
@@ -59,6 +59,97 @@
       <el-col :span="6">
         <el-card shadow="always">
           手机号码：{{ detail.customer_mobile }}
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-divider />
+    <el-row v-if="detail.favourable_coupon_id" style="margin-top:15px;" :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠类型</p>
+            <p>优惠券</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠ID</p>
+            <p>{{detail.favourable_coupon_id}}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠名称</p>
+            <p>{{detail.favourable_coupon_name}}</p>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <template v-if="detail.red_packet_data">  
+    <el-row v-for="(item,index) in detail.red_packet_data" :key="index" style="margin-top:15px;" :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠类型</p>
+            <p>红包</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠ID</p>
+            <p>{{item.coupon_id}}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠名称</p>
+            <p>{{item.coupon_name}}</p>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    </template>
+    <el-row v-if="detail.exceptional_send_id" style="margin-top:15px;" :gutter="12">
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>优惠类型</p>
+            <p>打赏</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>打赏总金额</p>
+            <p>{{detail.exceptional_price}}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>打赏次数</p>
+            <p>{{detail.exceptional_people_num}}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
+            <p>打赏土豪用户</p>
+            <p v-if="detail.exceptional_receive_data && detail.exceptional_receive_data.length">
+              {{detail.exceptional_receive_data.join(",")}}
+            </p>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -155,11 +246,14 @@
                 </div>
               </div>
             </div>
-            <div style="width:90%;margin-left:10%;" v-if="it.purchased_data && it.purchased_data.length">
-              <p style="margin-bottom:10px;">搭配</p>
+            <div
+              style="width: 90%; margin-left: 10%"
+              v-if="it.purchased_data && it.purchased_data.length"
+            >
+              <p style="margin-bottom: 10px">搭配</p>
               <div
                 class="goods_top"
-                style="margin-bottom:10px;"
+                style="margin-bottom: 10px"
                 v-for="(itd, itdx) in it.purchased_data"
                 :key="idx"
               >
@@ -220,6 +314,20 @@
           </div>
         </el-card>
       </el-col>
+      <el-col :span="8" v-if="detail.exceptional_send_id">
+        <el-card shadow="always">
+          <div>
+            <p>打赏时间</p>
+            <div class="time_info">
+              <p>发起打赏：{{ detail.exceptional_send_at }}</p>
+              <div v-for="(item,index) in detail.exceptional_receive_data" :key="index">
+                <p>打赏用户：{{ item.customer_name }}</p>
+                <p>打赏时间：{{ item.receive_at }}</p>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
       <el-col :span="8" v-if="detail.receive_at || detail.distribution_at">
         <el-card shadow="always">
           <div>
@@ -231,6 +339,8 @@
           </div>
         </el-card>
       </el-col>
+    </el-row>
+    <el-row :gutter="12" style="margin-top: 15px">
       <el-col :span="8" v-if="detail.after_sale_data.length > 0">
         <el-card shadow="always">
           <div>
@@ -299,7 +409,7 @@ export default {
           packageArr.push(res.package_data.slice(i, i + 3));
         }
         res.package_data = packageArr;
-        res.favourable_price = res.favourable_price.toFixed(2);
+        res.favourable_price = Number(res.favourable_price).toFixed(2);
         this.detail = res;
       });
     },
