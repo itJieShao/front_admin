@@ -221,7 +221,11 @@ export default {
     },
     getList() {
       this.loading = true;
-      vendorPackageList(this.listData).then((res) => {
+      let aData = JSON.parse(JSON.stringify(this.listData));
+      if (aData.status === ""){
+        delete aData.status
+      }
+      vendorPackageList(aData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;

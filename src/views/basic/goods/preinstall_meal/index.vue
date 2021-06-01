@@ -215,7 +215,11 @@ export default {
     },
     getList() {
       this.loading = true;
-      packageList(this.listData).then((res) => {
+      let aData = JSON.parse(JSON.stringify(this.listData));
+      if (aData.status === ""){
+        delete aData.status
+      }
+      packageList(aData).then((res) => {
         this.list = res.list;
         this.total = res.count;
         this.loading = false;
