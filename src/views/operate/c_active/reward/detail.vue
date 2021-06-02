@@ -110,6 +110,14 @@
       <el-col :span="4">
         <el-card shadow="always">
           <div class="item_flex">
+            <p>打赏好友数量</p>
+            <p>{{ detail.people_num }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card shadow="always">
+          <div class="item_flex">
             <p>打赏金额</p>
             <p>{{ detail.price }}</p>
           </div>
@@ -131,7 +139,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-card shadow="always">
           <div class="item_flex">
             <p>奖励有效期</p>
