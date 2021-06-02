@@ -314,7 +314,7 @@ export default {
           this.formData.exceptional_image = "";
           break;
         case 5:
-          this.formData.exceptional_image = "";
+          this.formData.exceptional_success_image = "";
           break;
         case 6:
           this.formData.exceptional_failure_image = "";
