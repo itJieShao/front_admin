@@ -21,10 +21,17 @@ const operateRouter = {
         },
         {
             path: 'add_buy_add',
-            component: () => import('@/views/operate/add_buy/add'),
+            component: () => import('@/views/operate/add_buy/edit'),
             name: 'AddBuyAdd',
             hidden:true,
             meta: { title: '新增套餐加购模板', icon: 'el-icon-s-help', activeMenu:'/operate/add_buy' },
+        },
+        {
+            path: 'add_buy_edit',
+            component: () => import('@/views/operate/add_buy/edit'),
+            name: 'AddBuyEdit',
+            hidden:true,
+            meta: { title: '编辑套餐加购模板', icon: 'el-icon-s-help', activeMenu:'/operate/add_buy' },
         },
         {
             path: 'add_buy_detail',

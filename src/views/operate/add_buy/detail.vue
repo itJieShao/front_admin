@@ -14,7 +14,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>主套餐</p>
-            <p>{{ detail.package_name }}</p>
+            <p>{{ detail.package_names }}</p>
           </div>
         </el-card>
       </el-col>
@@ -22,7 +22,7 @@
         <el-card shadow="always">
           <div class="item_flex">
             <p>搭配套餐</p>
-            <p>{{ detail.purchased_vendor_package_names.join(",") }}</p>
+            <p>{{ detail.purchased_vendor_package_names }}</p>
           </div>
         </el-card>
       </el-col>
@@ -43,7 +43,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row
+    <!-- <el-row
       v-if="detail.can_edit"
       :gutter="12"
       style="margin-top: 15px; display: flex; align-items: flex-end"
@@ -96,9 +96,8 @@
           >保存</el-button
         >
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-row
-      v-else
       :gutter="12"
       style="margin-top: 15px; display: flex; align-items: flex-end"
     >
@@ -136,7 +135,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="4" v-if="detail.can_enable || detail.can_disable">
+      <el-col :span="6" v-if="detail.can_enable || detail.can_disable">
         <el-card shadow="always">
           <div class="item_flex">
             <p>操作</p>
@@ -155,48 +154,62 @@
                 size="mini"
                 >禁用</el-button
               >
+              <el-button v-if="detail.can_edit" @click="goDetail" size="mini"
+                >编辑</el-button
+              >
             </p>
           </div>
         </el-card>
       </el-col>
     </el-row>
-    <div class="content-box">
-      <div style="margin: 0 auto 20px; border: 1px solid #ddd">
-        <div class="content-box-img">
-          <img :src="detail.package_image" alt="" />
-          <p>{{ detail.time_type_name }}</p>
-        </div>
-        <p class="content-box-title">{{ detail.package_name }}</p>
-        <p class="content-box-describe" v-if="detail.package_desc">
-          {{ detail.package_desc }}
-        </p>
-      </div>
-      <div
-        class="feeding"
-        v-for="(item, index) in detail.purchased_data"
-        :key="index"
-      >
-        <el-card shadow="always" style="margin-top: 15px">
-          <p style="margin-bottom: 10px">{{ item.title }}</p>
-          <el-card shadow="always">
-            <div class="feeding-content">
-              <div
-                class="feeding-item"
-                v-for="(it, idx) in item.package_data"
-                :key="idx"
-              >
-                <div class="feeding-item-img">
-                  <img :src="it.image" alt="" />
-                  <p>{{ it.time_type_name }}</p>
+    <div style="display: flex; margin: 20px 0">
+      <div class="content-box">
+        <div
+          class="feeding"
+          v-for="(item, index) in detail.purchased_data"
+          :key="index"
+        >
+          <el-card shadow="always" style="margin-top: 15px">
+            <p style="margin-bottom: 10px">{{ item.title }}</p>
+            <el-card shadow="always">
+              <div class="feeding-content">
+                <div
+                  class="feeding-item"
+                  v-for="(it, idx) in item.package_data"
+                  :key="idx"
+                >
+                  <div class="feeding-item-img">
+                    <img :src="it.image" alt="" />
+                    <p>{{ it.time_type_name }}</p>
+                  </div>
+                  <p class="package_name">{{ it.package_name }}</p>
+                  <p class="desc">{{ it.desc }}</p>
+                  <p class="price">加购价￥{{ it.discount_price }}</p>
                 </div>
-                <p class="package_name">{{ it.package_name }}</p>
-                <p class="desc">{{ it.desc }}</p>
-                <p class="price">加购价￥{{ it.discount_price }}</p>
               </div>
-            </div>
+            </el-card>
           </el-card>
-        </el-card>
+        </div>
       </div>
+      <el-card shadow="always" style="margin-left: 20px;">
+        <p style="margin-bottom:15px;">关联主套餐</p>
+        <div
+          class="main-package-box"
+          v-for="(item, index) in detail.package_data"
+          :key="index"
+        >
+          <div class="content-box-img">
+            <img :src="item.main_image" alt="" />
+            <p>{{ item.time_type_name }}</p>
+          </div>
+          <p class="content-box-title">
+            {{ item.package_name }}
+          </p>
+          <p class="content-box-describe" v-if="item.package_desc">
+            {{ item.package_desc }}
+          </p>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
@@ -218,6 +231,9 @@ export default {
     this.getStoreList();
   },
   methods: {
+    goDetail() {
+      this.$router.push(`/operate/add_buy_edit?id=${this.detail.id}`);
+    },
     //获取店铺列表
     getStoreList() {
       searchStoreList().then((res) => {
@@ -227,16 +243,16 @@ export default {
     getDetail() {
       getDetail({ id: this.$route.query.id }).then((res) => {
         this.vendor_ids = [];
-        if (res.valid_at_start){
-          this.valid_at[0] = res.valid_at_start
+        if (res.valid_at_start) {
+          this.valid_at[0] = res.valid_at_start;
         }
-        if (res.valid_at_end){
-          this.valid_at[1] = res.valid_at_end
+        if (res.valid_at_end) {
+          this.valid_at[1] = res.valid_at_end;
         }
-        if (res.vendor_ids && res.vendor_ids.length){
-          res.vendor_ids.forEach(item => {
-            this.vendor_ids.push(Number(item))
-          })
+        if (res.vendor_ids && res.vendor_ids.length) {
+          res.vendor_ids.forEach((item) => {
+            this.vendor_ids.push(Number(item));
+          });
         }
         this.detail = res;
       });
@@ -294,8 +310,12 @@ export default {
 </script>
 
 <style scoped>
+.main-package-box {
+  width: 530px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
 .content-box {
-  margin: 20px 0;
   width: 530px;
   padding: 20px;
   border: 1px solid #ddd;
@@ -330,7 +350,7 @@ export default {
   width: 120px;
   margin: 0 20px 20px 0;
 }
-.feeding-item p{
+.feeding-item p {
   text-align: center;
 }
 .feeding-item:nth-child(3n + 0) {
