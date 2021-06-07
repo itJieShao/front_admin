@@ -26,7 +26,7 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="单品ID">
+      <el-table-column width="100" align="center" label="单品ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>

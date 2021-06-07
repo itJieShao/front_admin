@@ -29,7 +29,7 @@ const basicRouter = {
                     path: 'preinstall_meal',
                     name: 'PreinstallMeal',
                     component: () => import('@/views/basic/goods/preinstall_meal/index'),
-                    meta: { title: '预设套餐', icon: 'example', auth: "preinstall_meal_list" }
+                    meta: { title: '预设套餐', keepAlive: true, icon: 'example', auth: "preinstall_meal_list" }
                 },
                 {
                     path: 'preinstall_meal_add',

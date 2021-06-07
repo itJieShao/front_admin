@@ -75,7 +75,7 @@
       <el-table-column width="250" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.can_enable"
+            v-if="scope.row.can_enable && type_id == 1"
             type="success"
             size="mini"
             @click="updateStatus(scope.row.id, 1, scope.$index)"

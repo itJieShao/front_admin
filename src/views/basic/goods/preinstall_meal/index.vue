@@ -68,7 +68,7 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="套餐ID">
+      <el-table-column width="100" align="center" label="套餐ID">
         <template slot-scope="scope">
           <span>{{ scope.row.package_id }}</span>
         </template>
@@ -160,7 +160,7 @@ import { packageList, packageUpdateStatus } from "@/api/basic";
 import { categoryData } from "@/api/system/category";
 import Pagination from "@/components/Pagination";
 export default {
-  name: "preinstall_meal",
+  name: "PreinstallMeal",
   components: { Pagination },
   data() {
     return {
