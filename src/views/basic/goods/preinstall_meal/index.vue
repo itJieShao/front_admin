@@ -186,12 +186,20 @@ export default {
       if (val && val.length == 2){
         this.listData.created_at_start = val[0];
         this.listData.created_at_end = val[1];
+      }else{
+        this.listData.created_at_start = this.listData.created_at_end = "";
       }
     }
   },
   created() {
+    if (this.$store.state.pageInfo){
+      this.listData = this.$store.state.pageInfo;
+    }
     this.getList();
     this.getLabelList();
+  },
+  destroyed(){
+    this.$store.commit("setPageInfo",this.listData)
   },
   methods: {
     //预设套餐标签列表
