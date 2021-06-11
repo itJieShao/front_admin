@@ -12,9 +12,7 @@ const whiteList = ['/login'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   console.log(to,from)
-  if(!(to.path.indexOf(from.path) != -1 || from.path.indexOf(to.path) != -1)){
-    store.commit("removePageInfo");
-  }
+  store.commit("app/setFromPath",from.path);
   // start progress bar
   NProgress.start()
 

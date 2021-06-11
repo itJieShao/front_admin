@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20" style="margin-bottom: 20px">
+    <tab-pane />
+    <!-- <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-select
           style="width: 100%"
@@ -18,15 +19,12 @@
           </el-option>
         </el-select>
       </el-col>
-      <!-- <el-col :span="10">
-        <el-input placeholder="请输入搜索内容"></el-input>
-      </el-col> -->
       <el-col :span="4">
         <el-button @click="addTab" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
       </el-col>
-    </el-row>
+    </el-row>   
     <el-tabs v-model="tabActive" style="margin-top: 15px" type="border-card">
       <el-tab-pane
         v-for="item in storeList"
@@ -43,7 +41,7 @@
           />
         </keep-alive>
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
   </div>
 </template>
 
@@ -66,14 +64,14 @@ export default {
   methods: {
     getStoreList() {
       searchStoreList().then((res) => {
-        res.forEach(item => item.vendor_id = item.vendor_id.toString());
+        res.forEach((item) => (item.vendor_id = item.vendor_id.toString()));
         this.tabActive = res[0].vendor_id;
         this.storeList = res;
       });
     },
     addTab() {
-      let {vendor_ids,storeList} = this;
-      let index =storeList.findIndex(item => item.vendor_id == vendor_ids);
+      let { vendor_ids, storeList } = this;
+      let index = storeList.findIndex((item) => item.vendor_id == vendor_ids);
       if (vendor_ids.length > 0 && index == -1) {
         let vendor_name = "";
         storeList.forEach((item) => {

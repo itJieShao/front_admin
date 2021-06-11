@@ -1,5 +1,29 @@
 <template>
   <div>
+    <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-col :span="10">
+        <el-select
+          style="width: 100%"
+          v-model="listData.vendor_ids"
+          filterable
+          multiple
+          placeholder="请选择门店"
+        >
+          <el-option
+            v-for="item in storeList"
+            :key="item.vendor_id"
+            :label="item.vendor_name"
+            :value="item.vendor_id"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
+      </el-col>
+    </el-row>
     <el-table
       v-loading="loading"
       :data="list"
@@ -112,23 +136,25 @@
 </template>
 
 <script>
+import { searchStoreList } from "@/api/basic";
 import { allocationList } from "@/api/warehouse";
 import Pagination from "@/components/Pagination";
 export default {
-  props: {
-    vendor_ids: {
-      type: Array,
-      default: [],
-    },
-  },
+  // props: {
+  //   vendor_ids: {
+  //     type: Array,
+  //     default: [],
+  //   },
+  // },
   components: { Pagination },
   data() {
     return {
       list: [],
+      storeList: [],
       listData: {
         page: 1,
         page_size: 10,
-        vendor_ids: this.vendor_ids,
+        vendor_ids: [],
       },
       loading: false,
       total: 0,
@@ -136,8 +162,18 @@ export default {
   },
   created() {
     this.getList();
+    this.getStoreList();
   },
   methods: {
+    searchBtn() {
+      this.listData.page = 1;
+      this.getList();
+    },
+    getStoreList() {
+      searchStoreList().then((res) => {
+        this.storeList = res;
+      });
+    },
     goDetail(allocation_id) {
       this.$router.push(`/warehouse/qc_detail?allocation_id=${allocation_id}`);
     },
@@ -150,7 +186,7 @@ export default {
       });
     },
     handleSelectionChange(val) {
-      this.$emit('checkedItem',val) 
+      this.$emit("checkedItem", val);
     },
   },
 };

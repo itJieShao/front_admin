@@ -371,7 +371,10 @@
               >（注：这里指的是当天用餐时段过后的时间）</span
             >
           </el-form-item>
-          <el-form-item v-if="formData.mode == 1 || formData.mode == 2" label="折扣率">
+          <el-form-item
+            v-if="formData.mode == 1 || formData.mode == 2"
+            label="折扣率"
+          >
             <el-input
               placeholder="请输入0-1的折扣率"
               v-model="formData.discount"
@@ -873,11 +876,21 @@ export default {
     },
   },
   created() {
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.defaultFormData = JSON.parse(JSON.stringify(this.formData));
     this.getList();
     this.getStoreList();
     this.getUserList();
     this.getTimeTypeData();
+  },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
     getTimeTypeData() {

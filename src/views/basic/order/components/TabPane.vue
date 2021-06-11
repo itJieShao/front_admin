@@ -2,6 +2,23 @@
   <div>
     <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="8">
+        <el-select
+          style="width: 100%"
+          v-model="listData.vendor_ids"
+          filterable
+          multiple
+          placeholder="请选择门店"
+        >
+          <el-option
+            v-for="item in storeList"
+            :key="item.vendor_id"
+            :label="item.vendor_name"
+            :value="item.vendor_id"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="8">
         <el-input
           v-model="listData.condition"
           placeholder="请输入搜索内容"
@@ -12,7 +29,7 @@
           >搜索</el-button
         >
       </el-col>
-      <el-col :span="12" style="display: flex; justify-content: flex-end">
+      <el-col :span="4" style="display: flex; justify-content: flex-end">
         <el-button type="success" @click="orderDialog = true">筛选</el-button>
       </el-col>
     </el-row>
@@ -215,7 +232,7 @@
         </el-form-item>
         <el-form-item label="取餐时间">
           <el-date-picker
-            v-model="take_at_date"
+            v-model="listData.take_at_date"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -256,7 +273,7 @@
         </el-form-item>
         <el-form-item label="下单时间">
           <el-date-picker
-            v-model="created_at_date"
+            v-model="listData.created_at_date"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始时间"
@@ -306,26 +323,27 @@
 </template>
 
 <script>
-import { orderList, cancelOrder } from "@/api/basic";
+import { orderList, cancelOrder, searchStoreList } from "@/api/basic";
 import { getTimeTypeData } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
-  props: {
-    vendor_ids: {
-      type: Array,
-      default: [],
-    },
-  },
+  // props: {
+  //   vendor_ids: {
+  //     type: Array,
+  //     default: [],
+  //   },
+  // },
   components: { Pagination },
   data() {
     return {
       list: [],
+      storeList: [],
       listData: {
         condition: "",
         dinner_time_ids: [],
         page: 1,
         page_size: 10,
-        vendor_ids: this.vendor_ids,
+        vendor_ids: [],
         export: "",
         order_status: [],
         take_status: [],
@@ -333,13 +351,9 @@ export default {
         discounts: [],
         discount_price_start: "",
         discount_price_end: "",
-        take_at_start: "",
-        take_at_end: "",
-        created_at_start: "",
-        created_at_end: "",
+        take_at_date: "",
+        created_at_date: "",
       },
-      take_at_date: "",
-      created_at_date: "",
       // startDatePicker: this.beginDate(),
       // endDatePicker: this.processDate(),
       orderStatusList: [
@@ -368,14 +382,6 @@ export default {
     };
   },
   watch: {
-    take_at_date(val) {
-      this.listData.take_at_start = val[0];
-      this.listData.take_at_end = val[1];
-    },
-    created_at_date(val) {
-      this.listData.created_at_start = val[0];
-      this.listData.created_at_end = val[1];
-    },
     "listData.has_favourable"(val) {
       if (val == 2) {
         this.listData.discounts = [];
@@ -385,33 +391,26 @@ export default {
     },
   },
   created() {
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.getList();
+    this.getStoreList();
     this.getTimeTypeData();
   },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
+  },
   methods: {
-    // beginDate() {
-    //   const self = this;
-    //   return {
-    //     disabledDate(time) {
-    //       let endTime = self.listData.take_at_end;
-    //       if (endTime) {
-    //         return time.getTime() > new Date(endTime).getTime();
-    //       }
-    //     },
-    //   };
-    // },
-    // processDate() {
-    //   const self = this;
-    //   return {
-    //     disabledDate(time) {
-    //       let startTime = self.listData.take_at_start;
-    //       if (startTime) {
-    //         return time.getTime() < new Date(startTime).getTime();
-    //       }
-    //     },
-    //   };
-    // },
-
+    getStoreList() {
+      searchStoreList().then((res) => {
+        this.storeList = res;
+      });
+    },
     //取消订单
     cancelOrder(order_id, index) {
       this.$confirm("是否确定取消该订单", "提示", {
@@ -449,7 +448,18 @@ export default {
     },
     getList() {
       this.loading = true;
-      orderList(this.listData).then((res) => {
+      let aData = JSON.parse(JSON.stringify(this.listData));
+      if (aData.take_at_date) {
+        aData.take_at_start = aData.take_at_date[0];
+        aData.take_at_end = aData.take_at_date[1];
+        delete aData.take_at_date;
+      }
+      if (aData.created_at_date) {
+        aData.created_at_start = aData.created_at_date[0];
+        aData.created_at_end = aData.created_at_date[1];
+        delete aData.created_at_date;
+      }
+      orderList(aData).then((res) => {
         this.total = res.count;
         this.list = res.list;
         this.loading = false;

@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="10" style="margin-bottom: 20px">
+    <tab-pane />
+    <!-- <el-row :gutter="10" style="margin-bottom: 20px">
       <el-col :span="3">
         <el-select
           style="width: 100%"
@@ -94,7 +95,7 @@
           />
         </keep-alive>
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
   </div>
 </template>
 
@@ -118,14 +119,6 @@ export default {
       labelList: [],
       timer:'',
     };
-  },
-  watch: {
-    effective_date(val) {
-      if (val && val.length == 2) {
-        this.created_at_start = val[0];
-        this.created_at_end = val[1];
-      }
-    },
   },
   created() {
     this.getStoreList();

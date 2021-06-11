@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20" style="margin-bottom: 20px">
+    <tab-pane />
+    <!-- <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-select
           style="width: 100%"
@@ -24,12 +25,6 @@
         >
       </el-col>
       <el-col :span="10" style="display: flex; justify-content: flex-end">
-        <!-- <el-button
-          @click="dialogFormVisible = true"
-          type="success"
-          icon="el-icon-plus"
-          >新增任务</el-button
-        > -->
         <el-button
           @click="goTaskTemplate"
           type="success"
@@ -69,7 +64,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addTask">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 

@@ -66,9 +66,7 @@
             @click="updateStatus(scope.row.id, scope.$index)"
             >{{ scope.row.status ? "禁用" : "启用" }}</el-button
           >
-          <el-button
-            size="mini"
-            @click="goDetail(scope.row.id)"
+          <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
           >
         </template>
@@ -102,13 +100,21 @@ export default {
     };
   },
   created() {
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.getList();
+  },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
     goDetail(id) {
-      this.$router.push(
-        `/store/staff/task_template_detail?id=${id}`
-      );
+      this.$router.push(`/store/staff/task_template_detail?id=${id}`);
     },
     goAdd() {
       this.$router.push("/store/staff/task_template_add");
@@ -125,13 +131,13 @@ export default {
       this.listData.page = 1;
       this.getList();
     },
-    updateStatus(template_id,index) {
+    updateStatus(template_id, index) {
       updateTaskTemplate({
         template_id,
-        status:0
+        status: 0,
       }).then((res) => {
         if (res) {
-          this.$set(this.list[index],"status",0)
+          this.$set(this.list[index], "status", 0);
           this.$notify({
             title: "成功",
             message: "操作成功",

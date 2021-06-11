@@ -9,9 +9,20 @@ const state = {
   copy_vendor_menu_id:"",
   copy_vendor_id:"",
   copy_day:"",
+  pageInfo:null,//缓存页面筛选过的信息
+  fromPath:"",
 }
 
 const mutations = {
+  setFromPath(state,path){
+    state.fromPath = path;
+  },
+  setPageInfo(state,pageInfo){
+    state.pageInfo = pageInfo;
+  },
+  removePageInfo(state){
+    state.pageInfo = null;
+  },
   COPYMENUPARM: (state,param) => {
     state.copy_vendor_menu_id = param.copy_vendor_menu_id;
     state.copy_vendor_id = param.copy_vendor_id;

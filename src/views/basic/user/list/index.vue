@@ -77,7 +77,7 @@
 
       <el-table-column align="center" label="口味">
         <template slot-scope="scope">
-          <span>{{ scope.row.taste == 1 ? '不辣' : '辣' }}</span>
+          <span>{{ scope.row.taste == 1 ? "不辣" : "辣" }}</span>
         </template>
       </el-table-column>
 
@@ -148,10 +148,20 @@ export default {
     };
   },
   created() {
+    if (this.$store.state.app.fromPath.indexOf("/user/detail") != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.getList();
   },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
+  },
   methods: {
-    search(){
+    search() {
       this.listData.page = 1;
       this.getList();
     },

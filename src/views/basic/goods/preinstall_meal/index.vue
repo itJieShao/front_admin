@@ -32,7 +32,7 @@
       </el-col>
       <el-col :span="8">
         <el-date-picker
-          v-model="effective_date"
+          v-model="listData.effective_date"
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           format="yyyy-MM-dd HH:mm:ss"
@@ -170,36 +170,30 @@ export default {
         page_size: 10,
         name: "",
         export: "",
-        package_label_id:"",
-        created_at_start:"",
-        created_at_end:"",
-        status:"",
+        package_label_id: "",
+        created_at_start: "",
+        created_at_end: "",
+        status: "",
+        effective_date: "",
       },
       loading: false,
       total: 0,
       labelList: [],
-      effective_date: "",
     };
   },
-  watch:{
-    effective_date(val){
-      if (val && val.length == 2){
-        this.listData.created_at_start = val[0];
-        this.listData.created_at_end = val[1];
-      }else{
-        this.listData.created_at_start = this.listData.created_at_end = "";
-      }
-    }
-  },
   created() {
-    if (this.$store.state.pageInfo){
-      this.listData = this.$store.state.pageInfo;
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
     }
     this.getList();
     this.getLabelList();
   },
-  destroyed(){
-    this.$store.commit("setPageInfo",this.listData)
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
     //预设套餐标签列表
@@ -224,8 +218,13 @@ export default {
     getList() {
       this.loading = true;
       let aData = JSON.parse(JSON.stringify(this.listData));
-      if (aData.status === ""){
-        delete aData.status
+      if (aData.status === "") {
+        delete aData.status;
+      }
+      if (aData.effective_date) {
+        aData.created_at_start = aData.effective_date[0];
+        aData.created_at_end = aData.effective_date[1];
+        delete aData.effective_date;
       }
       packageList(aData).then((res) => {
         this.list = res.list;

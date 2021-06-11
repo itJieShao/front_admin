@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20" style="margin-bottom: 20px">
+    <tab-pane />
+    <!-- <el-row :gutter="20" style="margin-bottom: 20px">
       <el-col :span="10">
         <el-select
           style="width: 100%"
@@ -18,9 +19,6 @@
           </el-option>
         </el-select>
       </el-col>
-      <!-- <el-col :span="10">
-        <el-input placeholder="请输入搜索内容"></el-input>
-      </el-col> -->
       <el-col :span="4">
         <el-button @click="addTab" type="primary" icon="el-icon-search"
           >搜索</el-button
@@ -43,7 +41,7 @@
           />
         </keep-alive>
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
   </div>
 </template>
 

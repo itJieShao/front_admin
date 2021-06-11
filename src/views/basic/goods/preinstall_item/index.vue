@@ -181,7 +181,17 @@ export default {
   },
   components: { Pagination },
   created() {
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.getList();
+  },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
     addMeal() {
@@ -201,7 +211,7 @@ export default {
         this.loading = false;
       });
     },
-    searchBtn(){
+    searchBtn() {
       this.listData.page = 1;
       this.getList();
     },

@@ -109,6 +109,7 @@ const basicRouter = {
                 {
                     path: 'store_item',
                     name: 'StoreItem',
+                    hidden: true,
                     component: () => import('@/views/basic/goods/store_item'),
                     meta: { title: '门店单品', icon: 'ysitem', auth: "store_item_list" }
                 },

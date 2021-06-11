@@ -139,17 +139,27 @@ export default {
     };
   },
   created() {
+    if (this.$store.state.app.fromPath.indexOf(this.$route.path) != -1) {
+      if (this.$store.state.app.pageInfo) {
+        this.listData = this.$store.state.app.pageInfo;
+      }
+    } else {
+      this.$store.commit("app/removePageInfo");
+    }
     this.getList();
+  },
+  destroyed() {
+    this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
     goEdit(employee_id) {
-      this.$router.push(`/store/staff/staff_edit?employee_id=${employee_id}`);
+      this.$router.push(`/store/staff/staff_list_edit?employee_id=${employee_id}`);
     },
     goDetail(employee_id,station_id) {
-      this.$router.push(`/store/staff/staff_detail?employee_id=${employee_id}&station_id=${station_id}`);
+      this.$router.push(`/store/staff/staff_list_detail?employee_id=${employee_id}&station_id=${station_id}`);
     },
     goAdd() {
-      this.$router.push("/store/staff/staff_add");
+      this.$router.push("/store/staff/staff_list_add");
     },
     getList() {
       this.loading = true;

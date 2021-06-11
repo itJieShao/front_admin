@@ -1,5 +1,29 @@
 <template>
   <div>
+    <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-col :span="10">
+        <el-select
+          style="width: 100%"
+          v-model="listData.vendor_ids"
+          filterable
+          multiple
+          placeholder="请选择门店"
+        >
+          <el-option
+            v-for="item in storeList"
+            :key="item.vendor_id"
+            :label="item.vendor_name"
+            :value="item.vendor_id"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
+      </el-col>
+    </el-row>
     <el-table v-loading="loading" :data="list" border style="width: 100%">
       <el-table-column align="center" label="报损ID">
         <template slot-scope="scope">
@@ -74,23 +98,25 @@
 </template>
 
 <script>
+import { searchStoreList } from "@/api/basic";
 import { lossList } from "@/api/warehouse";
 import Pagination from "@/components/Pagination";
 export default {
-  props: {
-    vendor_ids: {
-      type: Array,
-      default: [],
-    },
-  },
+  // props: {
+  //   vendor_ids: {
+  //     type: Array,
+  //     default: [],
+  //   },
+  // },
   components: { Pagination },
   data() {
     return {
       list: [],
+      storeList:[],
       listData: {
         page: 1,
         page_size: 10,
-        vendor_ids: this.vendor_ids,
+        vendor_ids: [],
       },
       loading: false,
       total: 0,
@@ -98,10 +124,22 @@ export default {
   },
   created() {
     this.getList();
+    this.getStoreList();
   },
   methods: {
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
+    },
+    getStoreList() {
+      searchStoreList().then((res) => {
+        this.storeList = res;
+      });
+    },
     goDetail(loss_vendor_id) {
-      this.$router.push(`/warehouse/frmloss_detail?loss_vendor_id=${loss_vendor_id}`);
+      this.$router.push(
+        `/warehouse/frmloss_detail?loss_vendor_id=${loss_vendor_id}`
+      );
     },
     getList() {
       this.loading = true;

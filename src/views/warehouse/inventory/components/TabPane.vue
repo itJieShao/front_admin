@@ -1,5 +1,29 @@
 <template>
   <div>
+    <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-col :span="10">
+        <el-select
+          style="width: 100%"
+          v-model="listData.vendor_ids"
+          filterable
+          multiple
+          placeholder="请选择门店"
+        >
+          <el-option
+            v-for="item in storeList"
+            :key="item.vendor_id"
+            :label="item.vendor_name"
+            :value="item.vendor_id"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="searchBtn" type="primary" icon="el-icon-search"
+          >搜索</el-button
+        >
+      </el-col>
+    </el-row>
     <el-table
       v-loading="loading"
       :data="list"
@@ -88,9 +112,20 @@
 
       <el-table-column width="180" align="center" label="配货状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == 0" type="warning" effect="dark">待分配</el-tag>
-          <el-tag v-else-if="scope.row.status == 1 && scope.row.diff_qty == 0" type="success" effect="dark">库存一致</el-tag>
-          <el-tag v-else-if="scope.row.status == 1 && scope.row.diff_qty > 0" effect="dark">库存增加</el-tag>
+          <el-tag v-if="scope.row.status == 0" type="warning" effect="dark"
+            >待分配</el-tag
+          >
+          <el-tag
+            v-else-if="scope.row.status == 1 && scope.row.diff_qty == 0"
+            type="success"
+            effect="dark"
+            >库存一致</el-tag
+          >
+          <el-tag
+            v-else-if="scope.row.status == 1 && scope.row.diff_qty > 0"
+            effect="dark"
+            >库存增加</el-tag
+          >
           <el-tag v-else type="danger" effect="dark">库存减少</el-tag>
         </template>
       </el-table-column>
@@ -114,23 +149,25 @@
 </template>
 
 <script>
+import { searchStoreList } from "@/api/basic";
 import { inventoryList } from "@/api/warehouse";
 import Pagination from "@/components/Pagination";
 export default {
-  props: {
-    vendor_ids: {
-      type: Array,
-      default: [],
-    },
-  },
+  // props: {
+  //   vendor_ids: {
+  //     type: Array,
+  //     default: [],
+  //   },
+  // },
   components: { Pagination },
   data() {
     return {
       list: [],
+      storeList:[],
       listData: {
         page: 1,
         page_size: 10,
-        vendor_ids: this.vendor_ids,
+        vendor_ids: [],
       },
       loading: false,
       total: 0,
@@ -138,8 +175,18 @@ export default {
   },
   created() {
     this.getList();
+    this.getStoreList();
   },
   methods: {
+    searchBtn(){
+      this.listData.page = 1;
+      this.getList();
+    },
+    getStoreList() {
+      searchStoreList().then((res) => {
+        this.storeList = res;
+      });
+    },
     goDetail(inventory_id) {
       this.$router.push(
         `/warehouse/inventory_detail?inventory_id=${inventory_id}`
