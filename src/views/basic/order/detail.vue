@@ -211,6 +211,7 @@
       <el-col :span="8" v-for="(it, idx) in item" :key="idx">
         <el-card shadow="hover">
           <div class="goods_item1">
+            <p v-if="it.type_id == 2" style="padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #ddd;">超值加购</p>
             <div class="goods_top">
               <img :src="it.image" alt="" />
               <div class="goods_info">

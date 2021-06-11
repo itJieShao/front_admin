@@ -170,7 +170,9 @@
           :key="index"
         >
           <el-card shadow="always" style="margin-top: 15px">
-            <p style="margin-bottom: 10px">{{ item.title }}</p>
+            <p style="margin-bottom: 10px">{{ item.title }}
+              <el-tag effect="dark" v-if="item.level">超值加购{{item.level}}</el-tag>
+            </p>
             <el-card shadow="always">
               <div class="feeding-content">
                 <div
