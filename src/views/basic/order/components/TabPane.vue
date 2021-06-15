@@ -504,10 +504,10 @@ export default {
     //导出
     exportBtn() {
       let aData = JSON.parse(JSON.stringify(this.exportData));
-      aData.env = JSON.stringify(aData.env);
-      aData.vendor_ids = JSON.stringify(aData.vendor_ids);
-      aData.customer_type_ids = JSON.stringify(aData.customer_type_ids);
-      aData.order_type_ids = JSON.stringify(aData.order_type_ids);
+      aData.env = aData.env.join(",");
+      aData.vendor_ids = aData.vendor_ids.join(",");
+      aData.customer_type_ids = aData.customer_type_ids.join(",");
+      aData.order_type_ids = aData.order_type_ids.join(",");
       const notify = this.$notify({
         title: "正在导出",
         message: "正在导出Excel表",
