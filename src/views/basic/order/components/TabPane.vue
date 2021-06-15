@@ -30,6 +30,9 @@
         >
       </el-col>
       <el-col :span="4" style="display: flex; justify-content: flex-end">
+        <el-button type="warning" @click="orderExprotDialog = true"
+          >导出订单</el-button
+        >
         <el-button type="success" @click="orderDialog = true">筛选</el-button>
       </el-col>
     </el-row>
@@ -319,11 +322,78 @@
         <el-button type="primary" @click="searchBtn">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="批量导出订单" :visible.sync="orderExprotDialog">
+      <el-form label-width="100px">
+        <el-form-item label="小程序环境">
+          <el-checkbox-group v-model="exportData.env">
+            <el-checkbox :label="1">一合拾盒</el-checkbox>
+            <el-checkbox :label="2">盒小饭堂</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="选择门店">
+          <el-select
+            style="width: 100%"
+            v-model="exportData.vendor_ids"
+            filterable
+            multiple
+            placeholder="请选择门店"
+          >
+            <el-option
+              v-for="item in storeList"
+              :key="item.vendor_id"
+              :label="item.vendor_name"
+              :value="item.vendor_id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="售卖日期">
+          <el-date-picker
+            v-model="saled_at"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="用户类型">
+          <el-checkbox-group v-model="exportData.customer_type_ids">
+            <el-checkbox
+              v-for="item in userTypeList"
+              :key="item.type"
+              :label="item.type"
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="订单类型">
+          <el-checkbox-group v-model="exportData.order_type_ids">
+            <el-checkbox :label="1">预约订单</el-checkbox>
+            <el-checkbox :label="2">当天订单</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="有效/无效订单">
+          <el-checkbox-group v-model="exportData.order_type_ids">
+            <el-checkbox :label="3">有效订单</el-checkbox>
+            <el-checkbox :label="4">无效订单</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" @click="exportBtn">导出</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { orderList, cancelOrder, searchStoreList } from "@/api/basic";
+import {
+  orderList,
+  cancelOrder,
+  searchStoreList,
+  exportOrder,
+} from "@/api/basic";
 import { getTimeTypeData } from "@/api/store";
 import Pagination from "@/components/Pagination";
 export default {
@@ -379,6 +449,22 @@ export default {
       loading: false,
       total: 0,
       orderDialog: false,
+      orderExprotDialog: false,
+      exportData: {
+        vendor_ids: [],
+        customer_type_ids: [],
+        order_type_ids: [],
+        env: [],
+        saled_at_start: "",
+        saled_at_end: "",
+      },
+      userTypeList: [
+        { type: 1, name: "普通用户" },
+        { type: 2, name: "门店员工" },
+        { type: 3, name: "一盒员工" },
+        { type: 4, name: "园区物业" },
+      ],
+      saled_at:"",
     };
   },
   watch: {
@@ -387,6 +473,15 @@ export default {
         this.listData.discounts = [];
         this.listData.discount_price_start = "";
         this.listData.discount_price_end = "";
+      }
+    },
+    saled_at(val) {
+      if (val) {
+        this.exportData.saled_at_start = val[0];
+        this.exportData.saled_at_end = val[1];
+      } else {
+        this.exportData.saled_at_start = "";
+        this.exportData.saled_at_end = "";
       }
     },
   },
@@ -406,6 +501,31 @@ export default {
     this.$store.commit("app/setPageInfo", this.listData);
   },
   methods: {
+    //导出
+    exportBtn() {
+      let aData = JSON.parse(JSON.stringify(this.exportData));
+      aData.env = JSON.stringify(aData.env);
+      aData.vendor_ids = JSON.stringify(aData.vendor_ids);
+      aData.customer_type_ids = JSON.stringify(aData.customer_type_ids);
+      aData.order_type_ids = JSON.stringify(aData.order_type_ids);
+      const notify = this.$notify({
+        title: "正在导出",
+        message: "正在导出Excel表",
+        position: "bottom-right",
+        duration: 0,
+      });
+      exportOrder({
+        module: "EXPORT_ORDER_DATA",
+        type: 2,
+        condition: aData,
+      }).then((res) => {
+        notify.close();
+        if (res) {
+          window.open(res.path);
+          this.orderExprotDialog = false;
+        }
+      });
+    },
     getStoreList() {
       searchStoreList().then((res) => {
         this.storeList = res;
@@ -469,6 +589,12 @@ export default {
 };
 </script>
 <style scoped>
+.el-checkbox {
+  margin-right: 20px;
+}
+.el-checkbox__label {
+  padding-left: 5px;
+}
 .y_item {
   display: flex;
   align-items: center;

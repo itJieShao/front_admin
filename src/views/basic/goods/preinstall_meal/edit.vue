@@ -157,7 +157,7 @@
       title="预设单品列表"
       :visible.sync="dialogTableVisible"
     >
-      <!-- <el-row :gutter="20" style="margin-bottom: 20px">
+      <el-row :gutter="20" style="margin-bottom: 20px">
         <el-col :span="20">
           <el-input
             v-model="productListData.name"
@@ -169,7 +169,7 @@
             >搜索</el-button
           >
         </el-col>
-      </el-row> -->
+      </el-row>
       <el-table
         ref="multipleTable"
         :data="productList"
@@ -276,7 +276,7 @@ export default {
     this.getLabelList();
   },
   methods: {
-    searchBtn(){
+    searchBtn() {
       this.productListData.page = 1;
       this.getProductList();
     },

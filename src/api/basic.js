@@ -17,6 +17,14 @@ export function orderDetail(data) {
     data
   })
 }
+//导出订单
+export function exportOrder(data) {
+  return request({
+    url: '/other/export/excel',
+    method: 'post',
+    data
+  })
+}
 //取消订单
 export function cancelOrder(data) {
   return request({
@@ -433,41 +441,41 @@ export function sendCoupon(data) {
 //会员卡列表
 export function memberCardList(data) {
   return request({
-      url: '/customer/customer/get-member-card-list',
-      method: 'post',
-      data
+    url: '/customer/customer/get-member-card-list',
+    method: 'post',
+    data
   })
 }
 //会员卡详情
 export function memberCardDetail(data) {
   return request({
-      url: '/customer/customer/get-member-card-data',
-      method: 'post',
-      data
+    url: '/customer/customer/get-member-card-data',
+    method: 'post',
+    data
   })
 }
 
 export function memberCardGetList(data) {
   return request({
-      url: '/customer/customer/get-member-card-get-list',
-      method: 'post',
-      data
+    url: '/customer/customer/get-member-card-get-list',
+    method: 'post',
+    data
   })
 }
 //禁用(启用)会员卡
 export function updateMemberCard(data) {
   return request({
-      url: '/customer/customer/disable-member-card',
-      method: 'post',
-      data
+    url: '/customer/customer/disable-member-card',
+    method: 'post',
+    data
   })
 }
 //添加会员卡
 export function addMemberCard(data) {
   return request({
-      url: '/customer/customer/add-member-card',
-      method: 'post',
-      data
+    url: '/customer/customer/add-member-card',
+    method: 'post',
+    data
   })
 }
 //会员卡管理模块 --- end
