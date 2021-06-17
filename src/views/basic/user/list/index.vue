@@ -1,13 +1,45 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20" style="margin-bottom: 20px">
-      <el-col :span="10">
+      <el-col :span="4" class="opt-bar-flex">
+        <label>用户来源：</label>
+        <el-select style="width: 100%" v-model="listData.env">
+          <el-option label="全部" :value="0"></el-option>
+          <el-option label="一合拾盒" :value="2"></el-option>
+          <el-option label="盒小饭堂" :value="1"></el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="4" class="opt-bar-flex">
+        <label>用户类型：</label>
+        <el-select style="width: 100%" v-model="listData.type_id">
+          <el-option
+            v-for="item in userTypeList"
+            :key="item.type"
+            :label="item.name"
+            :value="item.type"
+          ></el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="8" class="opt-bar-flex">
+        <label>注册时间：</label>
+        <el-date-picker
+          v-model="register_time"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        >
+        </el-date-picker>
+      </el-col>
+      <el-col :span="6">
         <el-input
-          v-model="listData.condition"
-          placeholder="请输入搜索内容"
+          v-model="listData.keyword"
+          placeholder="请输入用户昵称/手机号码搜索"
         ></el-input>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="2">
         <el-button @click="search" type="primary" icon="el-icon-search"
           >搜索</el-button
         >
@@ -24,6 +56,12 @@
       <el-table-column align="center" label="用户ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140" align="center" label="用户类型">
+        <template slot-scope="scope">
+          <span>{{ scope.row.type_name }}</span>
         </template>
       </el-table-column>
 
@@ -107,12 +145,12 @@
 
       <el-table-column width="180" fixed="right" align="center" label="操作">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             :type="scope.row.status ? 'success' : 'danger'"
             @click="updateStatus(scope.row.id, scope.row.status)"
             >{{ scope.row.status ? "启用" : "禁用" }}</el-button
-          >
+          > -->
           <el-button size="mini" @click="goDetail(scope.row.id)"
             >详情</el-button
           >
@@ -141,10 +179,22 @@ export default {
       listData: {
         page: 1,
         page_size: 10,
-        condition: "",
+        keyword: "",
+        type_id: 0,
+        env: 0,
+        start_time: "",
+        end_time: "",
       },
       loading: true,
       total: 0,
+      userTypeList: [
+        { name: "全部", type: 0 },
+        { name: "普通用户", type: 1 },
+        { name: "门店店员", type: 2 },
+        { name: "一盒员工", type: 3 },
+        { name: "园区物业", type: 4 },
+      ],
+      register_time: "",
     };
   },
   created() {
@@ -162,6 +212,10 @@ export default {
   },
   methods: {
     search() {
+      this.listData.start_time = this.register_time
+        ? this.register_time[0]
+        : "";
+      this.listData.end_time = this.register_time ? this.register_time[1] : "";
       this.listData.page = 1;
       this.getList();
     },

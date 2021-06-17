@@ -705,13 +705,25 @@
     </el-dialog>
     <el-dialog width="65%" title="发券" :visible.sync="sendCouponDialog">
       <el-row :gutter="20" style="margin-bottom: 20px">
+        <el-col :span="6" class="opt-bar-flex">
+          <label>用户来源：</label>
+          <el-select
+            style="width:100%;"
+            v-model="listData1.env"
+            placeholder="用户来源"
+          >
+            <el-option label="全部" :value="0"></el-option>
+            <el-option label="一合拾盒" :value="2"></el-option>
+            <el-option label="盒小饭堂" :value="1"></el-option>
+          </el-select>
+        </el-col>
         <el-col :span="10">
           <el-input
-            v-model="listData1.condition"
+            v-model="listData1.keyword"
             placeholder="请输入搜索内容"
           ></el-input>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="4">
           <el-button @click="searchUser" type="primary" icon="el-icon-search"
             >搜索</el-button
           >
@@ -803,8 +815,9 @@ export default {
       listData1: {
         page: 1,
         page_size: 10,
-        condition: "",
-        type: 1,
+        keyword: "",
+        status: 1,
+        env:0,
       },
       loading: true,
       total: 0,
