@@ -27,9 +27,39 @@
       </el-table-column>
       <el-table-column prop="supplier_name" label="单品报损">
         <el-table style="width: 100%" stripe :data="tabdatas">
-          <el-table-column prop="supplier_name" label="猪肚鸡" />
-          <el-table-column prop="supplier_name" label="两亩地" />
-          <el-table-column prop="supplier_name" label="东北大米饭" />
+          <el-table-column prop="supplier_name" label="猪肚鸡">
+            <template slot-scope="scope">
+              <el-input
+                v-if="!scope.row.totalFlag"
+                v-model="scope.row.yunfei"
+                size="small"
+                placeholder="请输入"
+                @input="totalAmountPayable(scope.row.yunfei, scope.$index)"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="supplier_name" label="两亩地">
+            <template slot-scope="scope">
+              <el-input
+                v-if="!scope.row.totalFlag"
+                v-model="scope.row.yunfei"
+                size="small"
+                placeholder="请输入"
+                @input="totalAmountPayable(scope.row.yunfei, scope.$index)"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="supplier_name" label="东北大米饭">
+            <template slot-scope="scope">
+              <el-input
+                v-if="!scope.row.totalFlag"
+                v-model="scope.row.yunfei"
+                size="small"
+                placeholder="请输入"
+                @input="totalAmountPayable(scope.row.yunfei, scope.$index)"
+              />
+            </template>
+          </el-table-column>
           <el-table-column prop="supplier_name" />
         </el-table>
 
