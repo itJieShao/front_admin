@@ -326,8 +326,8 @@
       <el-form label-width="100px">
         <el-form-item label="小程序环境">
           <el-checkbox-group v-model="exportData.env">
-            <el-checkbox :label="1">一合拾盒</el-checkbox>
-            <el-checkbox :label="2">盒小饭堂</el-checkbox>
+            <el-checkbox :label="0">一合拾盒</el-checkbox>
+            <el-checkbox :label="1">盒小饭堂</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="选择门店">
@@ -354,6 +354,8 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
           >
           </el-date-picker>
         </el-form-item>
@@ -524,7 +526,7 @@ export default {
           window.open(res.path);
           this.orderExprotDialog = false;
         }
-      });
+      }).catch(() => notify.close());
     },
     getStoreList() {
       searchStoreList().then((res) => {
