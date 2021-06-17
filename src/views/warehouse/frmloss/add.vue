@@ -2,7 +2,7 @@
   <div style="margin-left: 40px;">
     <h2>新增门店报损</h2>
     <el-row :gutter="20" style="margin-bottom: 20px;margin-top: 40px;">
-      <el-col :span="2" style="display: flex; justify-content: flex-end;">
+      <el-col :span="1.8" style="display: flex; justify-content: flex-end;">
         <h5 style="float: left;margin-top: 15px;">报损门店：</h5>
       </el-col>
       <el-col :span="10">
@@ -10,14 +10,14 @@
           <el-option v-for="item in sag" :key="item.value" :label="item.text" :value="item.value" />
         </el-select>
       </el-col>
-      <el-col :span="2" style="display: flex; justify-content: flex-end;">
+      <el-col :span="1.8" style="display: flex; justify-content: flex-end;">
         <h5 style="float: left;margin-top: 15px;">售卖日期：</h5>
       </el-col>
       <el-col :span="6">
         <el-date-picker v-model="value1" type="date" placeholder="选择日期" />
       </el-col>
     </el-row>
-    <el-table :data="tabdata" style="width: 80%" border>
+    <el-table :data="tabdata" style="width: 80%;" border>
       <el-table-column width="180" label="请选择套餐">
         <template slot-scope="scope">
           <el-select v-model="scope.row.num" style="width: 100%;" filterable placeholder="请选择门店套餐">
@@ -26,7 +26,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="supplier_name" label="单品报损">
-        <el-table style="width: 100%" stripe>
+        <el-table style="width: 100%" stripe :data="tabdatas">
           <el-table-column prop="supplier_name" label="猪肚鸡" />
           <el-table-column prop="supplier_name" label="两亩地" />
           <el-table-column prop="supplier_name" label="东北大米饭" />
