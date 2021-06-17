@@ -93,6 +93,13 @@ const warehouseRouter = {
             component: () => import('@/views/warehouse/frmloss/detail'),
             meta: { title: '报损详情', activeMenu: '/warehouse/frmloss' }
         },
+		{
+		    path: 'frmloss_add',
+		    name: 'frmlossadd',
+		    hidden: true,
+		    component: () => import('@/views/warehouse/frmloss/add'),
+		    meta: { title: '新增门店报损', activeMenu: '/warehouse/frmloss' }
+		},
         {
             path: 'qc',
             name: 'Qc',

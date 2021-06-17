@@ -23,6 +23,13 @@
           >搜索</el-button
         >
       </el-col>
+	  <el-col  :span="4" style="display: flex; justify-content: flex-end;float: right;">
+	    <el-button
+	      type="success"
+	      icon="el-icon-plus"
+	      @click="addMeal"
+	    >新增门店报损</el-button>
+	  </el-col>
     </el-row>
     <el-table v-loading="loading" :data="list" border style="width: 100%">
       <el-table-column align="center" label="报损ID">
@@ -127,6 +134,9 @@ export default {
     this.getStoreList();
   },
   methods: {
+    addMeal() {
+      this.$router.push('/warehouse/frmloss_add')
+    },
     searchBtn(){
       this.listData.page = 1;
       this.getList();
@@ -152,4 +162,3 @@ export default {
   },
 };
 </script>
-
